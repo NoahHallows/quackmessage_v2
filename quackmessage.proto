@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+service QuackMessageAuth {
+  rpc Login (LoginMessage) returns (LoginResult) {}; 
+  rpc CreateUser (CreateUserMessage) returns (CreateUserResult) {};
+}
+
+
+// For Login
+// bcrypt provides a binary hash
+message LoginMessage {
+  string username = 1;
+  bytes password_hash = 2;
+}
+
+// JWTs are strings ( I think)
+message LoginResult {
+  bool success = 1;
+  string auth_token = 2;
+}
+
+
+// Same as login, can add more info
+// Generate salt from username? May need to add a salt field here
+message CreateUserMessage {
+  string username = 1;
+  bytes password_hash = 2;
+}
+
+message CreateUserResult {
+  bool success = 1;
+}
+
+
+service QuackMessageMessages {
+  rpc sendMessage(messageRequest) returns (messageResponse) {};
+}
+
+message messageRequest {
+  
