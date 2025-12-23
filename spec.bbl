@@ -1,0 +1,47 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\datalist[entry]{none/global//global/global/global}
+  \entry{klensin_2005_rfc}{misc}{}{}
+    \name{author}{1}{}{%
+      {{hash=KJ}{%
+         family={Klensin},
+         familyi={K\bibinitperiod},
+         given={John},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \list{organization}{1}{%
+      {Rfc-editor.org}%
+    }
+    \strng{namehash}{KJ1}
+    \strng{fullhash}{KJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{RFC 3696 Errata 3}
+    \verb{url}
+    \verb https://www.rfc-editor.org/errata_search.php?rfc=3696
+    \endverb
+    \field{month}{07}
+    \field{year}{2005}
+    \field{urlday}{23}
+    \field{urlmonth}{12}
+    \field{urlyear}{2025}
+  \endentry
+\enddatalist
+\endinput

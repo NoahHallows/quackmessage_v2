@@ -1,6 +1,6 @@
 \documentclass[a4paper,12pt]{article}
 
-\usepackage{lstlisting}
+%\usepackage{lstlisting}
 \usepackage{xcolor}
 \usepackage{booktabs}
 \usepackage{enumitem}
@@ -8,9 +8,12 @@
 \usepackage{titlesec}
 \usepackage{tabularx}
 \usepackage{graphicx}
-\usepackage{biblatex}
 
-\addbibresource{spec.bib}
+\usepackage[backend=bibtex,urldate=edtf,dateabbrev=false,style=ieee]{biblatex}
+% This command forces the date format for all date fields
+\DeclareFieldFormat{urldate}{\thefield{urlday}/\thefield{urlmonth}/\thefield{urlyear}}
+\DeclareFieldFormat{date}{\thefield{day}/\thefield{month}/\thefield{year}}
+\bibliography{spec}
 
 \title{Quackmessage specs}
 \author{Noah Hallows}
@@ -52,11 +55,12 @@
 
         \subsection{Database}
             User accounts are stored in the table \textbf{users}. The collum
-            \textbf{email} is used as the key.
-            \begin{tabularx}{c|c|c|c}
-                \textbf{Name} & \textbf{Type} & \textbf{Limits} & \textbf{Description}
+            \textbf{email} is used as the key. \\
+            \begin{tabularx}{\linewidth}{lXXX}
+                \textbf{Name} & \textbf{Type} & \textbf{Limits} &
+                \textbf{Description} \\
                 \hline
-                email & varchar & 254 characters \cite{rfc3696_errata3} & Email
+                email & varchar & 254 characters \autocite[1]{klensin_2005_rfc} & Email
                 address of user, verified at signup. \\
                 username & varchar & 126 characters & Store usernames. \\
                 password\_hash & bytea & no limit & Stores hashed password. \\
@@ -65,8 +69,12 @@
                 messages\_sent & integer & \(-2,147,483,648\) to
                 \(2,147,483,647\) & Store number of messages sent. \\
                 messages\_received & integer & \(-2,147,483,648\) to
-                \(2,147,483,647\) & Store number of messages received.
+                \(2,147,483,647\) & Store number of messages received. \\
             \end{tabularx}
 
+    \newpage
+    \printbibliography
+
+\end{document}
 
 
