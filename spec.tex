@@ -1,0 +1,72 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage{lstlisting}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+\usepackage{titlesec}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{biblatex}
+
+\addbibresource{spec.bib}
+
+\title{Quackmessage specs}
+\author{Noah Hallows}
+\date{December 2025}
+
+\begin{document}
+
+  \pagenumbering{gobble}
+  \begin{titlepage}
+    \maketitle
+  \end{titlepage}
+
+  \tableofcontents
+
+  \newpage
+  \pagenumbering{arabic}
+
+    \section{Authentication}
+        Authentication is handled using helper functions in \textit{auth.py}.
+        Passwords are transmited to the server in plan text and hashed on the
+        server using argon2 hashing. Client authentication is checked using
+        stateless JWT tokens (for end to end encryption they also need to
+        locally have the appropriate keys). This JWT token is checked using an
+        interceptor.
+        \subsection{Login}
+            To log in the client sends the username and password over a encrypted
+            (tls) connection to the server. The main function of the server then
+            uses functions in \textit{auth.py} which looks up the password hash in
+            the database using the username and compares it with the users plan text
+            password provided (using argon2 verify). If successful \textit{auth.py}
+            generates a jwt token and returns it and the boolean true. Which is then
+            sent back to the client in the main function.
+
+        \subsection{Account creation}
+            To create an account the user needs to provide an email address
+            (which will be checked by sending a code to it), password and a
+            username. Account creation is handled using helper functions in
+            \textit{auth.py}.
+
+        \subsection{Database}
+            User accounts are stored in the table \textbf{users}. The collum
+            \textbf{email} is used as the key.
+            \begin{tabularx}{c|c|c|c}
+                \textbf{Name} & \textbf{Type} & \textbf{Limits} & \textbf{Description}
+                \hline
+                email & varchar & 254 characters \cite{rfc3696_errata3} & Email
+                address of user, verified at signup. \\
+                username & varchar & 126 characters & Store usernames. \\
+                password\_hash & bytea & no limit & Stores hashed password. \\
+                account\_creation\_date & timestamptz & 4713 BC to 5874897 AD &
+                Store account creation date and timezone. \\
+                messages\_sent & integer & \(-2,147,483,648\) to
+                \(2,147,483,647\) & Store number of messages sent. \\
+                messages\_received & integer & \(-2,147,483,648\) to
+                \(2,147,483,647\) & Store number of messages received.
+            \end{tabularx}
+
+
+

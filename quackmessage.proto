@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 service QuackMessageAuth {
-  rpc Login (LoginMessage) returns (LoginResult) {}; 
+  rpc Login (LoginMessage) returns (LoginResult) {};
   rpc CreateUser (CreateUserMessage) returns (CreateUserResult) {};
 }
 
@@ -13,7 +13,7 @@ message LoginMessage {
   bytes password_hash = 2;
 }
 
-// JWTs are strings ( I think)
+// Opython -m pip install grpcioauth
 message LoginResult {
   bool success = 1;
   string auth_token = 2;
@@ -36,5 +36,6 @@ service QuackMessageMessages {
   rpc sendMessage(messageRequest) returns (messageResponse) {};
 }
 
-message messageRequest {
-  
+message sendOPK {
+
+}

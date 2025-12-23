@@ -1,0 +1,47 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage{lstlstings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[colorlinks=true, linkcolor=blue]{hyperref}
+
+\title{Quackmessage notes}
+\author{Noah Hallows}
+\date{December 2025}
+
+\begin{document}
+
+\section{Preliminaries}
+    VXEdDSA extends XEdDSA to make it a verifiable random function.
+
+    \subsection{Notation}
+
+        Multiplication of intergers \(a\), \(b\) modulo prime \(p\) is written as \(a
+        \cdot b \mod{p}\)
+        Division is calulated as \(a \cdot b^{-1} \mod{p}\)
+        \(inv(a) \mod{p}\) returns \(a^{-1} \mod{p}\) when \(a \neq 0\) and \(0\)
+        otherwise. This may be calulated as \(inv(a) = a^{p-2} \mod{p}\)
+        Integer variables are lowercasem, points and other variables are uppercase.
+        Integer constants are also lowercase except the Montgomery curve constant.
+        Byte sequences are in bold. A bold integer or elliptic curve point represents a fixed-length byte sequence encoding the value.
+
+    An elliptic curve is a plane curve defined by the equation \(y^{2} = f(x)\),
+    where \(f(x)\) is a cubic polynomial with no repeated roots.
+
+    \subsection{Eliptic curve parameters}
+        \begin{tabularx}{c|c}
+            \textbf{Name} & \textbf{Definition} \\
+            \hline
+            \(B\) & Base point \\
+            \(I\) & Identity point \\
+            \(p\) & Field prime \\
+            \(q\) & Order of base point (prime; \(q < p\), \(q \cdot B = I\)) \\
+            \(c\) & Cofactor \\
+            \(d\) & Twisted Edwards curve constant \\
+            \(A\) & Montgomery curve constant \\
+            \(n\) & Nonsquare integer modulo p \\
+            \(|p|\) & \(celi(\log_{2}(p))\) \\
+            \(|q|\) & \(cali(\log_{2}(q))\) \\
+
+\end{document}
