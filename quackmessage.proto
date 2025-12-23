@@ -3,17 +3,18 @@ syntax = "proto3";
 service QuackMessageAuth {
   rpc Login (LoginMessage) returns (LoginResult) {};
   rpc CreateUser (CreateUserMessage) returns (CreateUserResult) {};
+  rpc VerifyEmail (VerifyEmailMessage) returns (VerificationEmailSent) ();
+  rpc CheckCode (VerificationCodeMessage) returns (VerificationCodeMatches) ();
 }
 
 
 // For Login
-// bcrypt provides a binary hash
+// Argon2 hashes password on server so hash doesn't become the password
 message LoginMessage {
   string username = 1;
-  bytes password_hash = 2;
+  string password = 2;
 }
 
-// Opython -m pip install grpcioauth
 message LoginResult {
   bool success = 1;
   string auth_token = 2;
@@ -21,10 +22,26 @@ message LoginResult {
 
 
 // Same as login, can add more info
-// Generate salt from username? May need to add a salt field here
+
+message VerifyEmailMessage {
+  string email = 1;
+}
+
+message VerificationEmailSent {
+  bool emailSent = 1;
+}
+
+message VerificationCodeMessage {
+  int32 code = 1;
+}
+
+message VerificationCodeMatches {
+  bool verified = 1;
+}
+
 message CreateUserMessage {
   string username = 1;
-  bytes password_hash = 2;
+  bytes password = 2;
 }
 
 message CreateUserResult {
@@ -36,6 +53,3 @@ service QuackMessageMessages {
   rpc sendMessage(messageRequest) returns (messageResponse) {};
 }
 
-message sendOPK {
-
-}

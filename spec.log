@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2026/dev/Arch Linux) (preloaded format=pdflatex 2025.12.23)  23 DEC 2025 22:05
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2026/dev/Arch Linux) (preloaded format=pdflatex 2025.12.23)  24 DEC 2025 09:52
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -645,84 +645,284 @@ een already used, duplicate ignored
                    \relax 
 l.31   \newpage
                 [1]
-Underfull \hbox (badness 1478) in paragraph at lines 73--73
-[]|\OT1/cmr/m/n/12 Email ad-dress
+
+Package tabularx Warning: X Columns too narrow (table too wide)
+(tabularx)                 on input line 75.
+
+
+Overfull \hbox (56.09598pt too wide) in paragraph at lines 75--75
+[]|\OT1/cmr/bx/n/12 Description| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 73--73
-[]|\OT1/cmr/m/n/12 Store user-
+Overfull \hbox (18.4387pt too wide) in paragraph at lines 75--75
+[]|\OT1/cmr/m/n/12 Email
  []
 
 
-Underfull \hbox (badness 3291) in paragraph at lines 73--73
-[]|\OT1/cmr/m/n/12 Stores hashed
+Overfull \hbox (4.5694pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 ad-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 73--73
-[]|\OT1/cmr/m/n/12 4713 BC to
+Overfull \hbox (13.83875pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 dress
  []
 
 
-Underfull \hbox (badness 4060) in paragraph at lines 73--73
-[]|\OT1/cmr/m/n/12 Store ac-count
+Underfull \hbox (badness 10000) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 of
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 73--73
-\OT1/cmr/m/n/12 cre-ation date
+Overfull \hbox (12.46793pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 user,
  []
 
 
-Overfull \hbox (6.96466pt too wide) in paragraph at lines 73--73
-[]|$\OMS/cmsy/m/n/12 ^^@\OT1/cmr/m/n/12 2\OML/cmm/m/it/12 ; \OT1/cmr/m/n/12 147
-\OML/cmm/m/it/12 ; \OT1/cmr/m/n/12 483\OML/cmm/m/it/12 ; \OT1/cmr/m/n/12 648$
+Overfull \hbox (7.83325pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 ver-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 73--73
-\OT1/cmr/m/n/12 to
+Underfull \hbox (badness 10000) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 i-
  []
 
 
-Underfull \hbox (badness 5359) in paragraph at lines 73--73
-[]|\OT1/cmr/m/n/12 Store num-ber
+Overfull \hbox (6.52771pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 fied
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 73--73
-\OT1/cmr/m/n/12 of mes-sages
+Underfull \hbox (badness 10000) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 at
  []
 
 
-Overfull \hbox (6.96466pt too wide) in paragraph at lines 73--73
-[]|$\OMS/cmsy/m/n/12 ^^@\OT1/cmr/m/n/12 2\OML/cmm/m/it/12 ; \OT1/cmr/m/n/12 147
-\OML/cmm/m/it/12 ; \OT1/cmr/m/n/12 483\OML/cmm/m/it/12 ; \OT1/cmr/m/n/12 648$
+Overfull \hbox (24.54419pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 signup.| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 73--73
-\OT1/cmr/m/n/12 to
+Overfull \hbox (15.01373pt too wide) in paragraph at lines 75--75
+[]|\OT1/cmr/m/n/12 Store
  []
 
 
-Underfull \hbox (badness 5359) in paragraph at lines 73--73
-[]|\OT1/cmr/m/n/12 Store num-ber
+Overfull \hbox (13.1207pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 user-
+ []
+
+
+Overfull \hbox (23.56503pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 names.| 
+ []
+
+
+Overfull \hbox (19.6484pt too wide) in paragraph at lines 75--75
+[]|\OT1/cmr/m/n/12 Stores
+ []
+
+
+Overfull \hbox (23.56503pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 hashed
+ []
+
+
+Overfull \hbox (13.83875pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 pass-
+ []
+
+
+Overfull \hbox (16.64566pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 word.| 
+ []
+
+
+Overfull \hbox (15.01373pt too wide) in paragraph at lines 75--75
+[]|\OT1/cmr/m/n/12 Store
+ []
+
+
+Overfull \hbox (3.26385pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 ac-
+ []
+
+
+Overfull \hbox (16.64566pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 count
+ []
+
+
+Overfull \hbox (7.18048pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 cre-
+ []
+
+
+Overfull \hbox (14.36096pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 ation
+ []
+
+
+Overfull \hbox (10.44434pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 date
+ []
+
+
+Overfull \hbox (7.18048pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 and
+ []
+
+
+Overfull \hbox (15.01373pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 time-
+ []
+
+
+Overfull \hbox (14.36096pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 zone.| 
+ []
+
+
+Overfull \hbox (15.01373pt too wide) in paragraph at lines 75--75
+[]|\OT1/cmr/m/n/12 Store
+ []
+
+
+Overfull \hbox (14.68735pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 num-
+ []
+
+
+Overfull \hbox (4.89578pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 ber
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 of
+ []
+
+
+Overfull \hbox (11.81516pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 mes-
+ []
+
+
+Overfull \hbox (14.49152pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 sages
+ []
+
+
+Overfull \hbox (12.14154pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 sent.| 
+ []
+
+
+Overfull \hbox (15.01373pt too wide) in paragraph at lines 75--75
+[]|\OT1/cmr/m/n/12 Store
+ []
+
+
+Overfull \hbox (14.68735pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 num-
+ []
+
+
+Overfull \hbox (4.89578pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 ber
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 of
+ []
+
+
+Overfull \hbox (11.81516pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 mes-
+ []
+
+
+Overfull \hbox (14.49152pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 sages
+ []
+
+
+Overfull \hbox (1.95831pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 re-
+ []
+
+
+Overfull \hbox (22.84698pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 ceived.| 
+ []
+
+
+Overfull \hbox (15.01373pt too wide) in paragraph at lines 75--75
+[]|\OT1/cmr/m/n/12 Store
+ []
+
+
+Overfull \hbox (11.0971pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 time
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 of
+ []
+
+
+Overfull \hbox (6.59299pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 last
+ []
+
+
+Overfull \hbox (1.30554pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 lo-
+ []
+
+
+Overfull \hbox (7.18048pt too wide) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 gin.| 
+ []
+
+
+Overfull \hbox (137.21082pt too wide) in alignment at lines 75--75
+[][][][][] 
  []
 
 
 
 [1]
+Overfull \vbox (98.39987pt too high) has occurred while \output is active []
+
+
 
 [2]
+LaTeX Font Info:    Trying to load font information for OML+cmr on input line 8
+0.
+ (/usr/share/texmf-dist/tex/latex/base/omlcmr.fd
+File: omlcmr.fd 2024/11/19 v2.5n Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OML/cmr/bx/n' in size <12> not available
+(Font)              Font shape `OML/cmm/b/it' tried instead on input line 80.
+
+
+LaTeX Warning: Citation '' on page 3 undefined on input line 80.
+
+
+
+[3]
 
 Package biblatex Warning: '\mkdaterangeedtf' is deprecated.
 (biblatex)                Please use '\mkdaterangeiso'.
 
 
 
-[3] (./spec.aux)
+[4] (./spec.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
@@ -732,7 +932,7 @@ L3 programming layer <2025-01-18>
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `spec.out' has not changed.
-(rerunfilecheck)             Checksum: 1253A0AE0EE22F8D0A1302764C429BF7;432.
+(rerunfilecheck)             Checksum: A46B646C3D5D5975EF63FDB4338670C9;553.
 
 Package biblatex Warning: Please (re)run BibTeX on the file(s):
 (biblatex)                spec
@@ -743,23 +943,24 @@ Package logreq Info: Writing requests to 'spec.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 17186 strings out of 475171
- 299498 string characters out of 5767094
- 919558 words of memory out of 5000000
- 40006 multiletter control sequences out of 15000+600000
- 564521 words of font info for 55 fonts, out of 8000000 for 9000
+ 17212 strings out of 475171
+ 299894 string characters out of 5767094
+ 919595 words of memory out of 5000000
+ 40026 multiletter control sequences out of 15000+600000
+ 564879 words of font info for 56 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 75i,10n,81p,1936b,1968s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,9n,81p,1936b,1919s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/
 texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-dist/fon
-ts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmr17.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-sy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr
-/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on spec.pdf (5 pages, 81446 bytes).
+ts/type1/public/amsfonts/cm/cmmib10.pfb></usr/share/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmr17.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></us
+r/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/share/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
+Output written on spec.pdf (6 pages, 90525 bytes).
 PDF statistics:
- 92 PDF objects out of 1000 (max. 8388607)
- 68 compressed objects within 1 object stream
- 10 named destinations out of 1000 (max. 500000)
- 33 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 106 PDF objects out of 1000 (max. 8388607)
+ 80 compressed objects within 1 object stream
+ 12 named destinations out of 1000 (max. 500000)
+ 41 words of extra memory for PDF output out of 10000 (max. 10000000)
 
