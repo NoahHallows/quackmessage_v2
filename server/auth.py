@@ -61,7 +61,6 @@ def createAccountHelper(username: str, password: str, email: str, cursor: cursor
             cur.execute("INSERT INTO users (email, username, password_hash, account_creation_date,
                     messages_sent, messages_received) VALUES (%s, %s, %s, NOW()), %s,
                     %s)", (email, username, password_hash, 0, 0))
-            conn.commit()
             print("Done")
             token = generate_jwt(username)
             return (True, token)

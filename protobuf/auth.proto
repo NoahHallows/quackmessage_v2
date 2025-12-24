@@ -41,15 +41,9 @@ message VerificationCodeMatches {
 
 message CreateUserMessage {
   string username = 1;
-  bytes password = 2;
+  string password = 2;
 }
 
 message CreateUserResult {
   bool success = 1;
 }
-
-
-service QuackMessageMessages {
-  rpc sendMessage(messageRequest) returns (messageResponse) {};
-}
-
