@@ -122,7 +122,7 @@ Rectangle {
         y: 698
         opacity: 0
         text: qsTr("Login")
-        enabled: usernameEdit.text.length > 0 && passwordEdit.text.length > 0
+//        enabled: usernameEdit.text.length > 0 // && passwordEdit.text.length > 0
         onClicked: console.log("Here")
         background: Rectangle {
             implicitWidth: 100
@@ -304,7 +304,7 @@ Rectangle {
         y: 698
         opacity: 0
         text: qsTr("Create account")
-        enabled: usernameEdit.text.length > 0 && passwordEdit.text.length > 0
+//        enabled: usernameEdit.text.length > 0 && passwordEdit.text.length > 0
         background: Rectangle {
             opacity: enabled ? 1 : 0.3
             color: "#0072ff"
@@ -330,6 +330,7 @@ Rectangle {
             PropertyChanges {target: loginButton; enabled: true; opacity: 1; scale: 1.0}
             PropertyChanges {target: selectCreateUserButton; enabled: false; opacity: 0; scale: 1.0}
             PropertyChanges {target: selectLoginButton; enabled: false; opacity: 0; scale: 1.0}
+            PropertyChanges {target: createAccountButton; enabled: false; opacity: 0; visible: false}
         },
 
         State {

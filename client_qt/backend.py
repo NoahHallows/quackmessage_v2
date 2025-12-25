@@ -16,3 +16,12 @@ class Backend(QObject):
     def request_email_code(self, email):
         print(f"Sending code to: {email}")
         # logic to send email...
+        #
+
+    @Slot(int)
+    def verify_email_code(self, code):
+        print(f"Verification code {code}")
+
+    @Slot(str, str)
+    def create_account(self, username, password):
+        print("creating user")
