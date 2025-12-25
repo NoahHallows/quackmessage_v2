@@ -1,8 +1,8 @@
 import QmlProject
 
 Project {
-    mainFile: "Quackmessage_desktopContent/App.qml"
-    mainUiFile: "Quackmessage_desktopContent/Login.ui.qml"
+    mainFile: "Quackmessage_desktopContent/Login.qml"
+    mainUiFile: "Quackmessage_desktopContent/LoginForm.ui.qml"
 
     /* Include .qml, .js, and image files from current directory and subdirectories */
     QmlFiles {

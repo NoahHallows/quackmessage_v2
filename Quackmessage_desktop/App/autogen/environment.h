@@ -11,7 +11,7 @@
 Q_IMPORT_QML_PLUGIN(Quackmessage_desktopPlugin)
 Q_IMPORT_QML_PLUGIN(Quackmessage_desktopContentPlugin)
 
-const char mainQmlFile[] = "qrc:/qt/qml/Quackmessage_desktopContent/App.qml";
+const char mainQmlFile[] = "qrc:/qt/qml/Quackmessage_desktopContent/Login.qml";
 
 #ifdef BUILD_QDS_COMPONENTS
 

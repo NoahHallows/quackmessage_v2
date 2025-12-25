@@ -7,15 +7,28 @@ Check out https://doc.qt.io/qtcreator/creator-quick-ui-forms.html for details on
 
 import QtQuick
 import QtQuick.Controls
-import Quackmessage_desktop
-import QtQuick.Studio.DesignEffects
+//import Quackmessage_desktop
+//import QtQuick.Studio.DesignEffects
 
 Rectangle {
     id: rectangle
-    width: Constants.width
-    height: Constants.height
+    width: 1920
+    height: 1080
     state: "initial"
-    color: Constants.backgroundColor
+    color: "#ffffff"
+
+    // Allow login.qml to see and change these properties
+    property alias loginBtn: loginButton
+    property alias usernameEdit: usernameEdit
+    property alias passwordEdit: passwordEdit
+    property alias selectLoginBtn: selectLoginButton
+    property alias selectCreateUserBtn: selectCreateUserButton
+    property alias emailEdit: emailEdit
+    property alias submitEmailBtn: submitEmailButton
+    property alias requestNewCodeBtn: requestNewCodeButton
+    property alias createAccountBtn: createAccountButton
+    property alias verificationCodeEdit: verificationCodeEdit
+    property alias submitVerificationCode: submitVerificationCode
 
     Text {
         id: title;
@@ -28,7 +41,7 @@ Rectangle {
         horizontalAlignment: Text.AlignHCenter
     }
 
-    Image {
+/*    Image {
         id: logo;
         x: 910
         y: 222
@@ -36,7 +49,7 @@ Rectangle {
         height: 100
         source: "qrcimages/template_image.png"
         fillMode: Image.PreserveAspectFit
-    }
+    }*/
 
     Text {
         id: userNameLabel;
@@ -64,7 +77,7 @@ Rectangle {
             implicitHeight: 31
             opacity: enabled ? 1 : 0.3
             color: "#888e95"
-            border.color: control.down ? "#17a81a" : "#21be2b"
+            border.color: "#21be2b"
             border.width: 1
             radius: 2
         }
@@ -97,7 +110,7 @@ Rectangle {
             implicitHeight: 31
             opacity: enabled ? 1 : 0.3
             color: "#888e95"
-            border.color: control.down ? "#17a81a" : "#21be2b"
+            border.color: "#21be2b"
             border.width: 1
             radius: 2
         }
@@ -110,12 +123,13 @@ Rectangle {
         opacity: 0
         text: qsTr("Login")
         enabled: usernameEdit.text.length > 0 && passwordEdit.text.length > 0
+        onClicked: console.log("Here")
         background: Rectangle {
             implicitWidth: 100
             implicitHeight: 40
             opacity: enabled ? 1 : 0.3
             color: "#0072ff"
-            border.color: control.down ? "#17a81a" : "#21be2b"
+            border.color: "#21be2b"
             border.width: 1
             radius: 2
         }
@@ -134,7 +148,7 @@ Rectangle {
             implicitHeight: 40
             opacity: enabled ? 1 : 0.3
             color: "#0072ff"
-            border.color: control.down ? "#17a81a" : "#21be2b"
+            border.color: "#21be2b"
             border.width: 1
             radius: 2
         }
@@ -153,7 +167,7 @@ Rectangle {
             implicitHeight: 40
             opacity: enabled ? 1 : 0.3
             color: "#007429"
-            border.color: control.down ? "#17a81a" : "#21be2b"
+            border.color: "#21be2b"
             border.width: 1
             radius: 2
         }
@@ -173,7 +187,7 @@ Rectangle {
             opacity: enabled ? 1 : 0.3
             color: "#888e95"
             radius: 2
-            border.color: control.down ? "#17a81a" : "#21be2b"
+            border.color: "#21be2b"
             border.width: 1
             implicitWidth: 253
             implicitHeight: 31
@@ -205,7 +219,7 @@ Rectangle {
             opacity: enabled ? 1 : 0.3
             color: "#0d60a9"
             radius: 2
-            border.color: control.down ? "#17a81a" : "#21be2b"
+            border.color: "#21be2b"
             border.width: 1
             implicitWidth: 100
             implicitHeight: 40
@@ -226,7 +240,7 @@ Rectangle {
             opacity: enabled ? 1 : 0.3
             color: "#888e95"
             radius: 2
-            border.color: control.down ? "#17a81a" : "#21be2b"
+            border.color: "#21be2b"
             border.width: 1
             implicitWidth: 253
             implicitHeight: 31
@@ -258,7 +272,7 @@ Rectangle {
             opacity: enabled ? 1 : 0.3
             color: "#0da91f"
             radius: 2
-            border.color: control.down ? "#17a81a" : "#21be2b"
+            border.color: "#21be2b"
             border.width: 1
             implicitWidth: 100
             implicitHeight: 40
@@ -266,7 +280,7 @@ Rectangle {
     }
 
     Button {
-        id: requestNewCode
+        id: requestNewCodeButton
         x: 782
         y: 597
         opacity: 0
@@ -277,7 +291,7 @@ Rectangle {
             opacity: enabled ? 1 : 0.3
             color: "#deb605"
             radius: 2
-            border.color: control.down ? "#17a81a" : "#21be2b"
+            border.color: "#21be2b"
             border.width: 1
             implicitWidth: 100
             implicitHeight: 40
@@ -295,7 +309,7 @@ Rectangle {
             opacity: enabled ? 1 : 0.3
             color: "#0072ff"
             radius: 2
-            border.color: control.down ? "#17a81a" : "#21be2b"
+            border.color: "#21be2b"
             border.width: 1
             implicitWidth: 100
             implicitHeight: 40
