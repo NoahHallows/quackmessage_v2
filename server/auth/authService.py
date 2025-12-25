@@ -14,13 +14,19 @@ import os
 import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from dotenv import load_dotenv, dotenv_values
+
+
+from .jwt_auth import create_jwt
 
 # Import protobufs
 import quackmessage_pb2
 import quackmessage_pb2_grpc
-from db_manager import db
+from ../db_manager import db
 
- try:
+load_dotenv()
+
+try:
     email_server = os.environ.get('EMAIL_SERVER')
     email_port = int(os.environ.get('EMAIL_PORT'))
     email_username = os.environ.get('EMAIL_USERNAME')
@@ -40,21 +46,8 @@ def db_binary_to_binary(db_binary):
             binary = binary + byte
     return binary
 
-# Create token for auth
-def create_jwt(user_id: str) -> str:
-    payload = {
-        "sub": user_id,
-        "iss": AuthServerName,
-        "aud": AudienceName,
-    }
-    return jwt.encode(payload, PRIVATE_KEY, algorithm="RS256")
 
-# Verify token for auth
-def verify_jwt(token: str) -> dict:
-    return jwt.decode(token, PUBLIC_KEY, algorithms=["RS256"], audience=AudienceName, issuer=AuthServerName)
-
-
-class AuthServicer(quackmessage_pb2_grpc.AuthService):
+class AuthServicer(quackmessage_pb2_grpc.QuackMessageAuthServicer):
 
     def __init__(self):
         self.email = None
@@ -71,7 +64,6 @@ class AuthServicer(quackmessage_pb2_grpc.AuthService):
             cursor.execute("SELECT password_hash FROM users WHERE username = %s", (request.username,))
             conn.commit()
             cursor.close()
-            db.putConn(conn)
             password_hash = db_binary_to_binary(cursor.fetchall())
 
         except:
@@ -123,12 +115,10 @@ class AuthServicer(quackmessage_pb2_grpc.AuthService):
             ph = PasswordHasher()
             password_hash = ph.hash(password)
             try:
-                cur.execute("INSERT INTO users (email, username, password_hash, account_creation_date,
-                        messages_sent, messages_received) VALUES (%s, %s, %s, NOW()), %s,
-                        %s)", (self.email, username, password_hash, 0, 0))
+                cur.execute("INSERT INTO users (email, username, password_hash, account_creation_date, messages_sent, messages_received) VALUES (%s, %s, %s, NOW()), %s, %s)", (self.email, username, password_hash, 0, 0))
                 conn.commit()
                 cur.close()
-                db.putConn(conn)
+
                 print("Done")
                 token = generate_jwt(username)
                 return quackmessage_pb2_grpc.CreateUserResult(success=False, auth_token=token)
@@ -139,9 +129,7 @@ class AuthServicer(quackmessage_pb2_grpc.AuthService):
 
         conn.commit()
         cur.close()
-        db.putConn(conn)
+
 
         return quackmessage_pb2_grpc.CreateUserResult(success=False, auth_token="")
-
-
 

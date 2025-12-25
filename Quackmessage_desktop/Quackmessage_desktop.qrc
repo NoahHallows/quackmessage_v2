@@ -1,0 +1,13 @@
+<RCC>
+    <qresource>
+        <file>Quackmessage_desktop.qmlproject</file>
+        <file>Quackmessage_desktop/Constants.qml</file>
+        <file>Quackmessage_desktop/EventListModel.qml</file>
+        <file>Quackmessage_desktop/EventListSimulator.qml</file>
+        <file>Quackmessage_desktop/qmldir</file>
+        <file>Quackmessage_desktopContent/App.qml</file>
+        <file>Quackmessage_desktopContent/Login.qml</file>
+        <file>Quackmessage_desktopContent/Screen01.ui.qml</file>
+        <file>qtquickcontrols2.conf</file>
+    </qresource>
+</RCC>

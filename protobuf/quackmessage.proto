@@ -3,8 +3,8 @@ syntax = "proto3";
 service QuackMessageAuth {
   rpc Login (LoginMessage) returns (LoginResult) {};
   rpc CreateUser (CreateUserMessage) returns (CreateUserResult) {};
-  rpc VerifyEmail (VerifyEmailMessage) returns (VerificationEmailSent) ();
-  rpc CheckCode (VerificationCodeMessage) returns (VerificationCodeMatches) ();
+  rpc VerifyEmail (VerifyEmailMessage) returns (VerificationEmailSent) {};
+  rpc CheckCode (VerificationCodeMessage) returns (VerificationCodeMatches) {};
 }
 
 
@@ -46,4 +46,5 @@ message CreateUserMessage {
 
 message CreateUserResult {
   bool success = 1;
+  string auth_token = 2;
 }
