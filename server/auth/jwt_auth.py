@@ -16,10 +16,9 @@ with open("credentials/public_key.pem", "rb") as f:
 
 
 # Create token for auth
-def create_jwt(user_id: str, user_type) -> str:
+def create_jwt(user_id: str) -> str:
     payload = {
         "sub": user_id,
-        "user_type": user_type,
         "iss": ISSUER,
         "aud": AUDIENCE,
     }

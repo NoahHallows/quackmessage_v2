@@ -339,10 +339,11 @@ Rectangle {
             PropertyChanges {target: usernameEdit; enabled: true; opacity: 1; scale: 1.0}
             PropertyChanges {target: passwordEdit; enabled: true; opacity: 1; scale: 1.0}
             PropertyChanges {target: passwordLabel; enabled: true; opacity: 1; scale: 1.0}
+            PropertyChanges {target: createAccountButton; enabled: true; opacity: 1; scale: 1.0}
             PropertyChanges {target: verificationCodeEdit; enabled: false; opacity: 0; scale: 1.0}
             PropertyChanges {target: verificationCodeLabel; enabled: false; opacity: 0; scale: 1.0}
             PropertyChanges {target: submitVerificationCode; enabled: false; opacity: 0; scale: 1.0}
-            PropertyChanges {target: requestNewCode; enabled: false; opacity: 0; scale: 1.0}
+            PropertyChanges {target: requestNewCodeButton; enabled: false; opacity: 0; scale: 1.0}
             PropertyChanges {target: selectCreateUserButton; enabled: false; opacity: 0; scale: 1.0}
             PropertyChanges {target: selectLoginButton; enabled: false; opacity: 0; scale: 1.0}
 
@@ -366,7 +367,7 @@ Rectangle {
             PropertyChanges {target: verificationCodeEdit; enabled: true; opacity: 1; scale: 1.0}
             PropertyChanges {target: verificationCodeLabel; enabled: true; opacity: 1; scale: 1.0}
             PropertyChanges {target: submitVerificationCode; enabled: true; opacity: 1; scale: 1.0}
-            PropertyChanges {target: requestNewCode; enabled: true; opacity: 1; scale: 1.0}
+            PropertyChanges {target: requestNewCodeButton; enabled: true; opacity: 1; scale: 1.0}
             PropertyChanges {target: selectCreateUserButton; enabled: false; opacity: 0; scale: 1.0}
             PropertyChanges {target: selectLoginButton; enabled: false; opacity: 0; scale: 1.0}
         }

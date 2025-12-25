@@ -4,12 +4,12 @@
 import grpc
 from concurrent import futures
 import quackmessage_pb2_grpc
-from auth import AuthServicer
+from auth import AuthService
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 
-    quackmessage_pb2_grpc.add_QuackMessageAuthServicer_to_server(AuthServicer(), server)
+    quackmessage_pb2_grpc.add_QuackMessageAuthServicer_to_server(AuthService.AuthServicer(), server)
 
     server.add_insecure_port("[::]:5555")
     print("Server started")
