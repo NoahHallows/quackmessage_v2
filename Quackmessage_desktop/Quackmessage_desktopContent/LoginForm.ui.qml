@@ -351,6 +351,8 @@ Rectangle {
             PropertyChanges {target: verificationCodeLabel; enabled: false; opacity: 0; scale: 1.0}
             PropertyChanges {target: submitVerificationCode; enabled: false; opacity: 0; scale: 1.0}
             PropertyChanges {target: requestNewCodeButton; enabled: false; opacity: 0; scale: 1.0}
+            PropertyChanges {target: selectCreateUserButton; enabled: false; opacity: 0; scale: 1.0}
+            PropertyChanges {target: selectLoginButton; enabled: false; opacity: 0; scale: 1.0}
         },
 
         State {
@@ -410,4 +412,3 @@ Rectangle {
         NumberAnimation { properties: "opacity,scale"; duration: 100; easing.type: Easing.OutCubic }
     }
 }
-

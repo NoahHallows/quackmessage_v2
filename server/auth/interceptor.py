@@ -5,9 +5,10 @@ from .jwt_auth import verify_jwt
 # Interceptor to check auth (JWT) token
 class AuthInterceptor(grpc.ServerInterceptor):
     PUBLIC_METHODS = {
-        "/AuthService/Login",
-        "/AuthService/CheckUserExists",
-        "/AuthService/GetSalt",
+        "/QuackMessageAuth/Login",
+        "/QuackMessageAuth/CreateUser",
+        "/QuackMessageAuth/VerifyEmail",
+        "/QuackMessageAuth/CheckCode"
     }
 
     def __init__(self):

@@ -39,11 +39,13 @@ except NameError:
 
 # Convert the list of bytes to a single variable
 def db_binary_to_binary(db_binary):
-    print(type(db_binary))
     binary = b''
     for collumn in db_binary:
-        for byte in collumn:
-            binary = binary + byte
+        for section in collumn:
+            for byte in section:
+                binary = binary + byte
+
+    print(binary)
     return binary
 
 
@@ -63,16 +65,16 @@ class AuthServicer(quackmessage_pb2_grpc.QuackMessageAuthServicer):
             conn = db.getConn()
             cursor = conn.cursor()
             cursor.execute("SELECT password_hash FROM users WHERE username = %s", (request.username,))
+            password_hash = db_binary_to_binary(cursor.fetchall())
             conn.commit()
             cursor.close()
-            password_hash = db_binary_to_binary(cursor.fetchall())
 
         except Exception as e:
             print(f"Password not found: {e}", file=stderr)
 
         try:
             ph = PasswordHasher()
-            ph.verify(request.password, password_hash)
+            ph.verify(password_hash, request.password)
             print("Passwords match")
             token = create_jwt(request.username)
             return quackmessage_pb2.LoginResult(success=True, auth_token=token)

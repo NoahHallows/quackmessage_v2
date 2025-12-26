@@ -43,6 +43,6 @@ class Backend(QObject):
     def create_account(self, username, password):
         print("creating user")
         request = quackmessage_pb2.CreateUserMessage(username=username, password=password)
-        create_account_result = self.stub.CreateUser(request)
+        create_account_result = self.stub.CreateUser.future(request)
         result = create_account_result.result()
         print(f"Result {result.success}, {result.auth_token}")
