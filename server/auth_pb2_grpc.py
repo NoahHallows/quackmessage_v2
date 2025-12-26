@@ -3,7 +3,7 @@
 import grpc
 import warnings
 
-import quackmessage_pb2 as quackmessage__pb2
+import auth_pb2 as auth__pb2
 
 GRPC_GENERATED_VERSION = '1.76.0'
 GRPC_VERSION = grpc.__version__
@@ -18,7 +18,7 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + ' but the generated code in quackmessage_pb2_grpc.py depends on'
+        + ' but the generated code in auth_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
@@ -36,23 +36,23 @@ class QuackMessageAuthStub(object):
         """
         self.Login = channel.unary_unary(
                 '/QuackMessageAuth/Login',
-                request_serializer=quackmessage__pb2.LoginMessage.SerializeToString,
-                response_deserializer=quackmessage__pb2.LoginResult.FromString,
+                request_serializer=auth__pb2.LoginMessage.SerializeToString,
+                response_deserializer=auth__pb2.LoginResult.FromString,
                 _registered_method=True)
         self.CreateUser = channel.unary_unary(
                 '/QuackMessageAuth/CreateUser',
-                request_serializer=quackmessage__pb2.CreateUserMessage.SerializeToString,
-                response_deserializer=quackmessage__pb2.CreateUserResult.FromString,
+                request_serializer=auth__pb2.CreateUserMessage.SerializeToString,
+                response_deserializer=auth__pb2.CreateUserResult.FromString,
                 _registered_method=True)
         self.VerifyEmail = channel.unary_unary(
                 '/QuackMessageAuth/VerifyEmail',
-                request_serializer=quackmessage__pb2.VerifyEmailMessage.SerializeToString,
-                response_deserializer=quackmessage__pb2.VerificationEmailSent.FromString,
+                request_serializer=auth__pb2.VerifyEmailMessage.SerializeToString,
+                response_deserializer=auth__pb2.VerificationEmailSent.FromString,
                 _registered_method=True)
         self.CheckCode = channel.unary_unary(
                 '/QuackMessageAuth/CheckCode',
-                request_serializer=quackmessage__pb2.VerificationCodeMessage.SerializeToString,
-                response_deserializer=quackmessage__pb2.VerificationCodeMatches.FromString,
+                request_serializer=auth__pb2.VerificationCodeMessage.SerializeToString,
+                response_deserializer=auth__pb2.VerificationCodeMatches.FromString,
                 _registered_method=True)
 
 
@@ -88,23 +88,23 @@ def add_QuackMessageAuthServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'Login': grpc.unary_unary_rpc_method_handler(
                     servicer.Login,
-                    request_deserializer=quackmessage__pb2.LoginMessage.FromString,
-                    response_serializer=quackmessage__pb2.LoginResult.SerializeToString,
+                    request_deserializer=auth__pb2.LoginMessage.FromString,
+                    response_serializer=auth__pb2.LoginResult.SerializeToString,
             ),
             'CreateUser': grpc.unary_unary_rpc_method_handler(
                     servicer.CreateUser,
-                    request_deserializer=quackmessage__pb2.CreateUserMessage.FromString,
-                    response_serializer=quackmessage__pb2.CreateUserResult.SerializeToString,
+                    request_deserializer=auth__pb2.CreateUserMessage.FromString,
+                    response_serializer=auth__pb2.CreateUserResult.SerializeToString,
             ),
             'VerifyEmail': grpc.unary_unary_rpc_method_handler(
                     servicer.VerifyEmail,
-                    request_deserializer=quackmessage__pb2.VerifyEmailMessage.FromString,
-                    response_serializer=quackmessage__pb2.VerificationEmailSent.SerializeToString,
+                    request_deserializer=auth__pb2.VerifyEmailMessage.FromString,
+                    response_serializer=auth__pb2.VerificationEmailSent.SerializeToString,
             ),
             'CheckCode': grpc.unary_unary_rpc_method_handler(
                     servicer.CheckCode,
-                    request_deserializer=quackmessage__pb2.VerificationCodeMessage.FromString,
-                    response_serializer=quackmessage__pb2.VerificationCodeMatches.SerializeToString,
+                    request_deserializer=auth__pb2.VerificationCodeMessage.FromString,
+                    response_serializer=auth__pb2.VerificationCodeMatches.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -132,8 +132,8 @@ class QuackMessageAuth(object):
             request,
             target,
             '/QuackMessageAuth/Login',
-            quackmessage__pb2.LoginMessage.SerializeToString,
-            quackmessage__pb2.LoginResult.FromString,
+            auth__pb2.LoginMessage.SerializeToString,
+            auth__pb2.LoginResult.FromString,
             options,
             channel_credentials,
             insecure,
@@ -159,8 +159,8 @@ class QuackMessageAuth(object):
             request,
             target,
             '/QuackMessageAuth/CreateUser',
-            quackmessage__pb2.CreateUserMessage.SerializeToString,
-            quackmessage__pb2.CreateUserResult.FromString,
+            auth__pb2.CreateUserMessage.SerializeToString,
+            auth__pb2.CreateUserResult.FromString,
             options,
             channel_credentials,
             insecure,
@@ -186,8 +186,8 @@ class QuackMessageAuth(object):
             request,
             target,
             '/QuackMessageAuth/VerifyEmail',
-            quackmessage__pb2.VerifyEmailMessage.SerializeToString,
-            quackmessage__pb2.VerificationEmailSent.FromString,
+            auth__pb2.VerifyEmailMessage.SerializeToString,
+            auth__pb2.VerificationEmailSent.FromString,
             options,
             channel_credentials,
             insecure,
@@ -213,8 +213,8 @@ class QuackMessageAuth(object):
             request,
             target,
             '/QuackMessageAuth/CheckCode',
-            quackmessage__pb2.VerificationCodeMessage.SerializeToString,
-            quackmessage__pb2.VerificationCodeMatches.FromString,
+            auth__pb2.VerificationCodeMessage.SerializeToString,
+            auth__pb2.VerificationCodeMatches.FromString,
             options,
             channel_credentials,
             insecure,
