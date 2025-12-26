@@ -19,7 +19,7 @@ class AuthInterceptor(grpc.ServerInterceptor):
 
     def intercept_service(self, continuation, handler_call_details):
         # Continue if a public method was called
-        if handler_call_details.method in self.PUBLIC_METHODS:
+        if handler_call_details.method in self.PUBLIC_METHODS:elf.active_elf.active_streams = {}streams = {}
             return continuation(handler_call_details)
         metadata = dict(handler_call_details.invocation_metadata)
         auth_header = metadata.get("authorization")

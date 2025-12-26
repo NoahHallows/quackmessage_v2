@@ -9,29 +9,26 @@ from backend import Backend
 
 class main:
     def __init__(self):
-        app = QGuiApplication(sys.argv)
-        engine = QQmlApplicationEngine()
+        self.app = QGuiApplication(sys.argv)
+        self.engine = QQmlApplicationEngine()
 
         import_path = Path(__file__).parent / "."
-        engine.addImportPath(str(import_path.resolve()))
+        self.engine.addImportPath(str(import_path.resolve()))
         # Create the backend object
         self.backend = Backend()
 
         # 1. Provide the backend to QML
-        engine.rootContext().setContextProperty("backend", self.backend)
+        self.engine.rootContext().setContextProperty("backend", self.backend)
 
 
         # 2. Load your main QML file (usually App.qml or Main.qml)
-        qml_file = Path(__file__).parent / "Login.qml"
-        engine.load(str(qml_file))
+        qml_file = Path(__file__).parent / "App.qml"
+        self.engine.load(str(qml_file))
 
-        if not engine.rootObjects():
+        if not self.engine.rootObjects():
             sys.exit(-1)
-        sys.exit(app.exec())
+        sys.exit(self.app.exec())
 
-    def changeToMainWindow(self):
-        qml_file = Path(__file__).parent / "MainWindow.qml"
-        engine.load(str(qml_file))
 
 if __name__ == "__main__":
     window = main()

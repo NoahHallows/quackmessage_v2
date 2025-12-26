@@ -1,11 +1,11 @@
 import QtQuick
 import QtQuick.Controls
 
-Window {
+Rectangle {
     width: 1920
     height: 1080
     visible: true // This is critical to make the window appear
-    title: "Quackmessage Login"
+    //title: "Quackmessage Login"
 
     LoginForm {
         loginBtn.onClicked: {

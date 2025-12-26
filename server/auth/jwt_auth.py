@@ -28,3 +28,6 @@ def create_jwt(user_id: str) -> str:
 def verify_jwt(token: str) -> dict:
     return jwt.decode(token, PUBLIC_KEY, algorithms=["RS256"], audience=AUDIENCE, issuer=ISSUER)
 
+def get_username(token: str) -> str:
+    decoded_token = jwt.decode(token, PUBLIC_KEY, algorithms=["RS256"], audience=AUDIENCE, issuer=ISSUER)
+    return decoded_token['sub']

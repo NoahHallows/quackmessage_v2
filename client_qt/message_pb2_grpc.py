@@ -34,8 +34,8 @@ class MessagerStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.receiveMessages = channel.unary_stream(
-                '/Messager/receiveMessages',
+        self.subscribeMessages = channel.unary_stream(
+                '/Messager/subscribeMessages',
                 request_serializer=message__pb2.receiveMessagesRequest.SerializeToString,
                 response_deserializer=message__pb2.Message.FromString,
                 _registered_method=True)
@@ -49,7 +49,7 @@ class MessagerStub(object):
 class MessagerServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def receiveMessages(self, request, context):
+    def subscribeMessages(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -64,8 +64,8 @@ class MessagerServicer(object):
 
 def add_MessagerServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'receiveMessages': grpc.unary_stream_rpc_method_handler(
-                    servicer.receiveMessages,
+            'subscribeMessages': grpc.unary_stream_rpc_method_handler(
+                    servicer.subscribeMessages,
                     request_deserializer=message__pb2.receiveMessagesRequest.FromString,
                     response_serializer=message__pb2.Message.SerializeToString,
             ),
@@ -86,7 +86,7 @@ class Messager(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def receiveMessages(request,
+    def subscribeMessages(request,
             target,
             options=(),
             channel_credentials=None,
@@ -99,7 +99,7 @@ class Messager(object):
         return grpc.experimental.unary_stream(
             request,
             target,
-            '/Messager/receiveMessages',
+            '/Messager/subscribeMessages',
             message__pb2.receiveMessagesRequest.SerializeToString,
             message__pb2.Message.FromString,
             options,

@@ -23,9 +23,9 @@ class Message(_message.Message):
     def __init__(self, sender: _Optional[str] = ..., receiver: _Optional[str] = ..., content: _Optional[str] = ..., messageId: _Optional[int] = ...) -> None: ...
 
 class sendMessageResult(_message.Message):
-    __slots__ = ("sendSuccessfull", "messageId")
-    SENDSUCCESSFULL_FIELD_NUMBER: _ClassVar[int]
-    MESSAGEID_FIELD_NUMBER: _ClassVar[int]
-    sendSuccessfull: bool
-    messageId: int
-    def __init__(self, sendSuccessfull: bool = ..., messageId: _Optional[int] = ...) -> None: ...
+    __slots__ = ("sendSuccessful", "message_id")
+    SENDSUCCESSFUL_FIELD_NUMBER: _ClassVar[int]
+    MESSAGE_ID_FIELD_NUMBER: _ClassVar[int]
+    sendSuccessful: bool
+    message_id: int
+    def __init__(self, sendSuccessful: bool = ..., message_id: _Optional[int] = ...) -> None: ...

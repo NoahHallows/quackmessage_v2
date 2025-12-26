@@ -9,9 +9,13 @@ import QtQuick
 import QtQuick.Controls
 
 Rectangle {
-    id: root
+    id: rectangle
     width: 1920
     height: 1080
+
+    property alias sendMessageBtn: sendMessageButton
+    property alias receiverEdit: receiverEdit
+    property alias messageEdit: messageEdit
 
     Button {
         id: sendMessageButton;
@@ -28,25 +32,7 @@ Rectangle {
             radius: 2
         }
     }
-    TextField {
-        id: senderEdit;
-        x: 979
-        y: 516
-        width: 145
-        height: 31
-        opacity: 1
-        enabled: true
-        placeholderText: qsTr("Sender")
-        background: Rectangle {
-            implicitWidth: 145
-            implicitHeight: 31
-            opacity: enabled ? 1 : 0.3
-            color: "#888e95"
-            border.color: "#21be2b"
-            border.width: 1
-            radius: 2
-        }
-    }
+
     TextField {
         id: receiverEdit;
         x: 979

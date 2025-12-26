@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 service Messager {
-  rpc receiveMessages(receiveMessagesRequest) returns (stream Message) {};
+  rpc subscribeMessages(receiveMessagesRequest) returns (stream Message) {};
   rpc sendMessage(Message) returns (sendMessageResult) {};
 }
 
@@ -17,6 +17,6 @@ message Message {
 }
 
 message sendMessageResult {
-  bool sendSuccessfull = 1;
-  sint32 messageId = 2;
+  bool sendSuccessful = 1;
+  sint32 message_id = 2;
 }

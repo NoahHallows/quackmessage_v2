@@ -9,10 +9,13 @@ import _credentials
 
 
 class Backend(QObject):
+    # Auth stuff
+    loginSuccess = Signal()
     def __init__(self):
         super().__init__()
         self.HOST = "localhost:5555"
         self._user_email = ""
+        self.username = ""
         self.token = ""
         call_credentials = grpc.access_token_call_credentials(self.token)
         channel_credentials = grpc.ssl_channel_credentials(_credentials.ROOT_CERTIFICATE)
@@ -31,6 +34,7 @@ class Backend(QObject):
         result = login_future.result()
         print(f"Result: {result.success}, auth token = {result.auth_token}")
         if result.success == True:
+            self.username = username
             self.token = result.auth_token
             call_credentials = grpc.access_token_call_credentials(self.token)
             channel_credentials = grpc.ssl_channel_credentials(_credentials.ROOT_CERTIFICATE)
@@ -38,7 +42,8 @@ class Backend(QObject):
             self.channel = grpc.secure_channel(self.HOST, composite_credentials)
             self.authStub = auth_pb2_grpc.QuackMessageAuthStub(self.channel)
             self.messageStub = message_pb2_grpc.MessagerStub(self.channel)
-            super.changeToMainWindow(super)
+            self.loginSuccess.emit()
+
 
 
 
@@ -68,3 +73,12 @@ class Backend(QObject):
         create_account_result = self.authStub.CreateUser.future(request)
         result = create_account_result.result()
         print(f"Result {result.success}, {result.auth_token}")
+
+    # Message stuff
+    @Slot(str, str)
+    def send_message(self, receiver, message):
+        print(f"Sending {message} to {receiver}")
+        request = message_pb2.Message(sender=self.username, receiver=receiver, content=message)
+        send_message_result = self.messageStub.sendMessage.future(request)
+        result = send_message_result.result()
+        print(f"Success: , message id: {result.message_id}")
