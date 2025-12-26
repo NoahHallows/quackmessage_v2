@@ -1,5 +1,22 @@
-syntax = "proto3"l
+syntax = "proto3";
 
 service Messager {
+  rpc receiveMessages(receiveMessagesRequest) returns (stream Message) {};
+  rpc sendMessage(Message) returns (sendMessageResult) {};
+}
 
+message receiveMessagesRequest {
+  bool request = 1;
+}
+
+message Message {
+  string sender = 1;
+  string receiver = 2;
+  string content = 3;
+  sint32 messageId = 4;
+}
+
+message sendMessageResult {
+  bool sendSuccessfull = 1;
+  sint32 messageId = 2;
 }

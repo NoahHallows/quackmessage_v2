@@ -4,14 +4,36 @@
 import grpc
 from concurrent import futures
 import auth_pb2_grpc
+import message_pb2_grpc
 from auth import AuthService
+from message import MessageService
+import _credentials
+
+_LISTEN_ADDRESS_TEMPLATE = "localhost:%d"
 
 def serve():
+    port = 5555
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 
     auth_pb2_grpc.add_QuackMessageAuthServicer_to_server(AuthService.AuthServicer(), server)
+    message_pb2_grpc.add_MessagerServicer_to_server(MessageService.MessageServicer(), server)
 
-    server.add_insecure_port("[::]:5555")
+    server_credentials = grpc.ssl_server_credentials(
+       (
+        (
+            _credentials.SERVER_CERTIFICATE_KEY,
+            _credentials.SERVER_CERTIFICATE,
+        ),
+    )
+    )
+
+    # Pass down credentials
+    port = server.add_secure_port(
+        _LISTEN_ADDRESS_TEMPLATE % port, server_credentials
+    )
+
+
+    #server.add_insecure_port("[::]:5555")
     print("Server started")
     server.start()
     server.wait_for_termination()

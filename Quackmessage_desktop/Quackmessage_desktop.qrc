@@ -8,6 +8,8 @@
         <file>Quackmessage_desktopContent/App.qml</file>
         <file>Quackmessage_desktopContent/Login.qml</file>
         <file>Quackmessage_desktopContent/LoginForm.ui.qml</file>
+        <file>Quackmessage_desktopContent/MainWindow.qml</file>
+        <file>Quackmessage_desktopContent/MainWindowForm.ui.qml</file>
         <file>qtquickcontrols2.conf</file>
     </qresource>
 </RCC>
