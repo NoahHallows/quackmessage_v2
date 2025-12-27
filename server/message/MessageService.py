@@ -60,11 +60,12 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
             # Send old messages
             conn = db.getConn()
             cursor = conn.cursor()
-            cursor.execute("SELECT sender, content, message_id FROM messages WHERE receiver = %s", (username,))
+            cursor.execute("SELECT sender, content, message_id, receiver FROM messages WHERE receiver = %s OR sender = %s", (username,username,))
             messages = cursor.fetchall()
             print(messages)
             for message in messages:
-                response = message_pb2.Message(sender=message[0], receiver=username, content=message[1], messageId=message[2])
+                print(f"Sender: {message[0]}, receiver: {message[3]}, content: {message[1]}, message id: {message[2]}")
+                response = message_pb2.Message(sender=message[0], receiver=message[3], content=message[1], messageId=message[2])
                 yield response
             try:
                 while True:

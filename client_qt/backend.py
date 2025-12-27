@@ -104,4 +104,8 @@ class Backend(QObject):
         print('Receiving message')
 
         for message in self.messageStub.subscribeMessages(message_pb2.receiveMessagesRequest(request=True)):
-            self.newMessage.emit(message.sender, message.content)
+            if (message.sender == self.username):
+                self.newMessage.emit("You", message.content)
+            else:
+                self.newMessage.emit(message.username, message.content)
+

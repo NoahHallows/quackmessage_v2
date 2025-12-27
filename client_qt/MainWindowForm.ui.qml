@@ -80,6 +80,7 @@ Rectangle {
         delegate: MessageBox {
             messageText: model.messageText
             senderText: model.senderText
+            messageColor: model.messageColor
         /*width: 100; height: 30
         border.width: 1
         color: "lightsteelblue"

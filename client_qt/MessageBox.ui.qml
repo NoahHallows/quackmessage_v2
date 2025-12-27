@@ -18,6 +18,7 @@ Rectangle {
 
     property alias messageText: messageText.text
     property alias senderText: senderText.text
+    property alias messageColor: root.color
 
     Text {
         id: messageText
