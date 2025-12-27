@@ -11,28 +11,33 @@ import QtQuick.Controls
 
 Rectangle {
     id: root
-    width: 150
-    height: 100
-    color: "#023d74"
+    width: 220
+    height: messageText.implicitHeight + senderText.implicitHeight + 24
     radius: 10
+    color: "lightsteelblue"
+
+    property alias messageText: messageText.text
+    property alias senderText: senderText.text
+    property alias messageColor: root.color
 
     Text {
-        id: text1
+        id: messageText
         x: 8
         y: 8
-        width: 134
-        height: 63
+        width: parent.width - 16
+        wrapMode: Text.WordWrap
         text: qsTr("Message: ")
         font.pixelSize: 12
     }
 
     Text {
-        id: text2
+        id: senderText
+        anchors.top: messageText.bottom
+        anchors.topMargin: 4
         x: 8
-        y: 77
-        width: 99
-        height: 15
+        width: parent.width - 16
         text: qsTr("Sent by: ")
-        font.pixelSize: 12
+        font.pixelSize: 10
+        font.italic: true
     }
 }

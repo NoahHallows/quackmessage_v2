@@ -3,6 +3,7 @@ syntax = "proto3";
 service Messager {
   rpc subscribeMessages(receiveMessagesRequest) returns (stream Message) {};
   rpc sendMessage(Message) returns (sendMessageResult) {};
+  rpc getContacts(contactsRequest) returns (contactList) {};
 }
 
 message receiveMessagesRequest {
@@ -19,4 +20,16 @@ message Message {
 message sendMessageResult {
   bool sendSuccessful = 1;
   sint32 message_id = 2;
+}
+
+message contactsRequest {
+  bool request = 1;
+}
+
+message contact {
+  string name = 1;
+}
+
+message contactList {
+  repeated contact contacts = 1;
 }

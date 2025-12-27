@@ -44,6 +44,11 @@ class MessagerStub(object):
                 request_serializer=message__pb2.Message.SerializeToString,
                 response_deserializer=message__pb2.sendMessageResult.FromString,
                 _registered_method=True)
+        self.getContacts = channel.unary_unary(
+                '/Messager/getContacts',
+                request_serializer=message__pb2.contactsRequest.SerializeToString,
+                response_deserializer=message__pb2.contactList.FromString,
+                _registered_method=True)
 
 
 class MessagerServicer(object):
@@ -61,6 +66,12 @@ class MessagerServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def getContacts(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_MessagerServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -73,6 +84,11 @@ def add_MessagerServicer_to_server(servicer, server):
                     servicer.sendMessage,
                     request_deserializer=message__pb2.Message.FromString,
                     response_serializer=message__pb2.sendMessageResult.SerializeToString,
+            ),
+            'getContacts': grpc.unary_unary_rpc_method_handler(
+                    servicer.getContacts,
+                    request_deserializer=message__pb2.contactsRequest.FromString,
+                    response_serializer=message__pb2.contactList.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -129,6 +145,33 @@ class Messager(object):
             '/Messager/sendMessage',
             message__pb2.Message.SerializeToString,
             message__pb2.sendMessageResult.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def getContacts(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/Messager/getContacts',
+            message__pb2.contactsRequest.SerializeToString,
+            message__pb2.contactList.FromString,
             options,
             channel_credentials,
             insecure,

@@ -14,10 +14,10 @@ import QtQuick.Controls
 //import QtQuick.Studio.DesignEffects
 Rectangle {
     id: rectangle
-    width: 500
+    width: 700
     height: 700
     state: "initial"
-    color: "#141414"
+    color: "#272727"
 
     // Allow login.qml to see and change these properties
     property alias loginBtn: loginButton

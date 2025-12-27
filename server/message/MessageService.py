@@ -62,9 +62,7 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
             cursor = conn.cursor()
             cursor.execute("SELECT sender, content, message_id, receiver FROM messages WHERE receiver = %s OR sender = %s", (username,username,))
             messages = cursor.fetchall()
-            print(messages)
             for message in messages:
-                print(f"Sender: {message[0]}, receiver: {message[3]}, content: {message[1]}, message id: {message[2]}")
                 response = message_pb2.Message(sender=message[0], receiver=message[3], content=message[1], messageId=message[2])
                 yield response
             try:
@@ -76,5 +74,21 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
 
             finally:
                 del self.active_clients[username]
+
+    def getContacts(self, request, context):
+        metadata = dict(context.invocation_metadata())
+        auth_header = metadata.get('authorization', '')
+        if auth_header.startswith('Bearer '):
+            token = auth_header[len("Bearer "):]
+            username = jwt_auth.get_username(token)
+            conn = db.getConn()
+            cursor = conn.cursor()
+            cursor.execute("SELECT username FROM users")
+            users = cursor.fetchall()
+            response = []
+            for user in users:
+                response.append(message_pb2.contact(name=user[0]))
+            return message_pb2.contactList(contacts=response)
+
 
 

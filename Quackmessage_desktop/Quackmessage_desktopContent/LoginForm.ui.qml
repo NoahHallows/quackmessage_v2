@@ -7,6 +7,7 @@ this file manually, you might introduce QML code that is not supported by Qt Des
 Check out https://doc.qt.io/qtcreator/creator-quick-ui-forms.html for details on .ui.qml files.
 */
 import QtQuick
+import QtQuick.Window
 import QtQuick.Controls
 
 //import Quackmessage_desktop
@@ -30,6 +31,8 @@ Rectangle {
     property alias createAccountBtn: createAccountButton
     property alias verificationCodeEdit: verificationCodeEdit
     property alias submitVerificationCode: submitVerificationCode
+    property alias errorPopup: errorPopup
+    property alias loginRectangle: rectangle
 
     Text {
         id: title
@@ -118,7 +121,7 @@ Rectangle {
         id: loginButton
         x: 190
         y: 450
-        opacity: 0
+        opacity: 1
         text: qsTr("Login")
         background: Rectangle {
             implicitWidth: 100
@@ -144,7 +147,7 @@ Rectangle {
             implicitHeight: 40
             opacity: enabled ? 1 : 0.3
             color: "#0072ff"
-            border.color: "#000000"
+            border.color: "#ffffff"
             border.width: 1
             radius: 2
         }
@@ -163,7 +166,7 @@ Rectangle {
             implicitHeight: 40
             opacity: enabled ? 1 : 0.3
             color: "#007429"
-            border.color: "#000000"
+            border.color: "#ffffff"
             border.width: 1
             radius: 2
         }
@@ -343,6 +346,44 @@ Rectangle {
         verticalAlignment: Text.AlignVCenter
     }
 
+    // Error popup
+    Popup {
+        id: errorPopup
+        x: 100
+        y: 350
+        width: 300
+        height: 100
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+        property alias errorText: errorLabel.text
+        background: Rectangle {
+            color: "#1e1e1e"
+            border.color: "#ff4444"
+            border.width: 2
+            radius: 10
+        }
+
+        Column {
+            anchors.centerIn: parent
+            spacing: 20
+
+            Text {
+                id: errorLabel
+                text: qsTr("Invalid credentials")
+                color: "white"
+                font.pixelSize: 16
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            Button {
+                text: qsTr("OK")
+                anchors.horizontalCenter: parent.horizontalCenter
+                onClicked: errorPopup.close()
+            }
+        }
+    }
+
     states: [
         State {
             name: "initial"
@@ -455,17 +496,12 @@ Rectangle {
                 scale: 1.0
             }
             PropertyChanges {
-                target: selectCreateUserButton
+                target: backButton
                 enabled: false
                 opacity: 0
                 scale: 1.0
             }
-            PropertyChanges {
-                target: selectLoginButton
-                enabled: false
-                opacity: 0
-                scale: 1.0
-            }
+
         },
 
         State {
@@ -518,6 +554,13 @@ Rectangle {
                 opacity: 0
                 visible: false
             }
+            PropertyChanges {
+                target: backButton
+                enabled: true
+                opacity: 1
+                scale: 1.0
+            }
+
         },
 
         State {
@@ -588,6 +631,13 @@ Rectangle {
                 opacity: 0
                 scale: 1.0
             }
+            PropertyChanges {
+                target: backButton
+                enabled: true
+                opacity: 1
+                scale: 1.0
+            }
+
         },
 
         State {
@@ -622,6 +672,19 @@ Rectangle {
                 opacity: 0
                 scale: 1.0
             }
+            PropertyChanges {
+                target: backButton
+                enabled: true
+                opacity: 1
+                scale: 1.0
+            }
+            PropertyChanges {
+                target: loginButton
+                enabled: false
+                opacity: 0
+                scale: 1.0
+            }
+
         },
 
         State {
@@ -680,6 +743,18 @@ Rectangle {
                 opacity: 0
                 scale: 1.0
             }
+            PropertyChanges {
+                target: backButton
+                enabled: true
+                opacity: 1
+                scale: 1.0
+            }
+            PropertyChanges {
+                target: loginButton
+                enabled: false
+                opacity: 0
+                scale: 1.0
+            }
         }
     ]
 
@@ -691,3 +766,6 @@ Rectangle {
         }
     }
 }
+
+
+

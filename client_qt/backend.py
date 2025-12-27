@@ -16,6 +16,8 @@ class Backend(QObject):
     sendEmailFail = Signal()
     emailVerificationFail = Signal()
     accountCreationFail = Signal()
+    addContactSignal = Signal(str)
+    active_contact = ""
     # Auth stuff
     def __init__(self):
         super().__init__()
@@ -52,6 +54,8 @@ class Backend(QObject):
             # Start receive message stream
             self.receiveMessageThread = threading.Thread(target=self.receiveMessage, args=(), daemon=True)
             self.receiveMessageThread.start()
+            getContactsThread = threading.Thread(target=self.getContacts, args=(),daemon=True)
+            getContactsThread.start()
         else:
             self.loginFail.emit()
 
@@ -91,10 +95,10 @@ class Backend(QObject):
             self.accountCreationFail.emit()
 
     # Message stuff
-    @Slot(str, str)
-    def send_message(self, receiver, message):
-        print(f"Sending {message} to {receiver}")
-        request = message_pb2.Message(sender=self.username, receiver=receiver, content=message)
+    @Slot(str)
+    def send_message(self, message):
+        print(f"Sending {message} to {self.active_contact}")
+        request = message_pb2.Message(sender=self.username, receiver=self.active_contact, content=message)
         send_message_result = self.messageStub.sendMessage.future(request)
         result = send_message_result.result()
         print(f"Success: , message id: {result.message_id}")
@@ -107,5 +111,18 @@ class Backend(QObject):
             if (message.sender == self.username):
                 self.newMessage.emit("You", message.content)
             else:
-                self.newMessage.emit(message.username, message.content)
+                self.newMessage.emit(message.sender, message.content)
 
+    # Workout who the selected contact is
+    @Slot(str)
+    def set_active_contact(self, contact_name):
+        print(f"Active contact changed to: {contact_name}")
+        self.active_contact = contact_name
+
+    # Populate contacts
+    def getContacts(self):
+        request = message_pb2.contactsRequest(request=True)
+        get_contacts_result = self.messageStub.getContacts.future(request)
+        results = get_contacts_result.result()
+        for result in results.contacts:
+            self.addContactSignal.emit(result.name)

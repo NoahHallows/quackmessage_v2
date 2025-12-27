@@ -1,64 +1,50 @@
+
+
 /*
 This is a UI file (.ui.qml) that is intended to be edited in Qt Design Studio only.
 It is supposed to be strictly declarative and only uses a subset of QML. If you edit
 this file manually, you might introduce QML code that is not supported by Qt Design Studio.
 Check out https://doc.qt.io/qtcreator/creator-quick-ui-forms.html for details on .ui.qml files.
 */
-
 import QtQuick
 import QtQuick.Controls
 
 Rectangle {
     id: rectangle
-    width: 250
-    height: 500
+    width: 700
+    height: 700
+    color: "#272727"
 
     property alias sendMessageBtn: sendMessageButton
-    property alias receiverEdit: receiverEdit
     property alias messageEdit: messageEdit
     property alias messageList: messageList
-
+    property alias contactsList: contactsList
 
     Button {
-        id: sendMessageButton;
-        x: 979
-        y: 712
-        text: qsTr("Send")
+        id: sendMessageButton
+        x: 440
+        y: 440
+        text: qsTr("➤")
+        icon.color: "#ff0000"
         background: Rectangle {
-            implicitWidth: 145
-            implicitHeight: 31
+            implicitWidth: 10
+            implicitHeight: 30
             opacity: enabled ? 1 : 0.3
             color: "#00650c"
             border.color: "#21be2b"
             border.width: 1
-            radius: 2
-        }
-    }
-
-    TextField {
-        id: receiverEdit;
-        x: 979
-        y: 460
-        width: 145
-        height: 31
-        opacity: 1
-        enabled: true
-        placeholderText: qsTr("Receiver")
-        background: Rectangle {
-            implicitWidth: 145
-            implicitHeight: 31
-            opacity: enabled ? 1 : 0.3
-            color: "#888e95"
-            border.color: "#21be2b"
-            border.width: 1
-            radius: 2
+            radius: 10
         }
     }
 
     TextArea {
         id: messageEdit
-        x: 979
-        y: 585
+        x: 120
+        y: 440
+        width: 295
+        height: 31
+        color: "#ffffff"
+        wrapMode: Text.Wrap
         placeholderText: qsTr("Message")
         background: Rectangle {
             implicitWidth: 145
@@ -72,8 +58,11 @@ Rectangle {
     }
     ListView {
         id: messageList
-        width: 240; height: 320
-        spacing: 10
+        x: 120
+        y: 8
+        width: 375
+        height: 400
+        spacing: 8
         verticalLayoutDirection: ListView.BottomToTop
         model: ListModel {}
 
@@ -81,25 +70,81 @@ Rectangle {
             messageText: model.messageText
             senderText: model.senderText
             messageColor: model.messageColor
-        /*width: 100; height: 30
-        border.width: 1
-        color: "lightsteelblue"
-        Text {
-            anchors.centerIn: parent
-            text: name
-        }*/
+        }
+
+        add: Transition {
+            NumberAnimation {
+                property: "opacity"
+                from: 0
+                to: 1.0
+                duration: 400
+            }
+            NumberAnimation {
+                property: "scale"
+                from: 0
+                to: 1.0
+                duration: 400
+            }
+        }
+
+        displaced: Transition {
+            NumberAnimation {
+                properties: "x,y"
+                duration: 400
+                easing.type: Easing.OutBounce
+            }
+        }
     }
 
-    add: Transition {
-        NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 400 }
-        NumberAnimation { property: "scale"; from: 0; to: 1.0; duration: 400 }
-    }
+    ListView {
+        id: contactsList
+        x: 8
+        y: 8
+        width: 100
+        height: 400
+        spacing: 8
+        focus: true
+        highlightFollowsCurrentItem: true
+        highlight: Rectangle {
+            color: "#22ffffff" // Semi-transparent white
+            radius: 5
+        }
+        verticalLayoutDirection: ListView.TopToBottom
+        model: ListModel {}
+        delegate: ContactElement {
+            name: model.name
 
-    displaced: Transition {
-        NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutBounce }
-    }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    messageList.currentIndex = index // Updates the visual selection
+                    // We call the function via the backend object
+                    backend.set_active_contact(model.name)
+                }
+            }
+        }
+        add: Transition {
+            NumberAnimation {
+                property: "opacity"
+                from: 0
+                to: 1.0
+                duration: 400
+            }
+            NumberAnimation {
+                property: "scale"
+                from: 0
+                to: 1.0
+                duration: 400
+            }
+        }
 
-    focus: true
-    Keys.onSpacePressed: model.insert(0, { "name": "Item " + model.count })
-}
+        displaced: Transition {
+            NumberAnimation {
+                properties: "x,y"
+                duration: 400
+                easing.type: Easing.OutBounce
+            }
+        }
+
+    }
 }

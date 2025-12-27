@@ -3,7 +3,7 @@ import QtQuick.Controls
 
 Window {
     id: window
-    width: 500
+    width: 700
     height: 700
     visible: true
     title: "Quackmessage"

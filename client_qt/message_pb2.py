@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rmessage.proto\")\n\x16receiveMessagesRequest\x12\x0f\n\x07request\x18\x01 \x01(\x08\"O\n\x07Message\x12\x0e\n\x06sender\x18\x01 \x01(\t\x12\x10\n\x08receiver\x18\x02 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x03 \x01(\t\x12\x11\n\tmessageId\x18\x04 \x01(\x11\"?\n\x11sendMessageResult\x12\x16\n\x0esendSuccessful\x18\x01 \x01(\x08\x12\x12\n\nmessage_id\x18\x02 \x01(\x11\x32u\n\x08Messager\x12:\n\x11subscribeMessages\x12\x17.receiveMessagesRequest\x1a\x08.Message\"\x00\x30\x01\x12-\n\x0bsendMessage\x12\x08.Message\x1a\x12.sendMessageResult\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rmessage.proto\")\n\x16receiveMessagesRequest\x12\x0f\n\x07request\x18\x01 \x01(\x08\"O\n\x07Message\x12\x0e\n\x06sender\x18\x01 \x01(\t\x12\x10\n\x08receiver\x18\x02 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x03 \x01(\t\x12\x11\n\tmessageId\x18\x04 \x01(\x11\"?\n\x11sendMessageResult\x12\x16\n\x0esendSuccessful\x18\x01 \x01(\x08\x12\x12\n\nmessage_id\x18\x02 \x01(\x11\"\"\n\x0f\x63ontactsRequest\x12\x0f\n\x07request\x18\x01 \x01(\x08\"\x17\n\x07\x63ontact\x12\x0c\n\x04name\x18\x01 \x01(\t\")\n\x0b\x63ontactList\x12\x1a\n\x08\x63ontacts\x18\x01 \x03(\x0b\x32\x08.contact2\xa6\x01\n\x08Messager\x12:\n\x11subscribeMessages\x12\x17.receiveMessagesRequest\x1a\x08.Message\"\x00\x30\x01\x12-\n\x0bsendMessage\x12\x08.Message\x1a\x12.sendMessageResult\"\x00\x12/\n\x0bgetContacts\x12\x10.contactsRequest\x1a\x0c.contactList\"\x00\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -37,6 +37,12 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_MESSAGE']._serialized_end=139
   _globals['_SENDMESSAGERESULT']._serialized_start=141
   _globals['_SENDMESSAGERESULT']._serialized_end=204
-  _globals['_MESSAGER']._serialized_start=206
-  _globals['_MESSAGER']._serialized_end=323
+  _globals['_CONTACTSREQUEST']._serialized_start=206
+  _globals['_CONTACTSREQUEST']._serialized_end=240
+  _globals['_CONTACT']._serialized_start=242
+  _globals['_CONTACT']._serialized_end=265
+  _globals['_CONTACTLIST']._serialized_start=267
+  _globals['_CONTACTLIST']._serialized_end=308
+  _globals['_MESSAGER']._serialized_start=311
+  _globals['_MESSAGER']._serialized_end=477
 # @@protoc_insertion_point(module_scope)
