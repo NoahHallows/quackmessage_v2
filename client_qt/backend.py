@@ -11,13 +11,14 @@ import threading
 class Backend(QObject):
     # Signals
     loginSuccess = Signal()
-    newMessage = Signal(str, str)
+    newMessage = Signal(str, str, int)
     loginFail = Signal()
     sendEmailFail = Signal()
     emailVerificationFail = Signal()
     accountCreationFail = Signal()
     addContactSignal = Signal(str)
     active_contact = ""
+    master_message_list = []
     # Auth stuff
     def __init__(self):
         super().__init__()
@@ -102,22 +103,33 @@ class Backend(QObject):
         send_message_result = self.messageStub.sendMessage.future(request)
         result = send_message_result.result()
         print(f"Success: , message id: {result.message_id}")
+        if result.sendSuccessful == True:
+            message_tuple = (self.username, self.active_contact, message, result.message_id)
+            self.master_message_list.append(message_tuple)
 
     # start receive message stream
     def receiveMessage(self):
         print('Receiving message')
 
         for message in self.messageStub.subscribeMessages(message_pb2.receiveMessagesRequest(request=True)):
-            if (message.sender == self.username):
-                self.newMessage.emit("You", message.content)
-            else:
-                self.newMessage.emit(message.sender, message.content)
+            message_tuple = (message.sender, message.receiver, message.content, message.messageId)
+            self.master_message_list.append(message_tuple)
+            if (message.sender == self.active_contact):
+                self.newMessage.emit(message.sender, message.content, message.messageId)
 
     # Workout who the selected contact is
     @Slot(str)
     def set_active_contact(self, contact_name):
         print(f"Active contact changed to: {contact_name}")
         self.active_contact = contact_name
+        # Loop through master message list and add all relevent messages to ui
+        for message in self.master_message_list:
+            if (message[0] == self.active_contact or message[1] == self.active_contact):
+                if (message[0] == self.username):
+                     self.newMessage.emit("You", message[2], message[3])
+                else:
+                    self.newMessage.emit(message[0], message[2], message[3])
+
 
     # Populate contacts
     def getContacts(self):
@@ -125,4 +137,5 @@ class Backend(QObject):
         get_contacts_result = self.messageStub.getContacts.future(request)
         results = get_contacts_result.result()
         for result in results.contacts:
-            self.addContactSignal.emit(result.name)
+            if (result.name != self.username):
+                self.addContactSignal.emit(result.name)

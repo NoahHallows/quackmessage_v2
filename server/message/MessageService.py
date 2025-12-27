@@ -39,6 +39,7 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
             cursor.execute("INSERT INTO messages (sender, receiver, content, message_id, time_sent) VALUES (%s, %s, %s, %s, NOW())", (request.sender, request.receiver, request.content, message_id))
             # Check if receiver is online
             if request.receiver in self.active_clients:
+                print("Receiver is active")
                 message = {"sender": request.sender, "receiver": request.receiver, "content": request.content, "messageId": message_id}
                 self.active_clients[request.receiver].put(message)
             conn.commit()
@@ -57,6 +58,7 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
             token = auth_header[len("Bearer "):]
             username = jwt_auth.get_username(token)
             self.active_clients[username] = user_queue
+            print(self.active_clients)
             # Send old messages
             conn = db.getConn()
             cursor = conn.cursor()
@@ -68,6 +70,7 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
             try:
                 while True:
                     new_message = user_queue.get()
+                    print(new_message)
                     if new_message["receiver"] == username:
                         response = message_pb2.Message(sender=new_message["sender"],receiver=username,content=new_message["content"],messageId=new_message["messageId"])
                         yield response

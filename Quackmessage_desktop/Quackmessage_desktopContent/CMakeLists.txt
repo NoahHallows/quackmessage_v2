@@ -10,8 +10,8 @@ qt6_add_qml_module(Quackmessage_desktopContent
     RESOURCE_PREFIX "/qt/qml"
     QML_FILES
         "App.qml"
-        "LoginForm.ui.qml"
         "Login.qml"
+        "LoginForm.ui.qml"
         "MainWindow.qml"
         "MainWindowForm.ui.qml"
         "MessageBox.ui.qml"

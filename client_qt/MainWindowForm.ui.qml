@@ -66,6 +66,8 @@ Rectangle {
         verticalLayoutDirection: ListView.BottomToTop
         model: ListModel {}
 
+
+
         delegate: MessageBox {
             messageText: model.messageText
             senderText: model.senderText
@@ -119,6 +121,7 @@ Rectangle {
                 onClicked: {
                     messageList.currentIndex = index // Updates the visual selection
                     // We call the function via the backend object
+                    messageList.model.clear()
                     backend.set_active_contact(model.name)
                 }
             }
