@@ -10,13 +10,13 @@ Rectangle {
     MainWindowForm {
         id: mainUI
         sendMessageBtn.onClicked: {
-            console.log("Send button clicked")
-            backend.send_message(receiverEdit.text, messageEdit.text)
+            backend.send_message(messageEdit.text)
             showMessage("You", messageEdit.text)
+            messageEdit.clear()
         }
 
+
         function showMessage(sender, message) {
-            console.log(message)
             if (sender === "You") {
                 var box_color = "#5e0549"
             }
@@ -27,10 +27,17 @@ Rectangle {
             "Sent by: " + sender, "messageColor": box_color})
         }
 
+        function createContact(contactName) {
+            contactsList.model.append({"name": contactName})
+        }
+
         Connections {
             target: backend
-            function onNewMessage(sender, message) {
+            function onNewMessage(sender, message, message_id) {
                 mainUI.showMessage(sender, message)
+            }
+            function onAddContactSignal(name) {
+                mainUI.createContact(name)
             }
         }
     }

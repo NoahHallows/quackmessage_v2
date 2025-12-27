@@ -1,18 +1,27 @@
 import QtQuick
-import Quackmessage_desktop
+import QtQuick.Controls
 
 Window {
-    width: mainScreen.width
-    height: mainScreen.height
-
+    id: window
+    width: 700
+    height: 700
     visible: true
-    title: "Quackmessage_desktop"
+    title: "Quackmessage"
 
-    Login {
-        id: mainScreen
-
-        anchors.centerIn: parent
+    Loader {
+        id: mainLoader
+        anchors.fill: parent
+        source: "Login.qml"
     }
 
-}
+    function showMainWindow() {
+        mainLoader.source = "MainWindow.qml"
+    }
 
+    Connections {
+        target: backend
+        function onLoginSuccess() {
+            showMainWindow()
+        }
+    }
+}

@@ -11,14 +11,14 @@ import QtQuick.Controls
 
 Rectangle {
     id: rectangle
-    width: 500
-    height: 500
+    width: 700
+    height: 700
     color: "#272727"
 
     property alias sendMessageBtn: sendMessageButton
-    property alias receiverEdit: receiverEdit
     property alias messageEdit: messageEdit
     property alias messageList: messageList
+    property alias contactsList: contactsList
 
     Button {
         id: sendMessageButton
@@ -62,9 +62,11 @@ Rectangle {
         y: 8
         width: 375
         height: 400
-        spacing: 10
+        spacing: 8
         verticalLayoutDirection: ListView.BottomToTop
         model: ListModel {}
+
+
 
         delegate: MessageBox {
             messageText: model.messageText
@@ -102,19 +104,50 @@ Rectangle {
         y: 8
         width: 100
         height: 400
+        spacing: 8
+        focus: true
+        highlightFollowsCurrentItem: true
+        highlight: Rectangle {
+            color: "#22ffffff" // Semi-transparent white
+            radius: 5
+        }
+        verticalLayoutDirection: ListView.TopToBottom
         model: ListModel {}
-        delegate: Row {
-            spacing: 5
-            Rectangle {
-                width: 100
-                height: 20
-                color: colorCode
-            }
+        delegate: ContactElement {
+            name: model.name
 
-            Text {
-                width: 100
-                text: name
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    messageList.currentIndex = index // Updates the visual selection
+                    // We call the function via the backend object
+                    messageList.model.clear()
+                    backend.set_active_contact(model.name)
+                }
             }
         }
+        add: Transition {
+            NumberAnimation {
+                property: "opacity"
+                from: 0
+                to: 1.0
+                duration: 400
+            }
+            NumberAnimation {
+                property: "scale"
+                from: 0
+                to: 1.0
+                duration: 400
+            }
+        }
+
+        displaced: Transition {
+            NumberAnimation {
+                properties: "x,y"
+                duration: 400
+                easing.type: Easing.OutBounce
+            }
+        }
+
     }
 }

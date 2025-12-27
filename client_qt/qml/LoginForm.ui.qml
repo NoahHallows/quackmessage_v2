@@ -1,23 +1,19 @@
-
-
-/*
-This is a UI file (.ui.qml) that is intended to be edited in Qt Design Studio only.
-It is supposed to be strictly declarative and only uses a subset of QML. If you edit
-this file manually, you might introduce QML code that is not supported by Qt Design Studio.
-Check out https://doc.qt.io/qtcreator/creator-quick-ui-forms.html for details on .ui.qml files.
-*/
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 
-//import Quackmessage_desktop
-//import QtQuick.Studio.DesignEffects
 Rectangle {
     id: rectangle
     width: 700
     height: 700
     state: "initial"
     color: "#272727"
+    //border.color: "#ff0000"
+
+    property string borderColor: "#aaaaaa"
+    property string blueColor: "#0072ff"
+    property string greenColor: "#007429"
+    property string placeHolderTextColor: "#b6b6b6"
 
     // Allow login.qml to see and change these properties
     property alias loginBtn: loginButton
@@ -36,7 +32,7 @@ Rectangle {
 
     Text {
         id: title
-        x: 100
+        x: 350 - (width / 2)
         y: 100
         width: 275
         height: 136
@@ -44,12 +40,13 @@ Rectangle {
         text: qsTr("Quackmessage\nLogin")
         font.pixelSize: 30
         horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
     }
 
     Text {
         id: userNameLabel
-        x: 100
-        y: 250
+        x: 275 - (width / 2)
+        y: 300
         width: 90
         height: 30
         opacity: 0
@@ -63,11 +60,13 @@ Rectangle {
 
     TextField {
         id: usernameEdit
-        x: 250
-        y: 250
+        x: 425 - (width / 2)
+        y: 300
         width: 145
         height: 30
         opacity: 0
+        wrapMode: Text.Wrap
+        placeholderTextColor: placeHolderTextColor
         enabled: false
         placeholderText: qsTr("Username")
         background: Rectangle {
@@ -75,7 +74,7 @@ Rectangle {
             implicitHeight: 30
             opacity: enabled ? 1 : 0.3
             color: "#888e95"
-            border.color: "#ffffff"
+            border.color: borderColor
             border.width: 1
             radius: 2
         }
@@ -83,8 +82,8 @@ Rectangle {
 
     Text {
         id: passwordLabel
-        x: 100
-        y: 310
+        x: 275 - (width / 2)
+        y: 360
         width: 90
         height: 30
         opacity: 0
@@ -98,11 +97,13 @@ Rectangle {
 
     TextField {
         id: passwordEdit
-        x: 250
-        y: 310
+        x: 425 - (width / 2)
+        y: 360
         width: 145
         height: 30
         opacity: 0
+        wrapMode: Text.Wrap
+        placeholderTextColor: placeHolderTextColor
         echoMode: TextInput.Password
         enabled: false
         placeholderText: qsTr("Password")
@@ -111,7 +112,7 @@ Rectangle {
             implicitHeight: 30
             opacity: enabled ? 1 : 0.3
             color: "#888e95"
-            border.color: "#ffffff"
+            border.color: borderColor
             border.width: 1
             radius: 2
         }
@@ -119,25 +120,25 @@ Rectangle {
 
     Button {
         id: loginButton
-        x: 190
+        x: 350 - (width / 2)
         y: 450
-        opacity: 1
+        opacity: 0
         text: qsTr("Login")
         background: Rectangle {
             implicitWidth: 100
             implicitHeight: 40
             opacity: enabled ? 1 : 0.3
-            color: "#0072ff"
-            border.color: "#ffffff"
+            color: blueColor
+            border.color: borderColor
             border.width: 1
-            radius: 2
+            radius: 8
         }
     }
 
     Button {
         id: selectLoginButton
-        x: 100
-        y: 400
+        x: 250 - (width / 2)
+        y: 450
         visible: true
         text: qsTr("Login")
         enabled: true
@@ -146,17 +147,17 @@ Rectangle {
             implicitWidth: 100
             implicitHeight: 40
             opacity: enabled ? 1 : 0.3
-            color: "#0072ff"
-            border.color: "#ffffff"
+            color: blueColor
+            border.color: borderColor
             border.width: 1
-            radius: 2
+            radius: 8
         }
     }
 
     Button {
         id: selectCreateUserButton
-        x: 270
-        y: 400
+        x: 450 - (width / 2)
+        y: 450
         visible: true
         text: qsTr("Create account")
         enabled: true
@@ -165,38 +166,40 @@ Rectangle {
             implicitWidth: 100
             implicitHeight: 40
             opacity: enabled ? 1 : 0.3
-            color: "#007429"
-            border.color: "#ffffff"
+            color: greenColor
+            border.color: borderColor
             border.width: 1
-            radius: 2
+            radius: 8
         }
     }
 
     TextField {
         id: emailEdit
-        x: 200
-        y: 300
-        width: 250
+        x: 325
+        y: 325
+        width: 310
         height: 30
         opacity: 0
         visible: true
+        wrapMode: Text.Wrap
+        placeholderTextColor: placeHolderTextColor
         placeholderText: qsTr("Email")
         enabled: false
         background: Rectangle {
             opacity: enabled ? 1 : 0.3
             color: "#888e95"
             radius: 2
-            border.color: "#ffffff"
+            border.color: borderColor
             border.width: 1
-            implicitWidth: 250
-            implicitHeight: 30
+            implicitWidth: parent.width
+            implicitHeight: parent.height
         }
     }
 
     Text {
         id: emailLabel
-        x: 70
-        y: 300
+        x: 250 - (width / 2)
+        y: 325
         width: 125
         height: 30
         opacity: 0
@@ -210,16 +213,16 @@ Rectangle {
 
     Button {
         id: submitEmailButton
-        x: 180
-        y: 400
+        x: 350 - (width / 2)
+        y: 450
         opacity: 0
         text: qsTr("Request code")
         onClicked: rectangle.state = "enterEmailVerificationCode"
         background: Rectangle {
             opacity: enabled ? 1 : 0.3
-            color: "#0d60a9"
-            radius: 2
-            border.color: "#ffffff"
+            color: blueColor
+            radius: 8
+            border.color: borderColor
             border.width: 1
             implicitWidth: 100
             implicitHeight: 40
@@ -228,18 +231,19 @@ Rectangle {
 
     TextField {
         id: verificationCodeEdit
-        x: 220
-        y: 365
+        x: 425 - (width / 2)
+        y: 325
         width: 175
         height: 30
         opacity: 0
+        placeholderTextColor: placeHolderTextColor
         placeholderText: qsTr("Code")
         enabled: false
         background: Rectangle {
             opacity: enabled ? 1 : 0.3
             color: "#888e95"
             radius: 2
-            border.color: "#ffffff"
+            border.color: borderColor
             border.width: 1
             implicitWidth: 250
             implicitHeight: 30
@@ -248,30 +252,32 @@ Rectangle {
 
     Text {
         id: verificationCodeLabel
-        x: 112
-        y: 276
-        width: 277
-        height: 36
+        x: 350 - (width / 2)
+        y: 275
+        width: 300
+        height: 35
         opacity: 0
         color: "#ffffff"
         text: qsTr("A verification code was sent to your email")
         font.pixelSize: 14
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
         enabled: false
     }
 
     Button {
         id: submitVerificationCode
-        x: 290
-        y: 500
+        x: 450 - (width / 2)
+        y: 450
         opacity: 0
         visible: true
         text: qsTr("Submit")
         onClicked: rectangle.state = "createUser"
         background: Rectangle {
             opacity: enabled ? 1 : 0.3
-            color: "#0da91f"
-            radius: 2
-            border.color: "#ffffff"
+            color: greenColor
+            radius: 8
+            border.color: borderColor
             border.width: 1
             implicitWidth: 100
             implicitHeight: 40
@@ -280,16 +286,16 @@ Rectangle {
 
     Button {
         id: requestNewCodeButton
-        x: 75
-        y: 500
+        x: 250 - (width / 2)
+        y: 450
         opacity: 0
         visible: true
         text: qsTr("Request new code")
         background: Rectangle {
             opacity: enabled ? 1 : 0.3
             color: "#deb605"
-            radius: 2
-            border.color: "#ffffff"
+            radius: 8
+            border.color: borderColor
             border.width: 1
             implicitWidth: 100
             implicitHeight: 40
@@ -298,15 +304,15 @@ Rectangle {
 
     Button {
         id: createAccountButton
-        x: 190
+        x: 350 - (width / 2)
         y: 450
         opacity: 0
         text: qsTr("Create account")
         background: Rectangle {
             opacity: enabled ? 1 : 0.3
-            color: "#0072ff"
-            radius: 2
-            border.color: "#000000"
+            color: blueColor
+            radius: 8
+            border.color: borderColor
             border.width: 1
             implicitWidth: 100
             implicitHeight: 40
@@ -324,8 +330,8 @@ Rectangle {
 
     Button {
         id: backButton
-        x: 50
-        y: 192
+        x: 60
+        y: 260
         opacity: 0
         onClicked: rectangle.state = "initial"
         text: qsTr("Back")
@@ -334,8 +340,8 @@ Rectangle {
 
     Text {
         id: verificationCodeLabel1
-        x: 100
-        y: 365
+        x: 250 - (width / 2)
+        y: 325
         width: 100
         height: 30
         opacity: 0
@@ -379,7 +385,7 @@ Rectangle {
             Button {
                 text: qsTr("OK")
                 anchors.horizontalCenter: parent.horizontalCenter
-                onClicked: errorPopup.close()
+                //onClicked: errorPopup.close()
             }
         }
     }
@@ -501,7 +507,6 @@ Rectangle {
                 opacity: 0
                 scale: 1.0
             }
-
         },
 
         State {
@@ -560,7 +565,6 @@ Rectangle {
                 opacity: 1
                 scale: 1.0
             }
-
         },
 
         State {
@@ -637,7 +641,6 @@ Rectangle {
                 opacity: 1
                 scale: 1.0
             }
-
         },
 
         State {
@@ -684,7 +687,6 @@ Rectangle {
                 opacity: 0
                 scale: 1.0
             }
-
         },
 
         State {
@@ -767,5 +769,13 @@ Rectangle {
     }
 }
 
-
+/*##^##
+Designer {
+    D{i:2;invisible:true}D{i:3;invisible:true}D{i:5;invisible:true}D{i:6;invisible:true}
+D{i:8;invisible:true}D{i:10;invisible:true}D{i:12;invisible:true}D{i:14;invisible:true}
+D{i:16;invisible:true}D{i:17;invisible:true}D{i:19;invisible:true}D{i:21;invisible:true}
+D{i:22;invisible:true}D{i:24;invisible:true}D{i:26;invisible:true}D{i:28;invisible:true}
+D{i:29;invisible:true}D{i:30;invisible:true}
+}
+##^##*/
 
