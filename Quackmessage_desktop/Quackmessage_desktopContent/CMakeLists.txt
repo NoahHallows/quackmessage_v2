@@ -14,6 +14,7 @@ qt6_add_qml_module(Quackmessage_desktopContent
         "Login.qml"
         "MainWindow.qml"
         "MainWindowForm.ui.qml"
+        "MessageBox.ui.qml"
 )
 
 

@@ -49,7 +49,7 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
             print(f"Error sending message: {e}")
             return message_pb2.sendMessageResult(sendSuccessful=False, message_id=0)
 
-    def subscribeMessage(self, request, context):
+    def subscribeMessages(self, request, context):
         user_queue = queue.Queue()
         metadata = dict(context.invocation_metadata())
         auth_header = metadata.get('authorization', '')
@@ -57,6 +57,15 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
             token = auth_header[len("Bearer "):]
             username = jwt_auth.get_username(token)
             self.active_clients[username] = user_queue
+            # Send old messages
+            conn = db.getConn()
+            cursor = conn.cursor()
+            cursor.execute("SELECT sender, content, message_id FROM messages WHERE receiver = %s", (username,))
+            messages = cursor.fetchall()
+            print(messages)
+            for message in messages:
+                response = message_pb2.Message(sender=message[0], receiver=username, content=message[1], messageId=message[2])
+                yield response
             try:
                 while True:
                     new_message = user_queue.get()

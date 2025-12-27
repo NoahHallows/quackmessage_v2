@@ -16,6 +16,8 @@ Rectangle {
     property alias sendMessageBtn: sendMessageButton
     property alias receiverEdit: receiverEdit
     property alias messageEdit: messageEdit
+    property alias messageList: messageList
+
 
     Button {
         id: sendMessageButton;
@@ -69,18 +71,22 @@ Rectangle {
         }
     }
     ListView {
+        id: messageList
         width: 240; height: 320
+        spacing: 10
         verticalLayoutDirection: ListView.BottomToTop
-    model: ListModel {}
+        model: ListModel {}
 
-    delegate: Rectangle {
-        width: 100; height: 30
+        delegate: MessageBox {
+            messageText: model.messageText
+            senderText: model.senderText
+        /*width: 100; height: 30
         border.width: 1
         color: "lightsteelblue"
         Text {
             anchors.centerIn: parent
             text: name
-        }
+        }*/
     }
 
     add: Transition {

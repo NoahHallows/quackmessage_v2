@@ -149,7 +149,7 @@ Rectangle {
             NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutBounce }
         }
     
-        focus: true
-        Keys.onSpacePressed: model.insert(0, { "name": "Item " + model.count })
+        //focus: true
+        //Keys.onSpacePressed: model.insert(0, { "name": "Item " + model.count })
     }
 }

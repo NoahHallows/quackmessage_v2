@@ -5,12 +5,13 @@ import message_pb2
 import message_pb2_grpc
 import grpc
 import _credentials
-
+import threading
 
 
 class Backend(QObject):
     # Auth stuff
     loginSuccess = Signal()
+    newMessage = Signal(str, str)
     def __init__(self):
         super().__init__()
         self.HOST = "localhost:5555"
@@ -43,6 +44,11 @@ class Backend(QObject):
             self.authStub = auth_pb2_grpc.QuackMessageAuthStub(self.channel)
             self.messageStub = message_pb2_grpc.MessagerStub(self.channel)
             self.loginSuccess.emit()
+            # Start receive message stream
+            self.receiveMessageThread = threading.Thread(target=self.receiveMessage, args=(), daemon=True)
+            self.receiveMessageThread.start()
+
+
 
 
 
@@ -82,3 +88,10 @@ class Backend(QObject):
         send_message_result = self.messageStub.sendMessage.future(request)
         result = send_message_result.result()
         print(f"Success: , message id: {result.message_id}")
+
+    # start receive message stream
+    def receiveMessage(self):
+        print('Receiving message')
+
+        for message in self.messageStub.subscribeMessages(message_pb2.receiveMessagesRequest(request=True)):
+            self.newMessage.emit(message.sender, message.content)
