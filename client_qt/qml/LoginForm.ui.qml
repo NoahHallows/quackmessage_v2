@@ -32,7 +32,7 @@ Rectangle {
     property alias verificationCodeEdit: verificationCodeEdit
     property alias submitVerificationCode: submitVerificationCode
     property alias errorPopup: errorPopup
-    property alias loginRectangle: rectangle
+    property alias loginState: rectangle.state
 
     Text {
         id: title

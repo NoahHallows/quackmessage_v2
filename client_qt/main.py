@@ -22,7 +22,7 @@ class main:
 
 
         # 2. Load your main QML file (usually App.qml or Main.qml)
-        qml_file = Path(__file__).parent / "App.qml"
+        qml_file = Path(__file__).parent / "qml/App.qml"
         self.engine.load(str(qml_file))
 
         if not self.engine.rootObjects():

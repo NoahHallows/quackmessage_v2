@@ -40,7 +40,7 @@ Rectangle {
                 console.log("Enter an email")
                 loginForm.errorPopup.errorText = "Enter a valid email"
                 loginForm.errorPopup.open()
-                loginForm.loginRectangle.state = "emailCodeRequest"
+                loginForm.loginState = "emailCodeRequest"
             }
             else
             {
@@ -51,7 +51,7 @@ Rectangle {
                 else {
                     loginForm.errorPopup.errorText = "Enter a valid email"
                     loginForm.errorPopup.open()
-                    loginForm.loginRectangle.state = "emailCodeRequest"
+                    loginForm.loginState = "emailCodeRequest"
                 }
             }
         }
