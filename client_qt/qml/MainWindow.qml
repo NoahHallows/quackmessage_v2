@@ -11,20 +11,21 @@ Rectangle {
         id: mainUI
         sendMessageBtn.onClicked: {
             backend.send_message(messageEdit.text)
-            showMessage("You", messageEdit.text)
+            //showMessage("You", messageEdit.text)
             messageEdit.clear()
         }
 
 
-        function showMessage(sender, message) {
+        function showMessage(sender, message, message_id) {
             if (sender === "You") {
-                var box_color = "#5e0549"
+                var isOwnMessage = true
             }
             else {
-                var box_color = "#c754bb"
+                var isOwnMessage = false
             }
             messageList.model.insert(0, { "messageText": message , "senderText":
-            "Sent by: " + sender, "messageColor": box_color})
+            "Sent by: " + sender, "isOwnMessage": isOwnMessage, "message_id":
+            message_id})
         }
 
         function createContact(contactName) {
@@ -34,7 +35,7 @@ Rectangle {
         Connections {
             target: backend
             function onNewMessage(sender, message, message_id) {
-                mainUI.showMessage(sender, message)
+                mainUI.showMessage(sender, message, message_id)
             }
             function onAddContactSignal(name) {
                 mainUI.createContact(name)

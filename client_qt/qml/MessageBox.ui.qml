@@ -11,20 +11,33 @@ import QtQuick.Controls
 
 Rectangle {
     id: root
-    width: 220
+    width: 320
     height: messageText.implicitHeight + senderText.implicitHeight + 24
     radius: 10
-    color: "lightsteelblue"
+
+    property int message_id: 0
 
     property alias messageText: messageText.text
     property alias senderText: senderText.text
-    property alias messageColor: root.color
+
+    property bool isOwnMessage: false
+
+    anchors.left: isOwnMessage ? undefined : parent.left
+    anchors.right: isOwnMessage ? parent.right : undefined
+
+    // Change color based on who sent it
+    // first if you sent it, second not you
+    color: isOwnMessage ?  "#b261ff" : "#539fe4"
 
     Text {
         id: messageText
-        x: 8
+        /*x: 8
         y: 8
-        width: parent.width - 16
+        width: parent.width - 16*/
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.margins: 8
         wrapMode: Text.WordWrap
         text: qsTr("Message: ")
         font.pixelSize: 12
@@ -33,11 +46,22 @@ Rectangle {
     Text {
         id: senderText
         anchors.top: messageText.bottom
-        anchors.topMargin: 4
+        anchors.margins: 8
+        anchors.right: parent.right
         x: 8
         width: parent.width - 16
         text: qsTr("Sent by: ")
         font.pixelSize: 10
         font.italic: true
+    }
+    Text {
+        id: receiptText
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        anchors.margins: 8
+        x: parent.width - 20
+        y: parent.height - 15
+        text: qsTr("Text")
+        font.pixelSize: 8
     }
 }

@@ -44,7 +44,7 @@ Rectangle {
             }
             else
             {
-                const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                 if (pattern.test(emailEdit.text.toLowerCase())) {
                     backend.request_email_code(emailEdit.text)
                 }

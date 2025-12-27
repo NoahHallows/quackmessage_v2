@@ -14,6 +14,7 @@ Rectangle {
     width: 700
     height: 700
     color: "#272727"
+    border.color: "#ff0000"
 
     property alias sendMessageBtn: sendMessageButton
     property alias messageEdit: messageEdit
@@ -22,8 +23,8 @@ Rectangle {
 
     Button {
         id: sendMessageButton
-        x: 440
-        y: 440
+        x: 640
+        y: 640
         text: qsTr("➤")
         icon.color: "#ff0000"
         background: Rectangle {
@@ -39,9 +40,9 @@ Rectangle {
 
     TextArea {
         id: messageEdit
-        x: 120
-        y: 440
-        width: 295
+        x: 192
+        y: 640
+        width: 423
         height: 31
         color: "#ffffff"
         wrapMode: Text.Wrap
@@ -53,20 +54,20 @@ Rectangle {
             color: "#888e95"
             border.color: "#21be2b"
             border.width: 1
-            radius: 2
+            radius: 8
         }
     }
     ListView {
         id: messageList
-        x: 120
+        x: 192
         y: 8
-        width: 375
-        height: 400
+        width: 500
+        height: 600
+        boundsBehavior: Flickable.DragOverBounds
+        snapMode: ListView.SnapToItem
         spacing: 8
         verticalLayoutDirection: ListView.BottomToTop
         model: ListModel {}
-
-
 
         delegate: MessageBox {
             messageText: model.messageText
@@ -102,8 +103,8 @@ Rectangle {
         id: contactsList
         x: 8
         y: 8
-        width: 100
-        height: 400
+        width: 178
+        height: 600
         spacing: 8
         focus: true
         highlightFollowsCurrentItem: true
@@ -118,12 +119,14 @@ Rectangle {
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: {
+
+
+                /*onClicked: {
                     messageList.currentIndex = index // Updates the visual selection
                     // We call the function via the backend object
                     messageList.model.clear()
                     backend.set_active_contact(model.name)
-                }
+                }*/
             }
         }
         add: Transition {
@@ -148,6 +151,5 @@ Rectangle {
                 easing.type: Easing.OutBounce
             }
         }
-
     }
 }

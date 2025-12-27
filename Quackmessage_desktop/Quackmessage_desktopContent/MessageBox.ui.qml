@@ -11,7 +11,7 @@ import QtQuick.Controls
 
 Rectangle {
     id: root
-    width: 220
+    width: 320
     height: messageText.implicitHeight + senderText.implicitHeight + 24
     radius: 10
     color: "lightsteelblue"
@@ -39,5 +39,12 @@ Rectangle {
         text: qsTr("Sent by: ")
         font.pixelSize: 10
         font.italic: true
+    }
+    Text {
+        id: receiptText
+        x: parent.width - 20
+        y: parent.height - 8
+        text: qsTr("Text")
+        font.pixelSize: 8
     }
 }

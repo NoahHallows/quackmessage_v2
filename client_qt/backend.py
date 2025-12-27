@@ -106,6 +106,7 @@ class Backend(QObject):
         if result.sendSuccessful == True:
             message_tuple = (self.username, self.active_contact, message, result.message_id)
             self.master_message_list.append(message_tuple)
+            self.newMessage.emit("You", self.active_contact, message, result.message_id)
 
     # start receive message stream
     def receiveMessage(self):

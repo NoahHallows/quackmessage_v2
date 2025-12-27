@@ -385,7 +385,7 @@ Rectangle {
             Button {
                 text: qsTr("OK")
                 anchors.horizontalCenter: parent.horizontalCenter
-                //onClicked: errorPopup.close()
+                onClicked: errorPopup.close()
             }
         }
     }
@@ -565,6 +565,13 @@ Rectangle {
                 opacity: 1
                 scale: 1.0
             }
+            PropertyChanges {
+                target: submitEmailButton
+                enabled: false
+                opacity: 0
+                scale: 1.0
+            }
+
         },
 
         State {
