@@ -13,6 +13,7 @@ Rectangle {
     id: root
     width: 150
     height: 100
+    color: "#023d74"
     radius: 10
 
     Text {

@@ -82,4 +82,74 @@ Rectangle {
             radius: 2
         }
     }
+
+    ListView {
+        id: listView
+        x: 668
+        y: 638
+        width: 160
+        height: 80
+        orientation: ListView.Vertical
+        verticalLayoutDirection: ListView.BottomToTop
+        model: ListModel {
+            ListElement {
+                name: "Red"
+                colorCode: "red"
+            }
+
+            ListElement {
+                name: "Green"
+                colorCode: "green"
+            }
+
+            ListElement {
+                name: "Blue"
+                colorCode: "blue"
+            }
+
+            ListElement {
+                name: "White"
+                colorCode: "white"
+            }
+        }
+        delegate: Row {
+            spacing: 5
+            Rectangle {
+                width: 100
+                height: 10
+                color: colorCode
+            }
+
+            Text {
+                width: 100
+                text: name
+            }
+        }
+    }
+    ListView {
+        width: 240; height: 320
+        model: ListModel {}
+
+        delegate: Rectangle {
+            width: 100; height: 30
+            border.width: 1
+            color: "lightsteelblue"
+            Text {
+                anchors.centerIn: parent
+                text: name
+            }
+        }
+
+        add: Transition {
+            NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 400 }
+            NumberAnimation { property: "scale"; from: 0; to: 1.0; duration: 400 }
+        }
+
+        displaced: Transition {
+            NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutBounce }
+        }
+
+        //focus: true
+        //Keys.onSpacePressed: model.insert(0, { "name": "Item " + model.count })
+    }
 }

@@ -10,8 +10,8 @@ import QtQuick.Controls
 
 Rectangle {
     id: rectangle
-    width: 1920
-    height: 1080
+    width: 250
+    height: 500
 
     property alias sendMessageBtn: sendMessageButton
     property alias receiverEdit: receiverEdit

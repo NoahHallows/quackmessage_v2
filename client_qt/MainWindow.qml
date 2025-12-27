@@ -3,8 +3,8 @@ import QtQuick.Controls
 
 Rectangle {
     id: mainScreen
-    width: 1920
-    height: 1080
+    width: 250
+    height: 500
     visible: true
 
     MainWindowForm {
