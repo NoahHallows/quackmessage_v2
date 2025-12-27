@@ -8,22 +8,28 @@ Rectangle {
     //title: "Quackmessage Login"
 
     LoginForm {
+        id: loginForm
         loginBtn.onClicked: {
             console.log("Login button clicked")
-            console.log(usernameEdit.text)
-            console.log(passwordEdit.text)
+            console.log(usernameEdit.text.length)
+            console.log(passwordEdit.text.length)
             if (passwordEdit.text.length == 0)
             {
                 console.log("Enter a password")
+                loginForm.errorPopup.errorText = "Enter a password"
+                loginForm.errorPopup.open()
             }
-            if (usernameEdit.text.length == 0)
+            else if (usernameEdit.text.length == 0)
             {
                 console.log("Enter a username")
+                loginForm.errorPopup.errorText = "Enter an username"
+                loginForm.errorPopup.open()
             }
             else
             {
                 backend.login(usernameEdit.text, passwordEdit.text)
             }
+
         }
 
         submitEmailBtn.onClicked: {
@@ -32,10 +38,21 @@ Rectangle {
             if (emailEdit.text.length == 0)
             {
                 console.log("Enter an email")
+                loginForm.errorPopup.errorText = "Enter a valid email"
+                loginForm.errorPopup.open()
+                loginForm.loginRectangle.state = "emailCodeRequest"
             }
             else
             {
-                backend.request_email_code(emailEdit.text)
+                const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (pattern.test(emailEdit.text.toLowerCase())) {
+                    backend.request_email_code(emailEdit.text)
+                }
+                else {
+                    loginForm.errorPopup.errorText = "Enter a valid email"
+                    loginForm.errorPopup.open()
+                    loginForm.loginRectangle.state = "emailCodeRequest"
+                }
             }
         }
 
@@ -45,6 +62,8 @@ Rectangle {
             if (verificationCodeEdit.text.length == 0)
             {
                 console.log("Enter code")
+                loginForm.errorPopup.errorText = "Enter the code"
+                loginForm.errorPopup.open()
             }
             else {
                 backend.verify_email_code(Number(verificationCodeEdit.text))
@@ -59,11 +78,47 @@ Rectangle {
 
         createAccountBtn.onClicked: {
             console.log("Create account button clicked")
-            console.log(usernameEdit.text)
-            console.log(passwordEdit.text)
-            backend.create_account(usernameEdit.text, passwordEdit.text)
+            if (usernameEdit.text.length == 0) {
+                loginForm.errorPopup.errorText = "Enter an username"
+                loginForm.errorPopup.open()
+            }
+            else if (passwordEdit.text.length == 0) {
+                loginForm.errorPopup.errorText = "Enter a password"
+                loginForm.errorPopup.open()
+            }
+            else {
+                backend.create_account(usernameEdit.text, passwordEdit.text)
+            }
         }
 
+        Connections {
+            // These are triggered by signals from backend.py
+            target: backend
+            function onLoginFail(message) {
+                loginForm.errorPopup.errorText = "Incorrect username or password"
+                loginForm.errorPopup.open()
+                loginForm.passwordEdit.clear()
+                loginForm.loginRectangle.state = "login"
+            }
+
+            function onSendEmailFail() {
+                loginForm.errorPopup.errorText = "Unable to send email"
+                loginForm.errorPopup.open()
+                loginForm.loginRectangle.state = "emailCodeRequest"
+            }
+            function onEmailVerificationFail() {
+                loginForm.errorPopup.errorText = "Incorrect code"
+                loginForm.errorPopup.open()
+                loginForm.verificationCodeEdit.clear()
+                loginForm.loginRectangle.state = "enterEmailVerificationCode"
+            }
+            function onAccountCreationFail() {
+                loginForm.errorPopup.errorText = "Error creating account"
+                loginForm.errorPopup.open()
+                loginForm.passwordEdit.clear()
+                loginForm.loginRectangle.state = "createUser"
+            }
+        }
     }
 
 }

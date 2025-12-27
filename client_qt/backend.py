@@ -9,9 +9,14 @@ import threading
 
 
 class Backend(QObject):
-    # Auth stuff
+    # Signals
     loginSuccess = Signal()
     newMessage = Signal(str, str)
+    loginFail = Signal()
+    sendEmailFail = Signal()
+    emailVerificationFail = Signal()
+    accountCreationFail = Signal()
+    # Auth stuff
     def __init__(self):
         super().__init__()
         self.HOST = "localhost:5555"
@@ -47,10 +52,8 @@ class Backend(QObject):
             # Start receive message stream
             self.receiveMessageThread = threading.Thread(target=self.receiveMessage, args=(), daemon=True)
             self.receiveMessageThread.start()
-
-
-
-
+        else:
+            self.loginFail.emit()
 
 
     # This allows Python to send data back to QML
@@ -62,6 +65,9 @@ class Backend(QObject):
         email_code = self.authStub.VerifyEmail.future(request)
         result = email_code.result()
         print(f"Email sent: {result.emailSent}")
+        if result.emailSent == False:
+            self.sendEmailFail.emit()
+
 
 
     @Slot(int)
@@ -71,6 +77,8 @@ class Backend(QObject):
         verify_result = self.authStub.CheckCode.future(request)
         result = verify_result.result()
         print(f"Result: {result.verified}")
+        if result.verified == False:
+            self.emailVerificationFail.emit()
 
     @Slot(str, str)
     def create_account(self, username, password):
@@ -79,6 +87,8 @@ class Backend(QObject):
         create_account_result = self.authStub.CreateUser.future(request)
         result = create_account_result.result()
         print(f"Result {result.success}, {result.auth_token}")
+        if result.success == False:
+            self.accountCreationFail.emit()
 
     # Message stuff
     @Slot(str, str)
