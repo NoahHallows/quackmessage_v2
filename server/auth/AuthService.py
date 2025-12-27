@@ -59,9 +59,8 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
 
     # Login function
     def Login(self, request, context):
-        print("Login")
+        print(f"Login for user {request.username}")
         try:
-            print(request.username)
             conn = db.getConn()
             cursor = conn.cursor()
             cursor.execute("SELECT password_hash FROM users WHERE username = %s", (request.username,))
@@ -108,10 +107,10 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
             message["From"] = email_username
             message["To"] = request.email
 
-            message_text = "Hello,\n your verification code is: {code}\nRegards Quackmessage automated email bot"
+            message_text = "Hello,\nYour verification code is: {code}\nRegards Quackmessage automated email bot"
             part1 = MIMEText(message_text.format(code=self.email_verification_code), "plain")
             message.attach(part1)
-            server.sendmail(email_username, request.email, message.as_string())
+            server.sendmail(email_username, request.email, message.as_string)
             self.email = request.email
             return auth_pb2.VerificationEmailSent(emailSent=True)
 
@@ -128,7 +127,6 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
         conn = db.getConn()
         cur = conn.cursor()
         cur.execute("SELECT 1 FROM users WHERE username = %s;", (request.username,))
-        print(f"{cur.fetchone()} {self.email} {self.email_verified}")
         if cur.fetchone() is None and self.email is not None and self.email_verified == True:
             ph = PasswordHasher()
             password_hash = ph.hash(request.password)
