@@ -38,8 +38,8 @@ jobs:
           include-package-data: grpc
           
           
-          company-name: "Quackmail"
-          product-name: "Quackmessage"
+          #company-name: "Quackmail"
+          #product-name: "Quackmessage"
           # Which Nuitka release to use:
           nuitka-version: main
 
