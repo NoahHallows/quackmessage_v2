@@ -6,7 +6,7 @@ Rectangle {
     width: 100
     height: 30
     radius: 10
-    color: "lightsteelblue"
+    color: "#2860a9"
 
     property alias name: contactName.text
 

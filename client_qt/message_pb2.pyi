@@ -1,3 +1,6 @@
+import datetime
+
+from google.protobuf import timestamp_pb2 as _timestamp_pb2
 from google.protobuf.internal import containers as _containers
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
@@ -13,16 +16,18 @@ class receiveMessagesRequest(_message.Message):
     def __init__(self, request: bool = ...) -> None: ...
 
 class Message(_message.Message):
-    __slots__ = ("sender", "receiver", "content", "messageId")
+    __slots__ = ("sender", "receiver", "content", "messageId", "sent_at")
     SENDER_FIELD_NUMBER: _ClassVar[int]
     RECEIVER_FIELD_NUMBER: _ClassVar[int]
     CONTENT_FIELD_NUMBER: _ClassVar[int]
     MESSAGEID_FIELD_NUMBER: _ClassVar[int]
+    SENT_AT_FIELD_NUMBER: _ClassVar[int]
     sender: str
     receiver: str
     content: str
     messageId: int
-    def __init__(self, sender: _Optional[str] = ..., receiver: _Optional[str] = ..., content: _Optional[str] = ..., messageId: _Optional[int] = ...) -> None: ...
+    sent_at: _timestamp_pb2.Timestamp
+    def __init__(self, sender: _Optional[str] = ..., receiver: _Optional[str] = ..., content: _Optional[str] = ..., messageId: _Optional[int] = ..., sent_at: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class sendMessageResult(_message.Message):
     __slots__ = ("sendSuccessful", "message_id")

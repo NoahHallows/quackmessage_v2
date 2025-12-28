@@ -11,12 +11,11 @@ Rectangle {
         id: mainUI
         sendMessageBtn.onClicked: {
             backend.send_message(messageEdit.text)
-            //showMessage("You", messageEdit.text)
             messageEdit.clear()
         }
 
 
-        function showMessage(sender, message, message_id) {
+        function showMessage(sender, message, message_id, time_string, time_stamp) {
             if (sender === "You") {
                 var isOwnMessage = true
             }
@@ -25,20 +24,58 @@ Rectangle {
             }
             messageList.model.insert(0, { "messageText": message , "senderText":
             "Sent by: " + sender, "isOwnMessage": isOwnMessage, "message_id":
-            message_id})
+            message_id, "timeText": time_string, "timeStamp": time_stamp})
         }
 
         function createContact(contactName) {
             contactsList.model.append({"name": contactName})
         }
 
+        function getRelativeTime(msTimestamp) {
+            if (!msTimestamp) return "";
+
+            let now = Date.now();
+            let diff = Math.floor((now - msTimestamp) / 1000); // Difference in seconds
+
+            if (diff < 60) return "just now";
+            if (diff < 3600) return Math.floor(diff / 60) + "m ago";
+            if (diff < 86400) return Math.floor(diff / 3600) + "h ago";
+
+            // For older messages, format as a real date
+            let date = new Date(msTimestamp);
+            return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+        }
+
         Connections {
             target: backend
-            function onNewMessage(sender, message, message_id) {
-                mainUI.showMessage(sender, message, message_id)
+            function onNewMessage(sender, message, message_id, time_sent_ms) {
+                mainUI.showMessage(sender, message, message_id,
+                mainUI.getRelativeTime(time_sent_ms), time_sent_ms)
             }
             function onAddContactSignal(name) {
                 mainUI.createContact(name)
+            }
+            function onSetUserName(name) {
+                mainUI.yourName.name = "You are " + name
+            }
+        }
+
+        Timer {
+            interval: 10000
+            //interval: 30000 // Update every 30 seconds for better accuracy
+            running: true
+            repeat: true
+            onTriggered: {
+                for (var i = 0; i < mainUI.messageList.model.count; i++) {
+                    let item = mainUI.messageList.model.get(i);
+                    if (item.timeStamp) {
+                        let updatedTime = mainUI.getRelativeTime(item.timeStamp);
+                        // Only update if the string actually changed to save performance
+                        if (item.timeStr !== updatedTime) {
+                            mainUI.messageList.model.setProperty(i, "timeText", updatedTime);
+                        }
+                    }
+                }
             }
         }
     }

@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 service Messager {
   rpc subscribeMessages(receiveMessagesRequest) returns (stream Message) {};
   rpc sendMessage(Message) returns (sendMessageResult) {};
@@ -14,12 +16,13 @@ message Message {
   string sender = 1;
   string receiver = 2;
   string content = 3;
-  sint32 messageId = 4;
+  int32 messageId = 4;
+  google.protobuf.Timestamp sent_at = 5;
 }
 
 message sendMessageResult {
   bool sendSuccessful = 1;
-  sint32 message_id = 2;
+  int32 message_id = 2;
 }
 
 message contactsRequest {
