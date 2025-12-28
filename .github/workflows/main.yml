@@ -60,5 +60,6 @@ jobs:
             build/**/*.bin
             build/**/*.run
             build/**/*
+            client_qt/build/**/*
           if-no-files-found: ignore
           include-hidden-files: true
