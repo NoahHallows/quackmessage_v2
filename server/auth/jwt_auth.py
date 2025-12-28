@@ -9,10 +9,10 @@ load_dotenv()
 ISSUER = os.environ["TOKEN_ISSUER"]
 AUDIENCE = os.environ["TOKEN_AUDIENCE"]
 
-with open("/etc/quackmessage/private_key.pem", "rb") as f:
+with open("/run/secrets/private_key", "rb") as f:
     PRIVATE_KEY = f.read()
 
-with open("/etc/quackmessage/public_key.pem", "rb") as f:
+with open("/run/secrets/public_key", "rb") as f:
     PUBLIC_KEY = f.read()
 
 
