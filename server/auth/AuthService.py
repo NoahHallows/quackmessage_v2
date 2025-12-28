@@ -16,7 +16,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from dotenv import load_dotenv, dotenv_values
 from sys import stderr
-
+from datetime import datetime
 from .jwt_auth import create_jwt
 
 # Import protobufs
@@ -45,7 +45,6 @@ def db_binary_to_binary(db_binary):
             for byte in section:
                 binary = binary + byte
 
-    print(binary)
     return binary
 
 
@@ -59,7 +58,7 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
 
     # Login function
     def Login(self, request, context):
-        print(f"Login for user {request.username}")
+        print(f"Login for user {request.username} at {datetime.now()}")
         try:
             conn = db.getConn()
             cursor = conn.cursor()
@@ -115,7 +114,6 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
             return auth_pb2.VerificationEmailSent(emailSent=True)
 
     def CheckCode(self, request, context):
-        print(f"code received: {request.code}, code sent: {self.email_verification_code}")
         if request.code == self.email_verification_code:
             self.email_verified = True
             return auth_pb2.VerificationCodeMatches(verified=True)

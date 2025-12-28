@@ -14,6 +14,12 @@ Rectangle {
             messageEdit.clear()
         }
 
+        messageEdit.onAccepted: {
+            backend.send_message(messageEdit.text)
+            messageEdit.clear()
+        }
+
+
 
         function showMessage(sender, message, message_id, time_string, time_stamp) {
             if (sender === "You") {

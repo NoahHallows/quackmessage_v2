@@ -8,7 +8,6 @@ Rectangle {
     height: 700
     state: "initial"
     color: "#272727"
-    //border.color: "#ff0000"
 
     property string borderColor: "#aaaaaa"
     property string blueColor: "#0072ff"
@@ -775,14 +774,3 @@ Rectangle {
         }
     }
 }
-
-/*##^##
-Designer {
-    D{i:2;invisible:true}D{i:3;invisible:true}D{i:5;invisible:true}D{i:6;invisible:true}
-D{i:8;invisible:true}D{i:10;invisible:true}D{i:12;invisible:true}D{i:14;invisible:true}
-D{i:16;invisible:true}D{i:17;invisible:true}D{i:19;invisible:true}D{i:21;invisible:true}
-D{i:22;invisible:true}D{i:24;invisible:true}D{i:26;invisible:true}D{i:28;invisible:true}
-D{i:29;invisible:true}D{i:30;invisible:true}
-}
-##^##*/
-

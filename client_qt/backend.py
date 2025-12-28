@@ -23,7 +23,7 @@ class Backend(QObject):
     # Auth stuff
     def __init__(self):
         super().__init__()
-        self.HOST = "localhost:5555"
+        self.HOST = "message.quackmail.com.au:5555"
         self._user_email = ""
         self.username = ""
         self.token = ""
@@ -42,7 +42,6 @@ class Backend(QObject):
         request = auth_pb2.LoginMessage(username=username, password=password)
         login_future = self.authStub.Login.future(request)
         result = login_future.result()
-        print(f"Result: {result.success}, auth token = {result.auth_token}")
         if result.success == True:
             self.username = username
             self.token = result.auth_token
@@ -83,7 +82,6 @@ class Backend(QObject):
         request = auth_pb2.VerificationCodeMessage(code=code)
         verify_result = self.authStub.CheckCode.future(request)
         result = verify_result.result()
-        print(f"Result: {result.verified}")
         if result.verified == False:
             self.emailVerificationFail.emit()
 
@@ -93,7 +91,6 @@ class Backend(QObject):
         request = auth_pb2.CreateUserMessage(username=username, password=password)
         create_account_result = self.authStub.CreateUser.future(request)
         result = create_account_result.result()
-        print(f"Result {result.success}, {result.auth_token}")
         if result.success == True:
             self.token = result.auth_token
             call_credentials = grpc.access_token_call_credentials(self.token)
@@ -158,6 +155,7 @@ class Backend(QObject):
         request = message_pb2.contactsRequest(request=True)
         get_contacts_result = self.messageStub.getContacts.future(request)
         results = get_contacts_result.result()
+        self.set_active_contact(results.contacts[0].name)
         for result in results.contacts:
             if (result.name != self.username):
                 self.addContactSignal.emit(result.name)

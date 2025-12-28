@@ -1,0 +1,29 @@
+services:
+   db:
+        image: postgres:13
+        environment:
+             - POSTGRES_USER=msg_user
+             - POSTGRES_PASSWORD=FSogQNQH1HXtY5SblJR&zlNnpQcz&f
+
+        networks:
+             - backend
+   app:
+        image: noahhallows/msg_server:latest
+        environment:
+                     - DATABASE_URL=postgres://msg_user:FSogQNQH1HXtY5SblJR&zlNnpQcz&f@db:5432/messagedb
+        networks:
+            - backend
+            - frontend
+        ports:
+          - "5555:5555"
+
+networks:
+    frontend:
+       driver: bridge
+
+    backend:
+     driver: bridge
+     ipam:
+         config:
+             - subnet: 172.16.238.0/24
+

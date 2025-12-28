@@ -10,9 +10,60 @@ Rectangle {
     LoginForm {
         id: loginForm
         loginBtn.onClicked: {
-            console.log("Login button clicked")
-            console.log(usernameEdit.text.length)
-            console.log(passwordEdit.text.length)
+            login()
+        }
+
+        submitEmailBtn.onClicked: {
+            emailCodeRequestFunction()
+            verificationCodeEdit.forceActiveFocus()
+        }
+
+        submitVerificationCode.onClicked: {
+            submitVerificationCodeFunction()
+            usernameEdit.forceActiveFocus()
+        }
+
+        requestNewCodeBtn.onClicked: {
+            backend.request_email_code(emailEdit.text)
+            verificationCodeEdit.forceActiveFocus()
+        }
+
+        createAccountBtn.onClicked: {
+            createAccountFunction()
+        }
+
+        usernameEdit.onAccepted: {
+            passwordEdit.forceActiveFocus()
+        }
+
+        passwordEdit.onAccepted: {
+            login()
+        }
+
+        emailEdit.onAccepted: {
+            emailCodeRequestFunction()
+            loginState = "enterEmailVerificationCode"
+        }
+
+        verificationCodeEdit.onAccepted: {
+            submitVerificationCodeFunction()
+            loginState = "createUser"
+            usernameEdit.forceActiveFocus()
+        }
+
+        selectLoginBtn.onClicked: {
+            usernameEdit.forceActiveFocus()
+        }
+
+        selectCreateUserBtn.onClicked: {
+            emailEdit.forceActiveFocus()
+        }
+
+
+
+
+        // Input validation functions
+        function login() {
             if (passwordEdit.text.length == 0)
             {
                 console.log("Enter a password")
@@ -32,9 +83,7 @@ Rectangle {
 
         }
 
-        submitEmailBtn.onClicked: {
-            console.log("Submit email button clicked")
-            console.log(emailEdit.text)
+        function emailCodeRequestFunction(){
             if (emailEdit.text.length == 0)
             {
                 console.log("Enter an email")
@@ -54,41 +103,34 @@ Rectangle {
                     loginForm.loginState = "emailCodeRequest"
                 }
             }
+
         }
 
-        submitVerificationCode.onClicked: {
-            console.log("Verification code submitted")
-            console.log(verificationCodeEdit.text)
+        function submitVerificationCodeFunction() {
             if (verificationCodeEdit.text.length == 0)
             {
-                console.log("Enter code")
                 loginForm.errorPopup.errorText = "Enter the code"
                 loginForm.errorPopup.open()
             }
             else {
                 backend.verify_email_code(Number(verificationCodeEdit.text))
             }
+
         }
 
-        requestNewCodeBtn.onClicked: {
-            console.log("New code requested")
-            console.log(emailEdit.text)
-            backend.request_email_code(emailEdit.text)
-        }
-
-        createAccountBtn.onClicked: {
-            console.log("Create account button clicked")
+        function createAccountFunction() {
             if (usernameEdit.text.length == 0) {
                 loginForm.errorPopup.errorText = "Enter an username"
                 loginForm.errorPopup.open()
             }
             else if (passwordEdit.text.length == 0) {
                 loginForm.errorPopup.errorText = "Enter a password"
-                loginForm.errorPopup.open()
+           loginForm.errorPopup.open()
             }
             else {
                 backend.create_account(usernameEdit.text, passwordEdit.text)
-            }
+           }
+
         }
 
         Connections {
@@ -102,7 +144,7 @@ Rectangle {
             }
 
             function onSendEmailFail() {
-                loginForm.errorPopup.errorText = "Unable to send email"
+        loginForm.errorPopup.errorText = "Unable to send email"
                 loginForm.errorPopup.open()
                 loginForm.loginRectangle.state = "emailCodeRequest"
             }

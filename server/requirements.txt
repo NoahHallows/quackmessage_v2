@@ -1,0 +1,4 @@
+grpcio-tools
+dotenv
+PyJWT
+argon2-cffi

@@ -39,7 +39,7 @@ Rectangle {
         }
     }
 
-    TextArea {
+    TextField {
         id: messageEdit
         x: 192
         y: 640
@@ -136,8 +136,6 @@ Rectangle {
 
                 onClicked: {
                     contactsList.currentIndex = index // Updates the visual selection
-                    console.log(index)
-                    console.log(messageList.currentIndex)
                     // We call the function via the backend object
                     messageList.model.clear()
                     backend.set_active_contact(model.name)

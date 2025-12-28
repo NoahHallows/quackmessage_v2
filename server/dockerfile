@@ -1,0 +1,14 @@
+from python:3.14.0b1-bookworm
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN pip install --no-chache-dir -r requirements.txt
+
+RUN python -m grpc_tools.protoc -I../protobuf --python_out=. --pyi_out=. --grpc_python_out=. ../protobuf/message.proto
+RUN python -m grpc_tools.protoc -I../protobuf --python_out=. --pyi_out=. --grpc_python_out=. ../protobuf/auth.proto
+
+EXPOSE 5555
+
+CMD [python, ./main.py]
