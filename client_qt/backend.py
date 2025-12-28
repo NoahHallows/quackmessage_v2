@@ -6,6 +6,19 @@ import message_pb2_grpc
 import grpc
 import threading
 from datetime import datetime
+import jwt
+
+
+PUBLIC_KEY = "-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAt9SpR5sSPnScaMlqrFRp
+vfKav+0RTkYUWks/5Nq3+SKXf3auFsI6TwmErAQBiy9gHxvlFuOyjJUMJMsJPRYw
+2Fi3pCkHZdeuXN1qUWtHR4W03RkYnDsG1HcIx9QW9dZD0mktRHOFEtWoZtLKL4Ck
+YQRGu+v6l3I4lTZLEITJ9XcqqD5F42wqotpV0aMVm8aYUN2afoMgdvcjUtsiM+yO
+XGM+mxVm2FVo/Q50kcEqIqhCK7YCOQfgjjbuZxVTWoPVc9fXURVmdjG5xghkSUsK
+18bRWbp8tRk5NiJez+AdwoelAFsW0uc2+6lw8RaVIF/L3q/GAy6M2Dl3gODgOoRV
+oQIDAQAB
+-----END PUBLIC KEY-----"
+
 
 class Backend(QObject):
     # Signals
@@ -44,6 +57,13 @@ class Backend(QObject):
         if result.success == True:
             self.username = username
             self.token = result.auth_token
+            # Verify jwt was signed by valid key
+            try:
+                jwt.decode(result.auth_token, PUBLIC_KEY, algorithms=["RS256"])
+            except:
+                print("ERROR VALIDATING AUTH TOKEN!!\nExiting", file=sys.stderr)
+                sys.exit(1)
+            # Create new channel with auth token in metadata
             call_credentials = grpc.access_token_call_credentials(self.token)
             channel_credentials = grpc.ssl_channel_credentials()
             composite_credentials = grpc.composite_channel_credentials(channel_credentials, call_credentials)
@@ -92,6 +112,14 @@ class Backend(QObject):
         result = create_account_result.result()
         if result.success == True:
             self.token = result.auth_token
+            self.username = username
+            # Verify jwt was signed by valid key
+            try:
+                jwt.decode(result.auth_token, PUBLIC_KEY, algorithms=["RS256"])
+            except:
+                print("ERROR VALIDATING AUTH TOKEN!!\nExiting", file=sys.stderr)
+                sys.exit(1)
+            # Create new channel with auth token in metadata
             call_credentials = grpc.access_token_call_credentials(self.token)
             channel_credentials = grpc.ssl_channel_credentials(_credentials.ROOT_CERTIFICATE)
             composite_credentials = grpc.composite_channel_credentials(channel_credentials, call_credentials)

@@ -1,5 +1,6 @@
 import os
 import jwt
+import _credentials
 # importing necessary functions from dotenv library
 from dotenv import load_dotenv
 # loading variables from .env file
@@ -8,10 +9,10 @@ load_dotenv()
 ISSUER = os.environ["TOKEN_ISSUER"]
 AUDIENCE = os.environ["TOKEN_AUDIENCE"]
 
-with open("credentials/private_key.pem", "rb") as f:
+with open("/etc/quackmessage/private_key.pem", "rb") as f:
     PRIVATE_KEY = f.read()
 
-with open("credentials/public_key.pem", "rb") as f:
+with open("/etc/quackmessage/public_key.pem", "rb") as f:
     PUBLIC_KEY = f.read()
 
 
