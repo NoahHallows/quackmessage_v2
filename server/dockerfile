@@ -3,11 +3,12 @@ from python:3.14.0b1-bookworm
 WORKDIR /usr/src/app
 
 COPY ./server .
+COPY ./protobuf .
 
 RUN pip install -r requirements.txt
 
-RUN python -m grpc_tools.protoc -I../protobuf --python_out=. --pyi_out=. --grpc_python_out=. ../protobuf/message.proto
-RUN python -m grpc_tools.protoc -I../protobuf --python_out=. --pyi_out=. --grpc_python_out=. ../protobuf/auth.proto
+RUN python -m grpc_tools.protoc -I. --python_out=. --pyi_out=. --grpc_python_out=. ./message.proto
+RUN python -m grpc_tools.protoc -I. --python_out=. --pyi_out=. --grpc_python_out=. ./auth.proto
 
 EXPOSE 5555
 
