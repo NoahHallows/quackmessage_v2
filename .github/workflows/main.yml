@@ -35,7 +35,7 @@ jobs:
           # Your entry-point script:
           script-name: main.py
           working-directory: client_qt
-          include-package-data: grpc qml
+          include-package-data: grpc, qml
           
           company-name: "Quackmail"
           product-name: "Quackmessage"
