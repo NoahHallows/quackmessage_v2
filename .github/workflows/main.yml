@@ -45,7 +45,7 @@ jobs:
           nuitka-version: main
 
           # Build mode: 'app', 'standalone', or leave unset for default
-          mode: onefile
+          mode: standalone
 
           enable-plugins: pyside6
           
