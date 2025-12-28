@@ -1,9 +1,5 @@
-name: Build Python App with Nuitka
-
-on:
-  push:
-    branches: [main]
-  pull_request:
+name: Build Quackmessage Client
+on: [push]
 
 jobs:
   build:
@@ -13,46 +9,42 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Check out repository
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.14'
+          python-version: '3.13'
           cache: 'pip'
-          cache-dependency-path: |
-            **/requirements*.txt
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install nuitka zstandard ordered-set
+          # Install from your requirements or manually
+          pip install PySide6 grpcio grpcio-tools
 
       - name: Build with Nuitka
         uses: Nuitka/Nuitka-Action@main
         with:
-          # Your entry-point script:
-          script-name: client_qt/main.py
-
-          # Which Nuitka release to use:
           nuitka-version: main
-
-          # Build mode: 'app', 'standalone', or leave unset for default
-          mode: onefile
-
+          # Point to the script within the subdirectory
+          script-name: client_qt/main.py
+          onefile: true
           enable-plugins: pyside6
+          # Pass your specific flags here
+          extra-args: |
+            --include-package=grpc
+            --include-package-data=grpc
+            --include-qt-plugins=qml
+            --follow-imports
+            --include-package-data=qml
+            ${{ matrix.os == 'windows-latest' && '--windows-disable-console' || '' }}
 
-          output-file: quackmessage
-          
-      - name: Upload build artifacts
+      - name: Upload Executable
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.os }} Build
-          path: |
-            build/**/*.exe
-            build/**/*.bin
-            build/**/*.run
-            build/**/*
-          if-no-files-found: ignore
-          include-hidden-files: true
+          name: quackmessage-${{ matrix.os }}
+          path: build/*
+          # Note: On Linux, Nuitka creates a .bin or extensionless file.
+          # You can use build/* to catch both.
