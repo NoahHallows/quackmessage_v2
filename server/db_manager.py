@@ -11,7 +11,7 @@ class DatabaseManager:
             sys.exit(1)
         self.conn = psycopg2.connect(
             user=DB_USER, password=DB_PASSWORD,
-            host='192.168.1.150', port='5432', database='quackmessage')
+            host='db', port='5432', database='quackmessage')
 
     def getConn(self):
         return self.conn
