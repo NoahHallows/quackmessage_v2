@@ -6,17 +6,18 @@ import message_pb2_grpc
 import grpc
 import _credentials
 import threading
-
+from datetime import datetime
 
 class Backend(QObject):
     # Signals
     loginSuccess = Signal()
-    newMessage = Signal(str, str, int)
+    newMessage = Signal(str, str, int, float)
     loginFail = Signal()
     sendEmailFail = Signal()
     emailVerificationFail = Signal()
     accountCreationFail = Signal()
     addContactSignal = Signal(str)
+    setUserName = Signal(str)
     active_contact = ""
     master_message_list = []
     # Auth stuff
@@ -57,6 +58,7 @@ class Backend(QObject):
             self.receiveMessageThread.start()
             getContactsThread = threading.Thread(target=self.getContacts, args=(),daemon=True)
             getContactsThread.start()
+            self.setUserName.emit(self.username)
         else:
             self.loginFail.emit()
 
@@ -92,7 +94,23 @@ class Backend(QObject):
         create_account_result = self.authStub.CreateUser.future(request)
         result = create_account_result.result()
         print(f"Result {result.success}, {result.auth_token}")
-        if result.success == False:
+        if result.success == True:
+            self.token = result.auth_token
+            call_credentials = grpc.access_token_call_credentials(self.token)
+            channel_credentials = grpc.ssl_channel_credentials(_credentials.ROOT_CERTIFICATE)
+            composite_credentials = grpc.composite_channel_credentials(channel_credentials, call_credentials)
+            self.channel = grpc.secure_channel(self.HOST, composite_credentials)
+            self.authStub = auth_pb2_grpc.QuackMessageAuthStub(self.channel)
+            self.messageStub = message_pb2_grpc.MessagerStub(self.channel)
+            self.loginSuccess.emit()
+            # Start receive message stream
+            self.receiveMessageThread = threading.Thread(target=self.receiveMessage, args=(), daemon=True)
+            self.receiveMessageThread.start()
+            getContactsThread = threading.Thread(target=self.getContacts, args=(),daemon=True)
+            getContactsThread.start()
+            self.setUserName.emit(self.username)
+
+        else:
             self.accountCreationFail.emit()
 
     # Message stuff
@@ -104,19 +122,22 @@ class Backend(QObject):
         result = send_message_result.result()
         print(f"Success: , message id: {result.message_id}")
         if result.sendSuccessful == True:
-            message_tuple = (self.username, self.active_contact, message, result.message_id)
+            time_sent = datetime.now().timestamp()*1000
+            message_tuple = (self.username, self.active_contact, message, result.message_id, time_sent)
             self.master_message_list.append(message_tuple)
-            self.newMessage.emit("You", self.active_contact, message, result.message_id)
+            self.newMessage.emit("You", message, result.message_id, time_sent)
 
     # start receive message stream
     def receiveMessage(self):
         print('Receiving message')
 
         for message in self.messageStub.subscribeMessages(message_pb2.receiveMessagesRequest(request=True)):
-            message_tuple = (message.sender, message.receiver, message.content, message.messageId)
+            js_timestamp = (message.sent_at.seconds * 1000) + (message.sent_at.nanos // 1000000)
+            message_tuple = (message.sender, message.receiver, message.content, message.messageId, js_timestamp)
             self.master_message_list.append(message_tuple)
+
             if (message.sender == self.active_contact):
-                self.newMessage.emit(message.sender, message.content, message.messageId)
+                self.newMessage.emit(message.sender, message.content, message.messageId, js_timestamp)
 
     # Workout who the selected contact is
     @Slot(str)
@@ -127,9 +148,9 @@ class Backend(QObject):
         for message in self.master_message_list:
             if (message[0] == self.active_contact or message[1] == self.active_contact):
                 if (message[0] == self.username):
-                     self.newMessage.emit("You", message[2], message[3])
+                     self.newMessage.emit("You", message[2], message[3], message[4])
                 else:
-                    self.newMessage.emit(message[0], message[2], message[3])
+                    self.newMessage.emit(message[0], message[2], message[3], message[4])
 
 
     # Populate contacts

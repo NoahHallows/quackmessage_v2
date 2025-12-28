@@ -16,9 +16,11 @@ Rectangle {
     radius: 10
 
     property int message_id: 0
+    property int timeStamp: 0
 
     property alias messageText: messageText.text
     property alias senderText: senderText.text
+    property alias timeText: timeText.text
 
     property bool isOwnMessage: false
 
@@ -55,7 +57,7 @@ Rectangle {
         font.italic: true
     }
     Text {
-        id: receiptText
+        id: timeText
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         anchors.margins: 8
