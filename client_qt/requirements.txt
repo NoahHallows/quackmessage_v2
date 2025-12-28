@@ -1,5 +1,5 @@
 PySide6
-grpcio-tools
+grpcio_tools
 grpcio
 nuitka
 zstandard
