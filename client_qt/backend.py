@@ -4,7 +4,6 @@ import auth_pb2_grpc
 import message_pb2
 import message_pb2_grpc
 import grpc
-import _credentials
 import threading
 from datetime import datetime
 
@@ -28,7 +27,7 @@ class Backend(QObject):
         self.username = ""
         self.token = ""
         call_credentials = grpc.access_token_call_credentials(self.token)
-        channel_credentials = grpc.ssl_channel_credentials(_credentials.ROOT_CERTIFICATE)
+        channel_credentials = grpc.ssl_channel_credentials()
         composite_credentials = grpc.composite_channel_credentials(channel_credentials, call_credentials)
         self.channel = grpc.secure_channel(self.HOST, composite_credentials)
         self.authStub = auth_pb2_grpc.QuackMessageAuthStub(self.channel)
@@ -46,7 +45,7 @@ class Backend(QObject):
             self.username = username
             self.token = result.auth_token
             call_credentials = grpc.access_token_call_credentials(self.token)
-            channel_credentials = grpc.ssl_channel_credentials(_credentials.ROOT_CERTIFICATE)
+            channel_credentials = grpc.ssl_channel_credentials()
             composite_credentials = grpc.composite_channel_credentials(channel_credentials, call_credentials)
             self.channel = grpc.secure_channel(self.HOST, composite_credentials)
             self.authStub = auth_pb2_grpc.QuackMessageAuthStub(self.channel)

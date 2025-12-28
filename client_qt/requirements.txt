@@ -1,0 +1,6 @@
+PySide6
+grpcio-tools
+grpcio
+nuitka
+zstandard
+ordered-set
