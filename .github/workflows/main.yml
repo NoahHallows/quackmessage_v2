@@ -36,7 +36,8 @@ jobs:
           script-name: main.py
           working-directory: client_qt
           include-package-data: grpc, qml
-          include-data-dir: client_qt/qml=qml/
+          include-data-dir: |
+            qml=qml
           
           
           #company-name: "Quackmail"
