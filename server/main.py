@@ -33,7 +33,6 @@ def serve():
     )
 
 
-    #server.add_insecure_port("[::]:5555")
     print("Server started")
     server.start()
     server.wait_for_termination()
