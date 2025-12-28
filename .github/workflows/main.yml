@@ -36,6 +36,7 @@ jobs:
           script-name: main.py
           working-directory: client_qt
           include-package-data: grpc, qml
+          include-qt-plugins: qml
           include-data-dir: |
             qml=qml
           
