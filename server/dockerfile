@@ -2,7 +2,7 @@ from python:3.14.0b1-bookworm
 
 WORKDIR /usr/src/app
 
-COPY . .
+COPY ./server .
 
 RUN pip install -r requirements.txt
 
