@@ -109,7 +109,7 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
             message_text = "Hello,\nYour verification code is: {code}\nRegards Quackmessage automated email bot"
             part1 = MIMEText(message_text.format(code=self.email_verification_code), "plain")
             message.attach(part1)
-            server.sendmail(email_username, request.email, message.as_string)
+            server.sendmail(email_username, request.email, message.as_string())
             self.email = request.email
             return auth_pb2.VerificationEmailSent(emailSent=True)
 
