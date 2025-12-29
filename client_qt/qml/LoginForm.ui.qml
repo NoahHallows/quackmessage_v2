@@ -356,8 +356,8 @@ Rectangle {
     // Error popup
     Popup {
         id: errorPopup
-        x: 100
-        y: 350
+        x: 350-(width/2)
+        y: 350-(width/2)
         width: 300
         height: 100
         modal: true
@@ -386,7 +386,7 @@ Rectangle {
             Button {
                 text: qsTr("OK")
                 anchors.horizontalCenter: parent.horizontalCenter
-                //onClicked: errorPopup.close()
+                onClicked: errorPopup.close()
             }
         }
     }
