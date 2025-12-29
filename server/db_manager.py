@@ -10,7 +10,7 @@ class DatabaseManager:
         if DB_USER is None or DB_PASSWORD is None:
             print("Unable to get db username or password", file=sys.stderr)
             sys.exit(1)
-        while x in range(0, 5):
+        for x in range(0, 5):
             try:
                 self.conn = psycopg2.connect(
                     user=DB_USER, password=DB_PASSWORD,
