@@ -39,6 +39,7 @@ jobs:
           include-qt-plugins: qml
           include-data-dir: |
             qml=qml
+            credentials=credentials
           
           
           #company-name: "Quackmail"
@@ -47,7 +48,7 @@ jobs:
           nuitka-version: main
 
           # Build mode: 'app', 'standalone', or leave unset for default
-          mode: standalone
+          mode: onefile
 
           enable-plugins: pyside6
           
