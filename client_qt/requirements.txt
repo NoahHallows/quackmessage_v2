@@ -4,3 +4,4 @@ grpcio
 nuitka
 zstandard
 ordered-set
+PyJWT

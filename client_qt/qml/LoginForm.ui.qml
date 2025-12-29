@@ -647,6 +647,13 @@ Rectangle {
                 opacity: 1
                 scale: 1.0
             }
+            PropertyChanges {
+                target: loginButton
+                enabled: false
+                opacity: 0
+                scale: 1.0
+            }
+
         },
 
         State {
@@ -693,6 +700,13 @@ Rectangle {
                 opacity: 0
                 scale: 1.0
             }
+            PropertyChanges {
+                target: loginButton
+                enabled: false
+                opacity: 0
+                scale: 1.0
+            }
+
         },
 
         State {
@@ -763,6 +777,13 @@ Rectangle {
                 opacity: 0
                 scale: 1.0
             }
+            PropertyChanges {
+                target: loginButton
+                enabled: false
+                opacity: 0
+                scale: 1.0
+            }
+
         }
     ]
 

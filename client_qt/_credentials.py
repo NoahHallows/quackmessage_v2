@@ -22,6 +22,6 @@ def _load_credential_from_file(filepath):
         return f.read()
 
 
-SERVER_CERTIFICATE = _load_credential_from_file("credentials/localhost.crt")
-SERVER_CERTIFICATE_KEY = _load_credential_from_file("credentials/localhost.key")
-ROOT_CERTIFICATE = _load_credential_from_file("credentials/root.crt")
+
+TLS_PUB = _load_credential_from_file("credentials/cert.pem")
+JWT_PUB = _load_credential_from_file("credentials/public_key.pem")
