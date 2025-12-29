@@ -22,6 +22,7 @@ class Backend(QObject):
     accountCreationFail = Signal()
     addContactSignal = Signal(str)
     setUserName = Signal(str)
+    requestFinished = Signal()
     active_contact = ""
     master_message_list = []
     # Auth stuff
@@ -71,6 +72,7 @@ class Backend(QObject):
             self.setUserName.emit(self.username)
         else:
             self.loginFail.emit()
+        self.requestFinished.emit()
 
 
     # This allows Python to send data back to QML
@@ -84,6 +86,7 @@ class Backend(QObject):
         print(f"Email sent: {result.emailSent}")
         if result.emailSent == False:
             self.sendEmailFail.emit()
+        self.requestFinished.emit()
 
 
 
@@ -95,6 +98,7 @@ class Backend(QObject):
         result = verify_result.result()
         if result.verified == False:
             self.emailVerificationFail.emit()
+        self.requestFinished.emit()
 
     @Slot(str, str)
     def create_account(self, username, password):
@@ -128,7 +132,7 @@ class Backend(QObject):
 
         else:
             self.accountCreationFail.emit()
-
+        self.requestFinished.emit()
     # Message stuff
     @Slot(str)
     def send_message(self, message):

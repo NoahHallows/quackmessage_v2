@@ -14,12 +14,13 @@ Rectangle {
     width: 700
     height: 700
     color: "#272727"
-    border.color: "#ff0000"
+    //border.color: "#ff0000"
 
     property alias sendMessageBtn: sendMessageButton
     property alias messageEdit: messageEdit
     property alias messageList: messageList
     property alias contactsList: contactsList
+    property alias yourName: yourContact
 
     Button {
         id: sendMessageButton
@@ -38,7 +39,7 @@ Rectangle {
         }
     }
 
-    TextArea {
+    TextField {
         id: messageEdit
         x: 192
         y: 640
@@ -63,16 +64,28 @@ Rectangle {
         y: 8
         width: 500
         height: 600
-        boundsBehavior: Flickable.DragOverBounds
+        boundsBehavior: Flickable.StopAtBounds
         snapMode: ListView.SnapToItem
+        clip: true
         spacing: 8
         verticalLayoutDirection: ListView.BottomToTop
+        ScrollBar.vertical: ScrollBar {
+            policy: ScrollBar.AsNeeded
+        }
         model: ListModel {}
 
-        delegate: MessageBox {
-            messageText: model.messageText
-            senderText: model.senderText
-            messageColor: model.messageColor
+        delegate: Item {
+            width: messageList.width // Gives MessageBox a parent width to anchor to
+            height: msgBox.height
+            MessageBox {
+                id: msgBox
+                messageText: model.messageText
+                senderText: model.senderText
+                isOwnMessage: model.isOwnMessage
+                message_id: model.message_id
+                timeText: model.timeText
+                timeStamp: model.timeStamp
+            }
         }
 
         add: Transition {
@@ -107,6 +120,7 @@ Rectangle {
         height: 600
         spacing: 8
         focus: true
+        clip: true
         highlightFollowsCurrentItem: true
         highlight: Rectangle {
             color: "#22ffffff" // Semi-transparent white
@@ -120,13 +134,12 @@ Rectangle {
             MouseArea {
                 anchors.fill: parent
 
-
-                /*onClicked: {
-                    messageList.currentIndex = index // Updates the visual selection
+                onClicked: {
+                    contactsList.currentIndex = index // Updates the visual selection
                     // We call the function via the backend object
                     messageList.model.clear()
                     backend.set_active_contact(model.name)
-                }*/
+                }
             }
         }
         add: Transition {
@@ -151,5 +164,12 @@ Rectangle {
                 easing.type: Easing.OutBounce
             }
         }
+    }
+
+    ContactElement {
+        id: yourContact
+        x: 8
+        y: 640
+        color: "#b261ff"
     }
 }

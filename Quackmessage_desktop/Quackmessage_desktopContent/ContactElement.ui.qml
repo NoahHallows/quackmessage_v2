@@ -6,9 +6,15 @@ Rectangle {
     width: 100
     height: 30
     radius: 10
-    color: "#2860a9"
+    //color: "lightsteelblue"
 
     property alias name: contactName.text
+
+    //border.color: ListView.isCurrentItem ? "#21be2b" : "transparent"
+    //border.width: ListView.isCurrentItem ? 2 : 0
+
+    // You can also change the background color slightly
+    color: ListView.isCurrentItem ? "#444444" : "#333333"
 
     Text {
         id: contactName

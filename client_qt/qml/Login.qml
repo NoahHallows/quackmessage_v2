@@ -81,6 +81,7 @@ Rectangle {
             }
             else
             {
+                loginForm.isBusy = true
                 backend.login(usernameEdit.text, passwordEdit.text)
             }
 
@@ -98,6 +99,7 @@ Rectangle {
             {
                 const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                 if (pattern.test(emailEdit.text.toLowerCase())) {
+                    loginForm.isBusy = true
                     backend.request_email_code(emailEdit.text)
                 }
                 else {
@@ -116,6 +118,7 @@ Rectangle {
                 loginForm.errorPopup.open()
             }
             else {
+                loginForm.isBusy = true
                 backend.verify_email_code(Number(verificationCodeEdit.text))
             }
 
@@ -131,6 +134,7 @@ Rectangle {
            loginForm.errorPopup.open()
             }
             else {
+                loginForm.isBusy = true
                 backend.create_account(usernameEdit.text, passwordEdit.text)
            }
 
@@ -148,18 +152,21 @@ Rectangle {
             function onSendEmailFail() {
                 loginForm.errorPopup.errorText = "Unable to send email"
                 loginForm.errorPopup.open()
-                //loginForm.loginRectangle.state = "emailCodeRequest"
+                loginForm.loginState = "emailCodeRequest"
             }
             function onEmailVerificationFail() {
                 loginForm.errorPopup.errorText = "Incorrect code"
                 loginForm.errorPopup.open()
                 loginForm.verificationCodeEdit.clear()
-                //loginForm.loginRectangle.state = "enterEmailVerificationCode"
+                loginForm.loginState = "enterEmailVerificationCode"
             }
             function onAccountCreationFail() {
                 loginForm.errorPopup.errorText = "Error creating account"
                 loginForm.errorPopup.open()
                 loginForm.passwordEdit.clear()
+            }
+            function onRequestFinished() {
+                loginForm.isBusy = false
             }
         }
     }

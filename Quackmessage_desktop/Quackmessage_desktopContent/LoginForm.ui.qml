@@ -28,7 +28,6 @@ Rectangle {
     property alias submitVerificationCode: submitVerificationCode
     property alias errorPopup: errorPopup
     property alias loginState: rectangle.state
-    property alias isBusy: busyIndicator.visible
 
     Text {
         id: title
@@ -324,9 +323,8 @@ Rectangle {
         x: 223
         y: 365
         width: 55
-        height: 55
+        height: 48
         visible: false
-        anchors.centerIn: parent
     }
 
     Button {
