@@ -248,9 +248,10 @@ class Backend(QObject):
         with self._var_lock:
             self.active_contact = contact_name
             logging.debug(f"Active contact changed to: {contact_name}")
+            logging.debug(f"self.username: {self.username}")
             # Loop through master message list and add all relevent messages to ui
             for message in self.master_message_list:
-                if (message[0] == self.active_contact or message[1] == contact_name):
+                if (message[0] == contact_name or message[1] == contact_name):
                     if (message[0] == self.username):
                          self.newMessage.emit("You", message[2], message[3], message[4])
                     else:
@@ -267,6 +268,5 @@ class Backend(QObject):
             for result in results.contacts:
                 if (result.name != self.username):
                     self.addContactSignal.emit(result.name)
-            self.set_active_contact(results.contacts[0].name)
         except Exception as e:
             logging.error(f"Error getting contacts: {e}")

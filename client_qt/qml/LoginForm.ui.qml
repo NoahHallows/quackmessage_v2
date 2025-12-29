@@ -13,7 +13,7 @@ Rectangle {
     property string blueColor: "#0072ff"
     property string greenColor: "#007429"
     property string placeHolderTextColor: "#b6b6b6"
-
+    property string nextState: ""
     // Allow login.qml to see and change these properties
     property alias loginBtn: loginButton
     property alias usernameEdit: usernameEdit
@@ -29,6 +29,7 @@ Rectangle {
     property alias errorPopup: errorPopup
     property alias loginState: rectangle.state
     property alias isBusy: busyIndicator.visible
+
 
     Text {
         id: title
@@ -217,7 +218,7 @@ Rectangle {
         y: 450
         opacity: 1
         text: qsTr("Request code")
-        onClicked: rectangle.state = "enterEmailVerificationCode"
+        onClicked: rectangle.nextState = "enterEmailVerificationCode"
         background: Rectangle {
             opacity: enabled ? 1 : 0.3
             color: blueColor
@@ -272,7 +273,7 @@ Rectangle {
         opacity: 1
         visible: true
         text: qsTr("Submit")
-        onClicked: rectangle.state = "createUser"
+        onClicked: rectangle.nextState = "createUser"
         background: Rectangle {
             opacity: enabled ? 1 : 0.3
             color: greenColor

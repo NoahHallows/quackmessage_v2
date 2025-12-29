@@ -167,6 +167,10 @@ Rectangle {
             }
             function onRequestFinished() {
                 loginForm.isBusy = false
+                if (loginForm.nextState !== "") {
+                    loginForm.loginState = loginForm.nextState
+                    loginForm.nextState = ""
+                }
             }
         }
     }
