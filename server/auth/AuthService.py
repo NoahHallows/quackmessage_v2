@@ -107,12 +107,15 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
         # Check email isn't already registered
         conn = db.getConn()
         cur = conn.cursor()
+        print("Connected to db")
         cur.execute("SELECT 1 FROM users WHERE email = %s;", (request.email,))
         if cur.fetchone() is not None:
             return auth_pb2.VerificationEmailSent(emailSent=False)
+            print("Email is already in db")
 
         with smtplib.SMTP_SSL(email_server, email_port, context=context) as server:
             server.login(email_username, email_password)
+            print("Loged in")
             self.email_verification_code = randint(100000, 999999)
             message = MIMEMultipart("alternative")
             message["Subject"] = "Quackmessage verification code"

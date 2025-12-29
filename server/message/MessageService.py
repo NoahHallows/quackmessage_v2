@@ -31,11 +31,16 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
 
             conn = db.getConn()
             cursor = conn.cursor()
-            cursor.execute("SELECT message_id FROM messages ORDER BY message_id DESC LIMIT 1")
-            message_id = cursor.fetchone()
-            print(message_id[0])
-            message_id = message_id[0] + 1
-            print(message_id)
+            try:
+                cursor.execute("SELECT message_id FROM messages ORDER BY message_id DESC LIMIT 1")
+                message_id = cursor.fetchone()
+                print(message_id[0])
+                message_id = message_id[0] + 1
+                print(message_id)
+
+            except:
+                print("It appears there are no messages in db")
+                message_id = 1
             cursor.execute("INSERT INTO messages (sender, receiver, content, message_id, time_sent) VALUES (%s, %s, %s, %s, NOW())", (request.sender, request.receiver, request.content, message_id))
             # Check if receiver is online
             if request.receiver in self.active_clients:

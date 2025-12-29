@@ -10,6 +10,7 @@ Rectangle {
     LoginForm {
         id: loginForm
         loginBtn.onClicked: {
+            console.log("Logging in bc login btn was clicked")
             login()
         }
 
@@ -29,6 +30,7 @@ Rectangle {
         }
 
         createAccountBtn.onClicked: {
+            console.log("Creating account bc create account btn was clicked")
             createAccountFunction()
         }
 
@@ -37,6 +39,7 @@ Rectangle {
         }
 
         passwordEdit.onAccepted: {
+            // TODO check rectangle state so it works for create account
             login()
         }
 
@@ -140,25 +143,23 @@ Rectangle {
                 loginForm.errorPopup.errorText = "Incorrect username or password"
                 loginForm.errorPopup.open()
                 loginForm.passwordEdit.clear()
-                loginForm.loginRectangle.state = "login"
             }
 
             function onSendEmailFail() {
-        loginForm.errorPopup.errorText = "Unable to send email"
+                loginForm.errorPopup.errorText = "Unable to send email"
                 loginForm.errorPopup.open()
-                loginForm.loginRectangle.state = "emailCodeRequest"
+                //loginForm.loginRectangle.state = "emailCodeRequest"
             }
             function onEmailVerificationFail() {
                 loginForm.errorPopup.errorText = "Incorrect code"
                 loginForm.errorPopup.open()
                 loginForm.verificationCodeEdit.clear()
-                loginForm.loginRectangle.state = "enterEmailVerificationCode"
+                //loginForm.loginRectangle.state = "enterEmailVerificationCode"
             }
             function onAccountCreationFail() {
                 loginForm.errorPopup.errorText = "Error creating account"
                 loginForm.errorPopup.open()
                 loginForm.passwordEdit.clear()
-                loginForm.loginRectangle.state = "createUser"
             }
         }
     }

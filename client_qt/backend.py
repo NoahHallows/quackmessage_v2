@@ -8,7 +8,7 @@ import grpc
 import threading
 from datetime import datetime
 import jwt
-
+import sys
 
 
 
@@ -52,10 +52,9 @@ class Backend(QObject):
             self.token = result.auth_token
             # Verify jwt was signed by valid key
             try:
-                jwt.decode(result.auth_token, JWT_PUB, algorithms=["RS256"])
+                jwt.decode(result.auth_token, _credentials.JWT_PUB, algorithms=["RS256"])
             except:
                 print("ERROR VALIDATING AUTH TOKEN!!\nExiting", file=sys.stderr)
-                sys.exit(1)
             # Create new channel with auth token in metadata
             call_credentials = grpc.access_token_call_credentials(self.token)
             channel_credentials = grpc.ssl_channel_credentials(_credentials.TLS_PUB)
@@ -107,11 +106,11 @@ class Backend(QObject):
             self.token = result.auth_token
             self.username = username
             # Verify jwt was signed by valid key
-            try:
-                jwt.decode(result.auth_token, JWT_PUB, algorithms=["RS256"])
+            """try:
+                jwt.decode(result.auth_token, _credentials.JWT_PUB, algorithms=["RS256"])
             except:
                 print("ERROR VALIDATING AUTH TOKEN!!\nExiting", file=sys.stderr)
-                sys.exit(1)
+                sys.exit(1)"""
             # Create new channel with auth token in metadata
             call_credentials = grpc.access_token_call_credentials(self.token)
             channel_credentials = grpc.ssl_channel_credentials(_credentials.TLS_PUB)
