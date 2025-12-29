@@ -9,7 +9,7 @@ from auth import AuthService
 from message import MessageService
 import _credentials
 
-_LISTEN_ADDRESS_TEMPLATE = "localhost:%d"
+_LISTEN_ADDRESS_TEMPLATE = "0.0.0.0:%d"
 
 def serve():
     port = 5555
