@@ -3,3 +3,4 @@ dotenv
 PyJWT
 argon2-cffi
 psycopg2
+cryptography
