@@ -49,7 +49,7 @@ if email_password is None:
     print("Unable to access email_password environment var", file=stderr)
     sys.exit(1)
 
-print(f"server: {EMAIL_SERVER}, port: {EMAIL_PORT}, username: {EMAIL_USERNAME}, password: {EMAIL_PASSWORD}")
+print(f"server: {email_server}, port: {email_port}, username: {email_username}, password: {email_password}")
 # Convert the list of bytes to a single variable
 def db_binary_to_binary(db_binary):
     binary = b''
