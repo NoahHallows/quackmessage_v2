@@ -36,7 +36,18 @@ try:
 except NameError:
     print("Cannot get email settings from environment", file=stderr)
 
-
+if email_server is None:
+    print("Unable to access email_server environment var", file=stderr)
+    sys.exit(1)
+if email_port is None:
+    print("Unable to access email_port environment var", file=stderr)
+    sys.exit(1)
+if email_username is None:
+    print("Unable to access email_username environment var", file=stderr)
+    sys.exit(1)
+if email_password is None:
+    print("Unable to access email_password environment var", file=stderr)
+    sys.exit(1)
 # Convert the list of bytes to a single variable
 def db_binary_to_binary(db_binary):
     binary = b''
@@ -135,7 +146,7 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
 
                 print("Done")
                 token = create_jwt(request.username)
-                return auth_pb2.CreateUserResult(success=False, auth_token=token)
+                return auth_pb2.CreateUserResult(success=True, auth_token=token)
             except Exception as e:
                 print(f"Error inserting user into database: {e}", file=stderr)
         else:
