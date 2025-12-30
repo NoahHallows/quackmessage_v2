@@ -60,10 +60,9 @@ jobs:
         with:
           name: ${{ matrix.os }} Build
           path: |
-            build/**/*.exe
-            build/**/*.bin
-            build/**/*.run
-            build/**/*
-            client_qt/build/**/*
+            client_qt/build/**/*.exe
+            client_qt/build/**/*.bin
+            client_qt/build/**/*.run
+            client_qt/build/quackmessage*
           if-no-files-found: ignore
           include-hidden-files: true
