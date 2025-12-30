@@ -9,7 +9,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest, windows-latest, darwin-latest]
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -41,9 +41,12 @@ jobs:
             qml=qml
             credentials=credentials
           
-          
-          #company-name: "Quackmail"
-          #product-name: "Quackmessage"
+          python-flag: unbuffered
+          company-name: "Quackmail"
+          product-name: "Quackmessage"
+          windows-console-mode: disable
+          product-version: 0.0.0.1
+          file-version: 0.0.0.1
           # Which Nuitka release to use:
           nuitka-version: main
 
