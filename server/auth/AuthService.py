@@ -182,9 +182,9 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
 
         return auth_pb2.CreateUserResult(success=False, auth_token="")
 
-    def CheckVersion(self, request, context):
+    def CheckVersion(self, rquest, context):
         if (request.version == VERSION):
-            return auth_pb2.CheckVersion(ValidVersion(valid=True,                                     valid_version_num=VERSION))
+            return auth_pb2.CheckVersion(ValidVersion(valid=True, valid_version_num=VERSION))
         else:
-            return auth_pb2.CheckVersion(ValidVersion(valid=False,                                     valid_version_num=VERSION))
+            return auth_pb2.ValidVersion(valid=False, valid_version_num=VERSION)
 

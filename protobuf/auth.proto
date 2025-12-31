@@ -14,7 +14,7 @@ message ClientVersion {
 
 message ValidVersion {
   bool valid = 1;
-  int32 valid_version_num = 2;
+  float valid_version_num = 2;
 }
 
 // For Login
