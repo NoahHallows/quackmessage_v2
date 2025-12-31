@@ -185,7 +185,7 @@ class Backend(QObject):
     def _create_account_helper(self, username, password):
         logging.debug(f"Create account helper: {username}, {password}")
         try:
-            request = auth_pb2.CreateUserMessage(username=username, password=password)
+            request = auth_pb2.CreateUserMessage(username=username, password=password, email=self.email)
             create_account_result = self.authStub.CreateUser.future(request)
             result = create_account_result.result()
             if result.success == True:

@@ -15,8 +15,8 @@ class ValidVersion(_message.Message):
     VALID_FIELD_NUMBER: _ClassVar[int]
     VALID_VERSION_NUM_FIELD_NUMBER: _ClassVar[int]
     valid: bool
-    valid_version_num: int
-    def __init__(self, valid: bool = ..., valid_version_num: _Optional[int] = ...) -> None: ...
+    valid_version_num: float
+    def __init__(self, valid: bool = ..., valid_version_num: _Optional[float] = ...) -> None: ...
 
 class LoginMessage(_message.Message):
     __slots__ = ("username", "password")

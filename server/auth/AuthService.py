@@ -20,6 +20,7 @@ from datetime import datetime
 from .jwt_auth import create_jwt
 import logging
 from threading import Lock
+import grpc
 
 # Import protobufs
 import auth_pb2
@@ -77,7 +78,7 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
 
     def __init__(self):
         self.email_verification_dict = {}
-        self.verified_emails = ()
+        self.verified_emails = []
         self.email_lock = Lock()
 
     # Login function
@@ -156,23 +157,24 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
                 return auth_pb2.VerificationCodeMatches(verified=False)
 
     def CreateUser(self, request, context):
-        logging.debug(f"self.email: {self.email} verification code: {self.email_verification_code}")
         conn = db.getConn()
         cur = conn.cursor()
         cur.execute("SELECT 1 FROM users WHERE username = %s;", (request.username,))
-        if cur.fetchone() is None and self.email is not None and self.email_verified == True:
-            ph = PasswordHasher()
-            password_hash = ph.hash(request.password)
-            try:
-                cur.execute("INSERT INTO users (email, username, password_hash, account_creation_date, messages_sent, messages_received) VALUES (%s, %s, %s, NOW(), %s, %s)", (self.email, request.username, password_hash, 0, 0))
-                conn.commit()
-                cur.close()
+        if cur.fetchone() is None:
+            if (request.email in verified_emails):
+                verified_emails.remove(request.email)
+                ph = PasswordHasher()
+                password_hash = ph.hash(request.password)
+                try:
+                    cur.execute("INSERT INTO users (email, username, password_hash, account_creation_date, messages_sent, messages_received) VALUES (%s, %s, %s, NOW(), %s, %s)", (self.email, request.username, password_hash, 0, 0))
+                    conn.commit()
+                    cur.close()
 
-                logging.info("Successfully created account")
-                token = create_jwt(request.username)
-                return auth_pb2.CreateUserResult(success=True, auth_token=token)
-            except Exception as e:
-                logging.warning(f"Error inserting user into database: {e}")
+                    logging.info("Successfully created account")
+                    token = create_jwt(request.username)
+                    return auth_pb2.CreateUserResult(success=True, auth_token=token)
+                except Exception as e:
+                    logging.warning(f"Error inserting user into database: {e}")
         else:
             logging.info("User exists or email is unverified")
 
@@ -182,7 +184,7 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
 
         return auth_pb2.CreateUserResult(success=False, auth_token="")
 
-    def CheckVersion(self, rquest, context):
+    def CheckVersion(self, request, context):
         if (request.version == VERSION):
             return auth_pb2.CheckVersion(ValidVersion(valid=True, valid_version_num=VERSION))
         else:

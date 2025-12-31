@@ -52,6 +52,7 @@ message VerificationCodeMatches {
 message CreateUserMessage {
   string username = 1;
   string password = 2;
+  string email = 3;
 }
 
 message CreateUserResult {
