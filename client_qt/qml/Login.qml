@@ -2,8 +2,7 @@ import QtQuick
 import QtQuick.Controls
 
 Rectangle {
-    width: 250
-    height: 500
+    anchors.fill: parent
     visible: true // This is critical to make the window appear
     //title: "Quackmessage Login"
 
@@ -81,7 +80,6 @@ Rectangle {
             }
             else
             {
-                loginForm.isBusy = true
                 backend.login(usernameEdit.text, passwordEdit.text)
             }
 
@@ -99,7 +97,6 @@ Rectangle {
             {
                 const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                 if (pattern.test(emailEdit.text.toLowerCase())) {
-                    loginForm.isBusy = true
                     backend.request_email_code(emailEdit.text)
                 }
                 else {
@@ -118,7 +115,6 @@ Rectangle {
                 loginForm.errorPopup.open()
             }
             else {
-                loginForm.isBusy = true
                 backend.verify_email_code(Number(verificationCodeEdit.text))
             }
 
@@ -134,7 +130,6 @@ Rectangle {
            loginForm.errorPopup.open()
             }
             else {
-                loginForm.isBusy = true
                 backend.create_account(usernameEdit.text, passwordEdit.text)
            }
 
@@ -152,25 +147,18 @@ Rectangle {
             function onSendEmailFail() {
                 loginForm.errorPopup.errorText = "Unable to send email"
                 loginForm.errorPopup.open()
-                loginForm.loginState = "emailCodeRequest"
+                //loginForm.loginRectangle.state = "emailCodeRequest"
             }
             function onEmailVerificationFail() {
                 loginForm.errorPopup.errorText = "Incorrect code"
                 loginForm.errorPopup.open()
                 loginForm.verificationCodeEdit.clear()
-                loginForm.loginState = "enterEmailVerificationCode"
+                //loginForm.loginRectangle.state = "enterEmailVerificationCode"
             }
             function onAccountCreationFail() {
                 loginForm.errorPopup.errorText = "Error creating account"
                 loginForm.errorPopup.open()
                 loginForm.passwordEdit.clear()
-            }
-            function onRequestFinished() {
-                loginForm.isBusy = false
-                if (loginForm.nextState !== "") {
-                    loginForm.loginState = loginForm.nextState
-                    loginForm.nextState = ""
-                }
             }
         }
     }

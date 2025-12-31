@@ -4,8 +4,7 @@ import QtQuick.Controls
 
 Rectangle {
     id: rectangle
-    width: 700
-    height: 700
+    anchors.fill: parent
     state: "initial"
     color: "#272727"
 
@@ -13,7 +12,7 @@ Rectangle {
     property string blueColor: "#0072ff"
     property string greenColor: "#007429"
     property string placeHolderTextColor: "#b6b6b6"
-    property string nextState: ""
+
     // Allow login.qml to see and change these properties
     property alias loginBtn: loginButton
     property alias usernameEdit: usernameEdit
@@ -28,8 +27,6 @@ Rectangle {
     property alias submitVerificationCode: submitVerificationCode
     property alias errorPopup: errorPopup
     property alias loginState: rectangle.state
-    property alias isBusy: busyIndicator.visible
-
 
     Text {
         id: title
@@ -218,7 +215,7 @@ Rectangle {
         y: 450
         opacity: 1
         text: qsTr("Request code")
-        onClicked: rectangle.nextState = "enterEmailVerificationCode"
+        onClicked: rectangle.state = "enterEmailVerificationCode"
         background: Rectangle {
             opacity: enabled ? 1 : 0.3
             color: blueColor
@@ -273,7 +270,7 @@ Rectangle {
         opacity: 1
         visible: true
         text: qsTr("Submit")
-        onClicked: rectangle.nextState = "createUser"
+        onClicked: rectangle.state = "createUser"
         background: Rectangle {
             opacity: enabled ? 1 : 0.3
             color: greenColor
@@ -325,9 +322,8 @@ Rectangle {
         x: 223
         y: 365
         width: 55
-        height: 55
+        height: 48
         visible: false
-        anchors.centerIn: parent
     }
 
     Button {
@@ -357,8 +353,8 @@ Rectangle {
     // Error popup
     Popup {
         id: errorPopup
-        x: 350-(width/2)
-        y: 350-(width/2)
+        x: 100
+        y: 350
         width: 300
         height: 100
         modal: true
@@ -387,7 +383,7 @@ Rectangle {
             Button {
                 text: qsTr("OK")
                 anchors.horizontalCenter: parent.horizontalCenter
-                onClicked: errorPopup.close()
+                //onClicked: errorPopup.close()
             }
         }
     }
@@ -937,8 +933,9 @@ Rectangle {
 
 /*##^##
 Designer {
-    D{i:2;invisible:true}D{i:3;invisible:true}D{i:5;invisible:true}D{i:6;invisible:true}
+    D{i:0}D{i:2;invisible:true}D{i:3;invisible:true}D{i:5;invisible:true}D{i:6;invisible:true}
 D{i:8;invisible:true}D{i:10;invisible:true}D{i:12;invisible:true}D{i:14;invisible:true}
 D{i:16;invisible:true}D{i:17;invisible:true}D{i:26;invisible:true}
 }
 ##^##*/
+

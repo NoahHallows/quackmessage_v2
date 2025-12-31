@@ -3,20 +3,24 @@ import QtQuick.Controls
 
 Rectangle {
     id: mainScreen
-    width: 250
-    height: 500
+    anchors.fill: parent
     visible: true
 
     MainWindowForm {
         id: mainUI
+        anchors.fill: parent
         sendMessageBtn.onClicked: {
-            backend.send_message(messageEdit.text)
-            messageEdit.clear()
+            if (messageEdit.text.length > 0) {
+                backend.send_message(messageEdit.text)
+                messageEdit.clear()
+            }
         }
 
         messageEdit.onAccepted: {
-            backend.send_message(messageEdit.text)
-            messageEdit.clear()
+            if (messageEdit.text.length > 0) {
+                backend.send_message(messageEdit.text)
+                messageEdit.clear()
+            }
         }
 
 
