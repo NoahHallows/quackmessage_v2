@@ -33,6 +33,9 @@ logging.basicConfig(
     style="{",
     datefmt="%Y-%m-%d %H:%M",
     level=logging.DEBUG,
+    handlers=[
+        logging.StreamHandler(sys.stdout)
+    ]
 )
 
 try:

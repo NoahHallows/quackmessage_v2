@@ -15,6 +15,9 @@ logging.basicConfig(
     style="{",
     datefmt="%Y-%m-%d %H:%M",
     level=logging.DEBUG,
+    handlers=[
+        logging.StreamHandler(sys.stdout)
+    ]
 )
 
 _LISTEN_ADDRESS_TEMPLATE = "0.0.0.0:%d"

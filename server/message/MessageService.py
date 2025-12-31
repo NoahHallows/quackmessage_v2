@@ -15,6 +15,9 @@ logging.basicConfig(
     style="{",
     datefmt="%Y-%m-%d %H:%M",
     level=logging.DEBUG,
+    handlers=[
+        logging.StreamHandler(sys.stdout)
+    ]
 )
 
 class MessageServicer(message_pb2_grpc.MessagerServicer):
