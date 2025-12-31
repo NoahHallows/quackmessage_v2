@@ -32,26 +32,28 @@
   \pagenumbering{arabic}
 
     \section{Authentication}
-        Authentication is handled using helper functions in \textit{auth.py}.
-        Passwords are transmited to the server in plan text and hashed on the
+        Authentication is handled using the module \textit{auth} which
+        resides in the server directory. Passwords are transmited to the server in plan text and hashed on the
         server using argon2 hashing. Client authentication is checked using
         stateless JWT tokens (for end to end encryption they also need to
-        locally have the appropriate keys). This JWT token is checked using an
-        interceptor.
+        locally have the appropriate keys but this hasn't been implemented). This JWT token is checked using an
+        interceptor. The same JWT token is used to verify messages are sent by
+        the correct person, so they can't simply change the sender name in the
+        send message request.
         \subsection{Login}
             To log in the client sends the username and password over a encrypted
             (tls) connection to the server. The main function of the server then
-            uses functions in \textit{auth.py} which looks up the password hash in
+            uses functions in \textit{auth/AuthService.py} which looks up the password hash in
             the database using the username and compares it with the users plan text
-            password provided (using argon2 verify). If successful \textit{auth.py}
-            generates a jwt token and returns it and the boolean true. Which is then
-            sent back to the client in the main function.
+            password provided (using argon2 verify). If successful
+            \textit{auth/jwt\_auth.py} generates a jwt token and returns it and the boolean true. Which is then
+            sent back to the client in the \textit{auth/AuthService.py} login
+            function.
 
         \subsection{Account creation}
             To create an account the user needs to provide an email address
             (which will be checked by sending a code to it), password and a
-            username. Account creation is handled using helper functions in
-            \textit{auth.py}.
+            username. Account creation is handled in \textit{auth/AuthService.py}.
 
         \subsection{Database}
             User accounts are stored in the table \textbf{users}. The collum
@@ -74,11 +76,48 @@
                 Store time of last login. \\
             \end{tabularx}
 
-        \section{Database access}
-            I am using \href{https://www.psycopg.org/docs/index.html}{Psycopg}
+        \subsubsection{Database access}
+            \href{https://www.psycopg.org/docs/index.html}{Psycopg} is used
             for connecting to the database. Connections are thread safe
             \autocite[2]{} and can either create a connection per thread or by
             using the same connection and creating seperate cursors.
+    \section{Messages}
+        \subsection{Sending}
+            To send a message the client listens for the onClick and onPress methods
+            of the send button and the messageEdit box. When these are triggered
+            the send message function in \textit{backend.py} is called and the
+            messageEdit box is cleared (if the messageEdit box isn't empty,
+            otherwise nothing happens). The client then sends the grpc request to
+            the server asyncronously (but in the main ui thread because this should
+            be basically instant) and updates the ui by creating the message bubble
+            for the message just sent. On the server messages are handled by the
+            \textit{messages/MessageService.py} file. Upon receiving a message the
+            server verifies the sender is valid by checking the sender field in the
+            message with the username in the JWT contained withing the metadata. If
+            they don't match the server returns false and doesn't send the message.
+            If this check passes the server then uses the send\_message lock to
+            prevent two threads from sending messages at the same time and thus
+            prevents two messages from having the same id (which the db wouldn't
+            allow and would cause an error). The message is then inserted into the
+            db, the lock is released, if the receiver is active the message is added
+            to the message queue of that user and the successful response is sent
+            back to the sender with the message id. The client then sets a variable
+            in the corresponding message bubble to the message is. The message
+            bubble is only created after the successful response is received.
+
+        \subsection{Receiving}
+            To receive messages the client sends a subscribe messages request to
+            the server which opens a response stream from the server. The server
+            verifies the username is correct using the JWT the same way as with
+            sending and then sends all the old messages from the database that
+            were send by or to the user who just connected. Once this is
+            finished the server waits for messages to be added to its queue,
+            which are then send to the client and removed (thus avoiding polling
+            the db). There is a dictionary of active users which contains the
+            username as the key and the users message queue as the value. On the
+            client once a message is received a signal to the ui is emitted
+            containing the message information and the ui creates a new message
+            bubble and adds it to the list view.
 
     \newpage
     \printbibliography
