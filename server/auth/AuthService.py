@@ -83,7 +83,6 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
 
     # Login function
     def Login(self, request, context):
-        logging.debug(f"self.email: {self.email} verification code: {self.email_verification_code}")
         logging.info(f"Login for user {request.username}")
         try:
             conn = db.getConn()
@@ -92,7 +91,7 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
             password_hash = db_binary_to_binary(cursor.fetchall())
 
         except Exception as e:
-            logging.warning(f"Password not found: {e}", file=stderr)
+            logging.warning(f"Password not found: {e}")
 
         try:
             ph = PasswordHasher()
@@ -115,7 +114,6 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
         context.abort(grpc.StatusCode.UNAUTHENTICATED, "Error")
 
     def VerifyEmail(self, request, context):
-        logging.debug(f"self.email: {self.email} verification code: {self.email_verification_code}")
         # Check email isn't already registered
         conn = db.getConn()
         cur = conn.cursor()
@@ -141,12 +139,10 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
             part1 = MIMEText(message_text.format(code=email_verification_code), "plain")
             message.attach(part1)
             server.sendmail(email_username, request.email, message.as_string())
-            self.email = request.email
             logging.debug("Email sent")
             return auth_pb2.VerificationEmailSent(emailSent=True)
 
     def CheckCode(self, request, context):
-        logging.debug(f"self.email: {self.email} verification code: {self.email_verification_code}")
         with self.email_lock:
             if request.code == self.email_verification_dict[request.email]:
                 self.verified_emails.append(request.email)
@@ -161,12 +157,12 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
         cur = conn.cursor()
         cur.execute("SELECT 1 FROM users WHERE username = %s;", (request.username,))
         if cur.fetchone() is None:
-            if (request.email in verified_emails):
-                verified_emails.remove(request.email)
+            if (request.email in self.verified_emails):
+                self.verified_emails.remove(request.email)
                 ph = PasswordHasher()
                 password_hash = ph.hash(request.password)
                 try:
-                    cur.execute("INSERT INTO users (email, username, password_hash, account_creation_date, messages_sent, messages_received) VALUES (%s, %s, %s, NOW(), %s, %s)", (self.email, request.username, password_hash, 0, 0))
+                    cur.execute("INSERT INTO users (email, username, password_hash, account_creation_date, messages_sent, messages_received) VALUES (%s, %s, %s, NOW(), %s, %s)", (request.email, request.username, password_hash, 0, 0))
                     conn.commit()
                     cur.close()
 

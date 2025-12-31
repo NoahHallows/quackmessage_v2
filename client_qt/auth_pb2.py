@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nauth.proto\" \n\rClientVersion\x12\x0f\n\x07version\x18\x01 \x01(\x02\"8\n\x0cValidVersion\x12\r\n\x05valid\x18\x01 \x01(\x08\x12\x19\n\x11valid_version_num\x18\x02 \x01(\x02\"2\n\x0cLoginMessage\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"2\n\x0bLoginResult\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x12\n\nauth_token\x18\x02 \x01(\t\"#\n\x12VerifyEmailMessage\x12\r\n\x05\x65mail\x18\x01 \x01(\t\"*\n\x15VerificationEmailSent\x12\x11\n\temailSent\x18\x01 \x01(\x08\"6\n\x17VerificationCodeMessage\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x05\x12\r\n\x05\x65mail\x18\x02 \x01(\t\"+\n\x17VerificationCodeMatches\x12\x10\n\x08verified\x18\x01 \x01(\x08\"7\n\x11\x43reateUserMessage\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"7\n\x10\x43reateUserResult\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x12\n\nauth_token\x18\x02 \x01(\t2\xa3\x02\n\x10QuackMessageAuth\x12&\n\x05Login\x12\r.LoginMessage\x1a\x0c.LoginResult\"\x00\x12\x35\n\nCreateUser\x12\x12.CreateUserMessage\x1a\x11.CreateUserResult\"\x00\x12<\n\x0bVerifyEmail\x12\x13.VerifyEmailMessage\x1a\x16.VerificationEmailSent\"\x00\x12\x41\n\tCheckCode\x12\x18.VerificationCodeMessage\x1a\x18.VerificationCodeMatches\"\x00\x12/\n\x0c\x43heckVersion\x12\x0e.ClientVersion\x1a\r.ValidVersion\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nauth.proto\" \n\rClientVersion\x12\x0f\n\x07version\x18\x01 \x01(\t\"8\n\x0cValidVersion\x12\r\n\x05valid\x18\x01 \x01(\x08\x12\x19\n\x11valid_version_num\x18\x02 \x01(\t\"2\n\x0cLoginMessage\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"2\n\x0bLoginResult\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x12\n\nauth_token\x18\x02 \x01(\t\"#\n\x12VerifyEmailMessage\x12\r\n\x05\x65mail\x18\x01 \x01(\t\"*\n\x15VerificationEmailSent\x12\x11\n\temailSent\x18\x01 \x01(\x08\"6\n\x17VerificationCodeMessage\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x05\x12\r\n\x05\x65mail\x18\x02 \x01(\t\"+\n\x17VerificationCodeMatches\x12\x10\n\x08verified\x18\x01 \x01(\x08\"F\n\x11\x43reateUserMessage\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\x12\r\n\x05\x65mail\x18\x03 \x01(\t\"7\n\x10\x43reateUserResult\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x12\n\nauth_token\x18\x02 \x01(\t2\xa3\x02\n\x10QuackMessageAuth\x12&\n\x05Login\x12\r.LoginMessage\x1a\x0c.LoginResult\"\x00\x12\x35\n\nCreateUser\x12\x12.CreateUserMessage\x1a\x11.CreateUserResult\"\x00\x12<\n\x0bVerifyEmail\x12\x13.VerifyEmailMessage\x1a\x16.VerificationEmailSent\"\x00\x12\x41\n\tCheckCode\x12\x18.VerificationCodeMessage\x1a\x18.VerificationCodeMatches\"\x00\x12/\n\x0c\x43heckVersion\x12\x0e.ClientVersion\x1a\r.ValidVersion\"\x00\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -48,9 +48,9 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_VERIFICATIONCODEMATCHES']._serialized_start=347
   _globals['_VERIFICATIONCODEMATCHES']._serialized_end=390
   _globals['_CREATEUSERMESSAGE']._serialized_start=392
-  _globals['_CREATEUSERMESSAGE']._serialized_end=447
-  _globals['_CREATEUSERRESULT']._serialized_start=449
-  _globals['_CREATEUSERRESULT']._serialized_end=504
-  _globals['_QUACKMESSAGEAUTH']._serialized_start=507
-  _globals['_QUACKMESSAGEAUTH']._serialized_end=798
+  _globals['_CREATEUSERMESSAGE']._serialized_end=462
+  _globals['_CREATEUSERRESULT']._serialized_start=464
+  _globals['_CREATEUSERRESULT']._serialized_end=519
+  _globals['_QUACKMESSAGEAUTH']._serialized_start=522
+  _globals['_QUACKMESSAGEAUTH']._serialized_end=813
 # @@protoc_insertion_point(module_scope)
