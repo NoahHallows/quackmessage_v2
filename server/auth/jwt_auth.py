@@ -7,12 +7,6 @@ from dotenv import load_dotenv
 # loading variables from .env file
 load_dotenv()
 
-logging.basicConfig(
-    format="{asctime} - {levelname} - {message}",
-    style="{",
-    datefmt="%Y-%m-%d %H:%M",
-    level=logging.WARNING,
-)
 
 ISSUER = os.environ.get("TOKEN_ISSUER")
 AUDIENCE = os.environ.get("TOKEN_AUDIENCE")
