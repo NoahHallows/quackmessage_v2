@@ -5,6 +5,7 @@ import logging
 import time
 from threading import Lock
 from sys import stdout
+from datetime import datetime
 
 import message_pb2
 import message_pb2_grpc
@@ -14,8 +15,6 @@ from auth import jwt_auth
 load_dotenv()
 
 
-def current_milli_time():
-    return round(time.time() * 1000)
 
 class MessageServicer(message_pb2_grpc.MessagerServicer):
     def __init__(self):
@@ -62,7 +61,7 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
             # Check if receiver is online
             if request.receiver in self.active_clients:
                 logging.debug("Receiver is active")
-                message = {"sender": request.sender, "receiver": request.receiver, "content": request.content, "messageId": message_id, "timeStamp": current_milli_time()}
+                message = {"sender": request.sender, "receiver": request.receiver, "content": request.content, "messageId": message_id, "timeStamp": datetime.now()}
                 with self.send_message_lock:
                     self.active_clients[request.receiver].put(message)
             logging.info("Done sending message")
@@ -93,8 +92,7 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
                 yield response
             try:
                 while True:
-                    with self.send_message_lock:
-                        new_message = user_queue.get()
+                    new_message = user_queue.get()
                     if new_message["receiver"] == username:
                         response = message_pb2.Message(sender=new_message["sender"],receiver=username,content=new_message["content"],messageId=new_message["messageId"], sent_at=new_message["timeStamp"])
                         yield response
