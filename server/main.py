@@ -9,6 +9,7 @@ from auth import AuthService
 from message import MessageService
 import _credentials
 import logging
+from sys import stdout
 
 logging.basicConfig(
     format="{asctime} - {levelname} - {message}",
@@ -16,7 +17,7 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M",
     level=logging.DEBUG,
     handlers=[
-        logging.StreamHandler(sys.stdout)
+        logging.StreamHandler(stdout)
     ]
 )
 

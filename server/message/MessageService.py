@@ -4,6 +4,7 @@ import queue
 import logging
 import time
 from threading import Lock
+from sys import stdout
 
 import message_pb2
 import message_pb2_grpc
@@ -18,7 +19,7 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M",
     level=logging.DEBUG,
     handlers=[
-        logging.StreamHandler(sys.stdout)
+        logging.StreamHandler(stdout)
     ]
 )
 

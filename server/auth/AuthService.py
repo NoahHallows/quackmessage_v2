@@ -15,7 +15,7 @@ import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from dotenv import load_dotenv, dotenv_values
-from sys import stderr
+from sys import stdout
 from datetime import datetime
 from .jwt_auth import create_jwt
 import logging
@@ -34,7 +34,7 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M",
     level=logging.DEBUG,
     handlers=[
-        logging.StreamHandler(sys.stdout)
+        logging.StreamHandler(stdout)
     ]
 )
 
