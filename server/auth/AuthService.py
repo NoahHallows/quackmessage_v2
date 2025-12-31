@@ -113,7 +113,8 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
             return auth_pb2.VerificationEmailSent(emailSent=False)
             logging.info("Email is already in db")
 
-        with smtplib.SMTP_SSL(email_server, email_port, context=context) as server:
+        email_context = ssl.create_default_context()
+        with smtplib.SMTP_SSL(email_server, email_port, context=email_context) as server:
             server.login(email_username, email_password)
             logging.info("Logged in to email server")
             email_verification_code = randint(100000, 999999)
