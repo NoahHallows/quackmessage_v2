@@ -4,6 +4,20 @@ from typing import ClassVar as _ClassVar, Optional as _Optional
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
+class ClientVersion(_message.Message):
+    __slots__ = ("version",)
+    VERSION_FIELD_NUMBER: _ClassVar[int]
+    version: float
+    def __init__(self, version: _Optional[float] = ...) -> None: ...
+
+class ValidVersion(_message.Message):
+    __slots__ = ("valid", "valid_version_num")
+    VALID_FIELD_NUMBER: _ClassVar[int]
+    VALID_VERSION_NUM_FIELD_NUMBER: _ClassVar[int]
+    valid: bool
+    valid_version_num: int
+    def __init__(self, valid: bool = ..., valid_version_num: _Optional[int] = ...) -> None: ...
+
 class LoginMessage(_message.Message):
     __slots__ = ("username", "password")
     USERNAME_FIELD_NUMBER: _ClassVar[int]

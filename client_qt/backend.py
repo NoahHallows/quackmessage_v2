@@ -21,7 +21,7 @@ logging.basicConfig(
     level=logging.DEBUG,
 )
 
-
+VERSION = 0.1
 
 
 class Backend(QObject):
@@ -56,6 +56,14 @@ class Backend(QObject):
         except Exception as e:
             logging.critical(f"Unable to connect to server, exiting!\n{e}")
             # TODO Exit
+            #
+        # Check version
+        request = auth_pb2.ClientVersion(version=VERSION)
+        version_future = self.authStub.CheckVersion.future(request)
+        result = version_future.result()
+        if (result.valid != True):
+            logging.error(f"Invalid version, please update to {result.valid_version_num}")
+            sys.exit(1)
 
     def _update_channel(self, token):
         logging.info("Updating channel")

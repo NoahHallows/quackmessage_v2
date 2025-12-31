@@ -24,29 +24,33 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nauth.proto\"2\n\x0cLoginMessage\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"2\n\x0bLoginResult\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x12\n\nauth_token\x18\x02 \x01(\t\"#\n\x12VerifyEmailMessage\x12\r\n\x05\x65mail\x18\x01 \x01(\t\"*\n\x15VerificationEmailSent\x12\x11\n\temailSent\x18\x01 \x01(\x08\"6\n\x17VerificationCodeMessage\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x05\x12\r\n\x05\x65mail\x18\x02 \x01(\t\"+\n\x17VerificationCodeMatches\x12\x10\n\x08verified\x18\x01 \x01(\x08\"7\n\x11\x43reateUserMessage\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"7\n\x10\x43reateUserResult\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x12\n\nauth_token\x18\x02 \x01(\t2\xf2\x01\n\x10QuackMessageAuth\x12&\n\x05Login\x12\r.LoginMessage\x1a\x0c.LoginResult\"\x00\x12\x35\n\nCreateUser\x12\x12.CreateUserMessage\x1a\x11.CreateUserResult\"\x00\x12<\n\x0bVerifyEmail\x12\x13.VerifyEmailMessage\x1a\x16.VerificationEmailSent\"\x00\x12\x41\n\tCheckCode\x12\x18.VerificationCodeMessage\x1a\x18.VerificationCodeMatches\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nauth.proto\" \n\rClientVersion\x12\x0f\n\x07version\x18\x01 \x01(\x02\"8\n\x0cValidVersion\x12\r\n\x05valid\x18\x01 \x01(\x08\x12\x19\n\x11valid_version_num\x18\x02 \x01(\x05\"2\n\x0cLoginMessage\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"2\n\x0bLoginResult\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x12\n\nauth_token\x18\x02 \x01(\t\"#\n\x12VerifyEmailMessage\x12\r\n\x05\x65mail\x18\x01 \x01(\t\"*\n\x15VerificationEmailSent\x12\x11\n\temailSent\x18\x01 \x01(\x08\"6\n\x17VerificationCodeMessage\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x05\x12\r\n\x05\x65mail\x18\x02 \x01(\t\"+\n\x17VerificationCodeMatches\x12\x10\n\x08verified\x18\x01 \x01(\x08\"7\n\x11\x43reateUserMessage\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"7\n\x10\x43reateUserResult\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x12\n\nauth_token\x18\x02 \x01(\t2\xa3\x02\n\x10QuackMessageAuth\x12&\n\x05Login\x12\r.LoginMessage\x1a\x0c.LoginResult\"\x00\x12\x35\n\nCreateUser\x12\x12.CreateUserMessage\x1a\x11.CreateUserResult\"\x00\x12<\n\x0bVerifyEmail\x12\x13.VerifyEmailMessage\x1a\x16.VerificationEmailSent\"\x00\x12\x41\n\tCheckCode\x12\x18.VerificationCodeMessage\x1a\x18.VerificationCodeMatches\"\x00\x12/\n\x0c\x43heckVersion\x12\x0e.ClientVersion\x1a\r.ValidVersion\"\x00\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'auth_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_LOGINMESSAGE']._serialized_start=14
-  _globals['_LOGINMESSAGE']._serialized_end=64
-  _globals['_LOGINRESULT']._serialized_start=66
-  _globals['_LOGINRESULT']._serialized_end=116
-  _globals['_VERIFYEMAILMESSAGE']._serialized_start=118
-  _globals['_VERIFYEMAILMESSAGE']._serialized_end=153
-  _globals['_VERIFICATIONEMAILSENT']._serialized_start=155
-  _globals['_VERIFICATIONEMAILSENT']._serialized_end=197
-  _globals['_VERIFICATIONCODEMESSAGE']._serialized_start=199
-  _globals['_VERIFICATIONCODEMESSAGE']._serialized_end=253
-  _globals['_VERIFICATIONCODEMATCHES']._serialized_start=255
-  _globals['_VERIFICATIONCODEMATCHES']._serialized_end=298
-  _globals['_CREATEUSERMESSAGE']._serialized_start=300
-  _globals['_CREATEUSERMESSAGE']._serialized_end=355
-  _globals['_CREATEUSERRESULT']._serialized_start=357
-  _globals['_CREATEUSERRESULT']._serialized_end=412
-  _globals['_QUACKMESSAGEAUTH']._serialized_start=415
-  _globals['_QUACKMESSAGEAUTH']._serialized_end=657
+  _globals['_CLIENTVERSION']._serialized_start=14
+  _globals['_CLIENTVERSION']._serialized_end=46
+  _globals['_VALIDVERSION']._serialized_start=48
+  _globals['_VALIDVERSION']._serialized_end=104
+  _globals['_LOGINMESSAGE']._serialized_start=106
+  _globals['_LOGINMESSAGE']._serialized_end=156
+  _globals['_LOGINRESULT']._serialized_start=158
+  _globals['_LOGINRESULT']._serialized_end=208
+  _globals['_VERIFYEMAILMESSAGE']._serialized_start=210
+  _globals['_VERIFYEMAILMESSAGE']._serialized_end=245
+  _globals['_VERIFICATIONEMAILSENT']._serialized_start=247
+  _globals['_VERIFICATIONEMAILSENT']._serialized_end=289
+  _globals['_VERIFICATIONCODEMESSAGE']._serialized_start=291
+  _globals['_VERIFICATIONCODEMESSAGE']._serialized_end=345
+  _globals['_VERIFICATIONCODEMATCHES']._serialized_start=347
+  _globals['_VERIFICATIONCODEMATCHES']._serialized_end=390
+  _globals['_CREATEUSERMESSAGE']._serialized_start=392
+  _globals['_CREATEUSERMESSAGE']._serialized_end=447
+  _globals['_CREATEUSERRESULT']._serialized_start=449
+  _globals['_CREATEUSERRESULT']._serialized_end=504
+  _globals['_QUACKMESSAGEAUTH']._serialized_start=507
+  _globals['_QUACKMESSAGEAUTH']._serialized_end=798
 # @@protoc_insertion_point(module_scope)

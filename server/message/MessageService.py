@@ -50,6 +50,7 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
 
             conn = db.getConn()
             cursor = conn.cursor()
+            # To prevent two messages having the same message_id
             with self.send_message_lock:
                 try:
                     cursor.execute("SELECT message_id FROM messages ORDER BY message_id DESC LIMIT 1")

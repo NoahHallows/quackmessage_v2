@@ -5,8 +5,17 @@ service QuackMessageAuth {
   rpc CreateUser (CreateUserMessage) returns (CreateUserResult) {};
   rpc VerifyEmail (VerifyEmailMessage) returns (VerificationEmailSent) {};
   rpc CheckCode (VerificationCodeMessage) returns (VerificationCodeMatches) {};
+  rpc CheckVersion (ClientVersion) returns (ValidVersion) {};
 }
 
+message ClientVersion {
+  float version = 1;
+}
+
+message ValidVersion {
+  bool valid = 1;
+  int32 valid_version_num = 2;
+}
 
 // For Login
 // Argon2 hashes password on server so hash doesn't become the password
