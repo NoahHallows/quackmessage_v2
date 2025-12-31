@@ -9,12 +9,12 @@ service QuackMessageAuth {
 }
 
 message ClientVersion {
-  float version = 1;
+  string version = 1;
 }
 
 message ValidVersion {
   bool valid = 1;
-  float valid_version_num = 2;
+  string valid_version_num = 2;
 }
 
 // For Login

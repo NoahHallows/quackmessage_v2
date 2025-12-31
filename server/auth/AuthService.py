@@ -27,7 +27,7 @@ import auth_pb2
 import auth_pb2_grpc
 from db_manager import db
 
-VERSION = 0.1
+VERSION = "0.0.0.1"
 
 load_dotenv()
 
