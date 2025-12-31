@@ -62,8 +62,7 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
             if request.receiver in self.active_clients:
                 logging.debug("Receiver is active")
                 message = {"sender": request.sender, "receiver": request.receiver, "content": request.content, "messageId": message_id, "timeStamp": datetime.now()}
-                with self.send_message_lock:
-                    self.active_clients[request.receiver].put(message)
+                self.active_clients[request.receiver].put(message)
             logging.info("Done sending message")
             return message_pb2.sendMessageResult(sendSuccessful=True, message_id=message_id)
         except Exception as e:
