@@ -31,16 +31,6 @@ VERSION = "0.0.0.1"
 
 load_dotenv()
 
-logging.basicConfig(
-    format="{asctime} - {levelname} - {message}",
-    style="{",
-    datefmt="%Y-%m-%d %H:%M",
-    level=logging.DEBUG,
-    handlers=[
-        logging.StreamHandler(stdout)
-    ]
-)
-
 try:
     email_server = os.environ.get('EMAIL_SERVER')
     email_port = int(os.environ.get('EMAIL_PORT'))

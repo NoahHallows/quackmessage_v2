@@ -13,15 +13,6 @@ from auth import jwt_auth
 
 load_dotenv()
 
-logging.basicConfig(
-    format="{asctime} - {levelname} - {message}",
-    style="{",
-    datefmt="%Y-%m-%d %H:%M",
-    level=logging.DEBUG,
-    handlers=[
-        logging.StreamHandler(stdout)
-    ]
-)
 
 def current_milli_time():
     return round(time.time() * 1000)
