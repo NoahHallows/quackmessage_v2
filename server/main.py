@@ -8,12 +8,20 @@ import message_pb2_grpc
 from auth import AuthService
 from message import MessageService
 import _credentials
+import logging
+
+logging.basicConfig(
+    format="{asctime} - {levelname} - {message}",
+    style="{",
+    datefmt="%Y-%m-%d %H:%M",
+    level=logging.DEBUG,
+)
 
 _LISTEN_ADDRESS_TEMPLATE = "0.0.0.0:%d"
 
 def serve():
     port = 5555
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=25))
 
     auth_pb2_grpc.add_QuackMessageAuthServicer_to_server(AuthService.AuthServicer(), server)
     message_pb2_grpc.add_MessagerServicer_to_server(MessageService.MessageServicer(), server)
@@ -33,7 +41,7 @@ def serve():
     )
 
 
-    print("Server started")
+    logging.info("Server started")
     server.start()
     server.wait_for_termination()
 

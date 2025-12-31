@@ -18,6 +18,8 @@ from dotenv import load_dotenv, dotenv_values
 from sys import stderr
 from datetime import datetime
 from .jwt_auth import create_jwt
+import logging
+
 
 # Import protobufs
 import auth_pb2
@@ -25,6 +27,13 @@ import auth_pb2_grpc
 from db_manager import db
 
 load_dotenv()
+
+logging.basicConfig(
+    format="{asctime} - {levelname} - {message}",
+    style="{",
+    datefmt="%Y-%m-%d %H:%M",
+    level=logging.DEBUG,
+)
 
 try:
     email_server = os.environ.get('EMAIL_SERVER')
@@ -34,22 +43,20 @@ try:
     if email_server is None or email_port is None or email_password is None or email_username is None:
         raise NameError
 except NameError:
-    print("Cannot get email settings from environment", file=stderr)
+    logging.warning("Cannot get email settings from environment")
 
 if email_server is None:
-    print("Unable to access email_server environment var", file=stderr)
-    sys.exit(1)
-if email_port is None:
-    print("Unable to access email_port environment var", file=stderr)
-    sys.exit(1)
-if email_username is None:
-    print("Unable to access email_username environment var", file=stderr)
-    sys.exit(1)
-if email_password is None:
-    print("Unable to access email_password environment var", file=stderr)
-    sys.exit(1)
+    logging.warning("Unable to access email_server environment var")
 
-print(f"server: {email_server}, port: {email_port}, username: {email_username}, password: {email_password}")
+if email_port is None:
+    logging.warning("Unable to access email_port environment var")
+
+if email_username is None:
+    logging.warning("Unable to access email_username environment var")
+
+if email_password is None:
+    logging.warning("Unable to access email_password environment var")
+
 # Convert the list of bytes to a single variable
 def db_binary_to_binary(db_binary):
     binary = b''
@@ -71,7 +78,8 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
 
     # Login function
     def Login(self, request, context):
-        print(f"Login for user {request.username} at {datetime.now()}")
+        logging.debug(f"self.email: {self.email} verification code: {self.email_verification_code}")
+        logging.info(f"Login for user {request.username}")
         try:
             conn = db.getConn()
             cursor = conn.cursor()
@@ -79,21 +87,22 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
             password_hash = db_binary_to_binary(cursor.fetchall())
 
         except Exception as e:
-            print(f"Password not found: {e}", file=stderr)
+            logging.warning(f"Password not found: {e}", file=stderr)
 
         try:
             ph = PasswordHasher()
             ph.verify(password_hash, request.password)
-            print("Passwords match")
+            logging.info("Passwords match")
             cursor.execute("UPDATE users SET last_login = NOW() WHERE username = %s", (request.username,))
             conn.commit()
             cursor.close()
 
             token = create_jwt(request.username)
+            logging.info(f"User {request.username} has successfully logged in")
             return auth_pb2.LoginResult(success=True, auth_token=token)
 
         except Exception as e:
-            print(f"Passwords do not match: {e}")
+            logging.info(f"Passwords do not match for user {request.username}: {e}")
             conn.commit()
             cursor.close()
 
@@ -101,21 +110,19 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
         context.abort(grpc.StatusCode.UNAUTHENTICATED, "Error")
 
     def VerifyEmail(self, request, context):
-        # Create a secure SSL context
-        context = ssl.create_default_context()
-
+        logging.debug(f"self.email: {self.email} verification code: {self.email_verification_code}")
         # Check email isn't already registered
         conn = db.getConn()
         cur = conn.cursor()
-        print("Connected to db")
+        logging.info("Connected to db")
         cur.execute("SELECT 1 FROM users WHERE email = %s;", (request.email,))
         if cur.fetchone() is not None:
             return auth_pb2.VerificationEmailSent(emailSent=False)
-            print("Email is already in db")
+            logging.info("Email is already in db")
 
         with smtplib.SMTP_SSL(email_server, email_port, context=context) as server:
             server.login(email_username, email_password)
-            print("Loged in")
+            logging.info("Logged in to email server")
             self.email_verification_code = randint(100000, 999999)
             message = MIMEMultipart("alternative")
             message["Subject"] = "Quackmessage verification code"
@@ -127,9 +134,11 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
             message.attach(part1)
             server.sendmail(email_username, request.email, message.as_string())
             self.email = request.email
+            logging.debug("Email sent")
             return auth_pb2.VerificationEmailSent(emailSent=True)
 
     def CheckCode(self, request, context):
+        logging.debug(f"self.email: {self.email} verification code: {self.email_verification_code}")
         if request.code == self.email_verification_code:
             self.email_verified = True
             return auth_pb2.VerificationCodeMatches(verified=True)
@@ -138,6 +147,7 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
             return auth_pb2.VerificationCodeMatches(verified=False)
 
     def CreateUser(self, request, context):
+        logging.debug(f"self.email: {self.email} verification code: {self.email_verification_code}")
         conn = db.getConn()
         cur = conn.cursor()
         cur.execute("SELECT 1 FROM users WHERE username = %s;", (request.username,))
@@ -149,13 +159,13 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
                 conn.commit()
                 cur.close()
 
-                print("Done")
+                logging.info("Successfully created account")
                 token = create_jwt(request.username)
                 return auth_pb2.CreateUserResult(success=True, auth_token=token)
             except Exception as e:
-                print(f"Error inserting user into database: {e}", file=stderr)
+                logging.warning(f"Error inserting user into database: {e}")
         else:
-            print("User exists or email is unverified", file=stderr)
+            logging.info("User exists or email is unverified")
 
         conn.commit()
         cur.close()
