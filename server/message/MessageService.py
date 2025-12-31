@@ -102,9 +102,7 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
                     with self.send_message_lock:
                         new_message = user_queue.get()
                     if new_message["receiver"] == username:
-                        response =
-                        message_pb2.Message(sender=new_message["sender"],receiver=username,content=new_message["content"],messageId=new_message["messageId"],
-                                            sent_at=new_message["timeStamp"])
+                        response = message_pb2.Message(sender=new_message["sender"],receiver=username,content=new_message["content"],messageId=new_message["messageId"], sent_at=new_message["timeStamp"])
                         yield response
 
             finally:
