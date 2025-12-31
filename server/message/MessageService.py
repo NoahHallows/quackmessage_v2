@@ -2,6 +2,8 @@ import psycopg2
 from dotenv import load_dotenv, dotenv_values
 import queue
 import logging
+import time
+from threading import Lock
 
 import message_pb2
 import message_pb2_grpc
@@ -20,8 +22,13 @@ logging.basicConfig(
     ]
 )
 
+def current_milli_time():
+    return round(time.time() * 1000)
+
 class MessageServicer(message_pb2_grpc.MessagerServicer):
     def __init__(self):
+        self.client_lock = Lock()
+        self.send_message_lock = Lock()
         self.active_clients = {}
 
     def sendMessage(self, request, context):
@@ -42,24 +49,27 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
 
             conn = db.getConn()
             cursor = conn.cursor()
-            try:
-                cursor.execute("SELECT message_id FROM messages ORDER BY message_id DESC LIMIT 1")
-                message_id = cursor.fetchone()
-                logging.debug(message_id[0])
-                message_id = message_id[0] + 1
-                logging.debug(message_id)
+            with self.send_message_lock:
+                try:
+                    cursor.execute("SELECT message_id FROM messages ORDER BY message_id DESC LIMIT 1")
+                    message_id = cursor.fetchone()
+                    logging.debug(message_id[0])
+                    message_id = message_id[0] + 1
+                    logging.debug(message_id)
 
-            except:
-                logging.warning("It appears there are no messages in db")
-                message_id = 1
-            cursor.execute("INSERT INTO messages (sender, receiver, content, message_id, time_sent) VALUES (%s, %s, %s, %s, NOW())", (request.sender, request.receiver, request.content, message_id))
+                except:
+                    logging.warning("It appears there are no messages in db")
+                    message_id = 1
+                cursor.execute("INSERT INTO messages (sender, receiver, content, message_id, time_sent) VALUES (%s, %s, %s, %s, NOW())", (request.sender, request.receiver, request.content, message_id))
+                conn.commit()
+                cursor.close()
+
             # Check if receiver is online
             if request.receiver in self.active_clients:
                 logging.debug("Receiver is active")
-                message = {"sender": request.sender, "receiver": request.receiver, "content": request.content, "messageId": message_id}
-                self.active_clients[request.receiver].put(message)
-            conn.commit()
-            cursor.close()
+                message = {"sender": request.sender, "receiver": request.receiver, "content": request.content, "messageId": message_id, "timeStamp": current_milli_time()}
+                with self.send_message_lock:
+                    self.active_clients[request.receiver].put(message)
             logging.info("Done sending message")
             return message_pb2.sendMessageResult(sendSuccessful=True, message_id=message_id)
         except Exception as e:
@@ -73,8 +83,8 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
         if auth_header.startswith('Bearer '):
             token = auth_header[len("Bearer "):]
             username = jwt_auth.get_username(token)
-            self.active_clients[username] = user_queue
-            logging.debug(self.active_clients)
+            with self.send_message_lock:
+                self.active_clients[username] = user_queue
             # Send old messages
             conn = db.getConn()
             cursor = conn.cursor()
@@ -88,13 +98,17 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
                 yield response
             try:
                 while True:
-                    new_message = user_queue.get()
+                    with self.send_message_lock:
+                        new_message = user_queue.get()
                     if new_message["receiver"] == username:
-                        response = message_pb2.Message(sender=new_message["sender"],receiver=username,content=new_message["content"],messageId=new_message["messageId"])
+                        response =
+                        message_pb2.Message(sender=new_message["sender"],receiver=username,content=new_message["content"],messageId=new_message["messageId"],
+                                            sent_at=new_message["timeStamp"])
                         yield response
 
             finally:
-                del self.active_clients[username]
+                with self.send_message_lock:
+                    del self.active_clients[username]
 
     def getContacts(self, request, context):
         metadata = dict(context.invocation_metadata())

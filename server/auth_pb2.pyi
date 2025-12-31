@@ -33,10 +33,12 @@ class VerificationEmailSent(_message.Message):
     def __init__(self, emailSent: bool = ...) -> None: ...
 
 class VerificationCodeMessage(_message.Message):
-    __slots__ = ("code",)
+    __slots__ = ("code", "email")
     CODE_FIELD_NUMBER: _ClassVar[int]
+    EMAIL_FIELD_NUMBER: _ClassVar[int]
     code: int
-    def __init__(self, code: _Optional[int] = ...) -> None: ...
+    email: str
+    def __init__(self, code: _Optional[int] = ..., email: _Optional[str] = ...) -> None: ...
 
 class VerificationCodeMatches(_message.Message):
     __slots__ = ("verified",)

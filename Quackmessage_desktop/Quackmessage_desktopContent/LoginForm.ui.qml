@@ -4,8 +4,7 @@ import QtQuick.Controls
 
 Rectangle {
     id: rectangle
-    width: 700
-    height: 700
+    anchors.fill: parent
     state: "initial"
     color: "#272727"
 
@@ -934,8 +933,9 @@ Rectangle {
 
 /*##^##
 Designer {
-    D{i:2;invisible:true}D{i:3;invisible:true}D{i:5;invisible:true}D{i:6;invisible:true}
+    D{i:0}D{i:2;invisible:true}D{i:3;invisible:true}D{i:5;invisible:true}D{i:6;invisible:true}
 D{i:8;invisible:true}D{i:10;invisible:true}D{i:12;invisible:true}D{i:14;invisible:true}
 D{i:16;invisible:true}D{i:17;invisible:true}D{i:26;invisible:true}
 }
 ##^##*/
+

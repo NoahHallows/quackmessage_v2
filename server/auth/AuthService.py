@@ -19,7 +19,7 @@ from sys import stderr
 from datetime import datetime
 from .jwt_auth import create_jwt
 import logging
-
+from threading import Lock
 
 # Import protobufs
 import auth_pb2
@@ -74,10 +74,9 @@ def db_binary_to_binary(db_binary):
 class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
 
     def __init__(self):
-        self.email = None
-        self.email_verified = False
-        self.email_verification_code = None
-
+        self.email_verification_dict = {}
+        self.verified_emails = ()
+        self.email_lock = Lock()
 
     # Login function
     def Login(self, request, context):
@@ -126,14 +125,17 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
         with smtplib.SMTP_SSL(email_server, email_port, context=context) as server:
             server.login(email_username, email_password)
             logging.info("Logged in to email server")
-            self.email_verification_code = randint(100000, 999999)
+            email_verification_code = randint(100000, 999999)
+            with self.email_lock:
+                self.email_verification_dict[request.email] = email_verification_code
+
             message = MIMEMultipart("alternative")
             message["Subject"] = "Quackmessage verification code"
             message["From"] = email_username
             message["To"] = request.email
 
             message_text = "Hello,\nYour verification code is: {code}\nRegards Quackmessage automated email bot"
-            part1 = MIMEText(message_text.format(code=self.email_verification_code), "plain")
+            part1 = MIMEText(message_text.format(code=email_verification_code), "plain")
             message.attach(part1)
             server.sendmail(email_username, request.email, message.as_string())
             self.email = request.email
@@ -142,12 +144,14 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
 
     def CheckCode(self, request, context):
         logging.debug(f"self.email: {self.email} verification code: {self.email_verification_code}")
-        if request.code == self.email_verification_code:
-            self.email_verified = True
-            return auth_pb2.VerificationCodeMatches(verified=True)
-        else:
-            self.email_verified = False
-            return auth_pb2.VerificationCodeMatches(verified=False)
+        with self.email_lock:
+            if request.code == self.email_verification_dict[request.email]:
+                self.verified_emails.append(request.email)
+                self.email_verification_dict.pop(request.email)
+                return auth_pb2.VerificationCodeMatches(verified=True)
+            else:
+                self.email_verification_dict.pop(request.email)
+                return auth_pb2.VerificationCodeMatches(verified=False)
 
     def CreateUser(self, request, context):
         logging.debug(f"self.email: {self.email} verification code: {self.email_verification_code}")

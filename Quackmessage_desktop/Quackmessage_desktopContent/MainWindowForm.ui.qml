@@ -14,7 +14,7 @@ Rectangle {
     width: 700
     height: 700
     color: "#272727"
-    //border.color: "#ff0000"
+    border.color: "#ff0000"
 
     property alias sendMessageBtn: sendMessageButton
     property alias messageEdit: messageEdit
@@ -24,8 +24,8 @@ Rectangle {
 
     Button {
         id: sendMessageButton
-        x: 640
-        y: 640
+        x: parent.width - 60
+        y: parent.width - 60
         text: qsTr("➤")
         icon.color: "#ff0000"
         background: Rectangle {
@@ -41,16 +41,16 @@ Rectangle {
 
     TextField {
         id: messageEdit
-        x: 192
-        y: 640
-        width: 423
+        x: parent.width - 500
+        y: parent.height - 60
+        width: parent.width - 275
         height: 31
         color: "#ffffff"
         wrapMode: Text.Wrap
         placeholderText: qsTr("Message")
         background: Rectangle {
-            implicitWidth: 145
-            implicitHeight: 31
+            implicitWidth: parent.width
+            implicitHeight: parent.height
             opacity: enabled ? 1 : 0.3
             color: "#888e95"
             border.color: "#21be2b"
@@ -60,10 +60,10 @@ Rectangle {
     }
     ListView {
         id: messageList
-        x: 192
+        x: parent.width - (parent.width * (51 / 70))
         y: 8
-        width: 500
-        height: 600
+        width: parent.width * (51 / 70) - 8
+        height: parent.height - 100
         boundsBehavior: Flickable.StopAtBounds
         snapMode: ListView.SnapToItem
         clip: true
@@ -116,8 +116,8 @@ Rectangle {
         id: contactsList
         x: 8
         y: 8
-        width: 178
-        height: 600
+        width: parent.width * (17 / 70)
+        height: parent.width - 100
         spacing: 8
         focus: true
         clip: true
@@ -134,12 +134,12 @@ Rectangle {
             MouseArea {
                 anchors.fill: parent
 
-                onClicked: {
-                    contactsList.currentIndex = index // Updates the visual selection
-                    // We call the function via the backend object
-                    messageList.model.clear()
-                    backend.set_active_contact(model.name)
-                }
+                //onClicked: {
+                //contactsList.currentIndex = index // Updates the visual selection
+                // We call the function via the backend object
+                //messageList.model.clear()
+                //backend.set_active_contact(model.name)
+                //}
             }
         }
         add: Transition {
@@ -169,7 +169,7 @@ Rectangle {
     ContactElement {
         id: yourContact
         x: 8
-        y: 640
+        y: parent.height - 60
         color: "#b261ff"
     }
 }

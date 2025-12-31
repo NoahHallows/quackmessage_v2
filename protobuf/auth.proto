@@ -33,6 +33,7 @@ message VerificationEmailSent {
 
 message VerificationCodeMessage {
   int32 code = 1;
+  string email = 2;
 }
 
 message VerificationCodeMatches {

@@ -40,6 +40,7 @@ class Backend(QObject):
     setUserName = Signal(str)
     requestFinished = Signal()
     active_contact = ""
+    email = ""
     master_message_list = []
     # Auth stuff
     def __init__(self):
@@ -130,6 +131,8 @@ class Backend(QObject):
     def _request_email_helper(self, email):
         logging.debug(f"Sending code to: {email}")
         try:
+            with self._var_lock:
+                self.email = email
             request = auth_pb2.VerifyEmailMessage(email=email)
             email_code = self.authStub.VerifyEmail.future(request)
             result = email_code.result()
@@ -153,7 +156,8 @@ class Backend(QObject):
     def _verify_email_helper(self, code):
         logging.debug(f"Verification code {code}")
         try:
-            request = auth_pb2.VerificationCodeMessage(code=code)
+            with self._var_lock:
+                request = auth_pb2.VerificationCodeMessage(code=code, email=self.email)
             verify_result = self.authStub.CheckCode.future(request)
             result = verify_result.result()
             if result.verified == False:

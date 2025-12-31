@@ -2,8 +2,7 @@ import QtQuick
 import QtQuick.Controls
 
 Rectangle {
-    width: 250
-    height: 500
+    anchors.fill: parent
     visible: true // This is critical to make the window appear
     //title: "Quackmessage Login"
 
