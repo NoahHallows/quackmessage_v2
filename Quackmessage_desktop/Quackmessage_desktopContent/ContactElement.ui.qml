@@ -6,9 +6,10 @@ Rectangle {
     width: 100
     height: 30
     radius: 10
-    //color: "lightsteelblue"
 
+    //color: "lightsteelblue"
     property alias name: contactName.text
+    property alias messageNum: messageNum.text
 
     //border.color: ListView.isCurrentItem ? "#21be2b" : "transparent"
     //border.width: ListView.isCurrentItem ? 2 : 0
@@ -25,5 +26,14 @@ Rectangle {
         wrapMode: Text.WordWrap
         text: qsTr("Name")
         font.pixelSize: 12
+    }
+
+    RoundButton {
+        id: messageNum
+        x: 67
+        y: 3
+        width: 25
+        height: 25
+        text: "5"
     }
 }

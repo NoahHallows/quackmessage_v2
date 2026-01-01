@@ -42,7 +42,7 @@ class Backend(QObject):
     requestFinished = Signal()
     active_contact = ""
     email = ""
-    master_message_list = []
+    master_message_dict = {}
     # System notifications
         # Auth stuff
     def __init__(self):
@@ -104,7 +104,7 @@ class Backend(QObject):
             request = auth_pb2.LoginMessage(username=username, password=password)
             login_future = self.authStub.Login.future(request)
             result = login_future.result()
-            if result.success == True:
+            if result.success is True:
                 with self._var_lock:
                     self.username = username
                     self.token = result.auth_token
@@ -192,7 +192,7 @@ class Backend(QObject):
             request = auth_pb2.CreateUserMessage(username=username, password=password, email=self.email)
             create_account_result = self.authStub.CreateUser.future(request)
             result = create_account_result.result()
-            if result.success == True:
+            if result.success is True:
                 logging.info("Create user succeeded, putting auth token in channel and starting message thread")
                 with self._var_lock:
                     self.token = result.auth_token
@@ -233,10 +233,9 @@ class Backend(QObject):
             logging.debug(f"Success: {result.sendSuccessful}, message id: {result.message_id}")
             if result.sendSuccessful:
                 time_sent = datetime.now().timestamp()*1000
-                message_tuple = (self.username, self.active_contact, message, result.message_id, time_sent)
                 with self._var_lock:
-                    self.master_message_list.append(message_tuple)
-                self.newMessage.emit("You", message, result.message_id, time_sent)
+                    self.master_message_dict{result.message_id} = (self.username, self.active_contact, message, time_sent)
+                self.newMessageActive.emit("You", message, result.message_id, time_sent)
             else:
                 logging.error("Failed to send message")
                 # TODO show some ui thing to indicate this error
@@ -249,12 +248,13 @@ class Backend(QObject):
         try:
             for message in self.messageStub.subscribeMessages(message_pb2.receiveMessagesRequest(request=True)):
                 js_timestamp = (message.sent_at.seconds * 1000) + (message.sent_at.nanos // 1000000)
-                message_tuple = (message.sender, message.receiver, message.content, message.messageId, js_timestamp)
                 with self._var_lock:
-                    self.master_message_list.append(message_tuple)
-
+                    self.master_message_dict[message.messageId] = (message.sender, message.receiver, message.content, js_timestamp)
                 if (message.sender == self.active_contact):
-                    self.newMessage.emit(message.sender, message.content, message.messageId, js_timestamp)
+                    self.newMessageActive.emit(message.sender, message.content, message.messageId, js_timestamp)
+                else:
+                    logging.debug("Emitting message for deactive sender")
+                    self.newMessageDeactive.emit(message.sender)
         except Exception as e:
             logging.error("Receive message thread has errored: {e}")
 
@@ -266,12 +266,12 @@ class Backend(QObject):
             logging.debug(f"Active contact changed to: {contact_name}")
             logging.debug(f"self.username: {self.username}")
             # Loop through master message list and add all relevent messages to ui
-            for message in self.master_message_list:
+            for message_id, message in self.master_message_dict:
                 if (message[0] == contact_name or message[1] == contact_name):
                     if (message[0] == self.username):
-                         self.newMessage.emit("You", message[2], message[3], message[4])
+                         self.newMessageActive.emit("You", message[2], message_id, message[4])
                     else:
-                        self.newMessage.emit(message[0], message[2], message[3], message[4])
+                        self.newMessageActive.emit(message[0], message[2], message_id, message[4])
 
 
     # Populate contacts

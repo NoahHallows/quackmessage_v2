@@ -85,6 +85,7 @@ Rectangle {
                 message_id: model.message_id
                 timeText: model.timeText
                 timeStamp: model.timeStamp
+                seenText: model.seenText
             }
         }
 
@@ -124,21 +125,24 @@ Rectangle {
         highlightFollowsCurrentItem: true
         highlight: Rectangle {
             color: "#22ffffff" // Semi-transparent white
-            radius: 5
+            radius: 10
+            z: 1
         }
         verticalLayoutDirection: ListView.TopToBottom
         model: ListModel {}
         delegate: ContactElement {
             name: model.name
+            messageNum: model.messageNum
 
             MouseArea {
                 anchors.fill: parent
 
                 onClicked: {
-                contactsList.currentIndex = index // Updates the visual selection
-                // We call the function via the backend object
-                messageList.model.clear()
-                backend.set_active_contact(model.name)
+                    contactsList.currentIndex = index // Updates the visual selection
+                    // We call the function via the backend object
+                    messageList.model.clear()
+                    backend.set_active_contact(model.name)
+                    contactsList.model.setProperty(index, "messageNum", "0")
                 }
             }
         }

@@ -30,40 +30,51 @@ Rectangle {
     // Change color based on who sent it
     // first if you sent it, second not you
     color: isOwnMessage ?  "#b261ff" : "#539fe4"
+    Column {
+        id: messageColumn
+        spacing: 4
 
-    Text {
-        id: messageText
-        /*x: 8
-        y: 8
-        width: parent.width - 16*/
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.margins: 8
-        wrapMode: Text.WordWrap
-        text: qsTr("Message: ")
-        font.pixelSize: 12
-    }
+        Text {
+            id: messageText
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.margins: 8
+            wrapMode: Text.WordWrap
+            text: qsTr("Message: ")
+            font.pixelSize: 12
+        }
 
-    Text {
-        id: senderText
-        anchors.top: messageText.bottom
-        anchors.margins: 8
-        anchors.right: parent.right
-        x: 8
-        width: parent.width - 16
-        text: qsTr("Sent by: ")
-        font.pixelSize: 10
-        font.italic: true
-    }
-    Text {
-        id: timeText
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        anchors.margins: 8
-        x: parent.width - 20
-        y: parent.height - 15
-        text: qsTr("Text")
-        font.pixelSize: 8
+        Text {
+            id: senderText
+            anchors.top: messageText.bottom
+            anchors.margins: 8
+            anchors.right: parent.right
+            x: 8
+            width: parent.width - 16
+            text: qsTr("Sent by: ")
+            font.pixelSize: 10
+            font.italic: true
+        }
+        Text {
+            id: timeText
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            anchors.margins: 8
+            x: parent.width - 20
+            y: parent.height - 15
+            text: qsTr("Text")
+            font.pixelSize: 8
+        }
+
+        Text {
+            id: statusLabel
+            text: model.statusText || "" // Use the property from the model
+            visible: text !== ""
+            font.pixelSize: 10
+            color: "#aaaaaa"
+            anchors.right: isOwnMessage ? parent.right : undefined
+            anchors.left: !isOwnMessage ? parent.left : undefined
+        }
     }
 }

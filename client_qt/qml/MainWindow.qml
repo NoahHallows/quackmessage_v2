@@ -37,8 +37,24 @@ Rectangle {
             message_id, "timeText": time_string, "timeStamp": time_stamp})
         }
 
+        function newMessageDeactive(sender) {
+            console.log("Incrementing for " + sender + mainUI.contactsList.model.count)
+            for (var i = 0; i < mainUI.contactsList.model.count; i++) {
+                console.log("odagh")
+                var contact = mainUI.contactsList.model.get(i);
+                console.log(contact.name)
+                if (contact.name === sender) {
+                    console.log("Contact name == sender")
+                    // Increment the current count
+                    var currentCount = parseInt(contact.messageNum);
+                    mainUI.contactsList.model.setProperty(i, "messageNum", (currentCount + 1).toString());
+                    break;
+                }
+            }
+        }
+
         function createContact(contactName) {
-            contactsList.model.append({"name": contactName})
+            contactsList.model.append({"name": contactName, "messageNum": "0"})
         }
 
         function getRelativeTime(msTimestamp) {
@@ -58,10 +74,17 @@ Rectangle {
 
         Connections {
             target: backend
-            function onNewMessage(sender, message, message_id, time_sent_ms) {
+            // New message from selected user
+            function onNewMessageActive(sender, message, message_id, time_sent_ms) {
                 mainUI.showMessage(sender, message, message_id,
                 mainUI.getRelativeTime(time_sent_ms), time_sent_ms)
             }
+            // New message for non selected user
+            function onNewMessageDeactive(sender) {
+                console.log("EIOGHOUGH")
+                mainUI.newMessageDeactive(sender)
+            }
+
             function onAddContactSignal(name) {
                 mainUI.createContact(name)
             }
