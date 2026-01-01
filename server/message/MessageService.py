@@ -114,6 +114,3 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
             for user in users:
                 response.append(message_pb2.contact(name=user[0]))
             return message_pb2.contactList(contacts=response)
-
-
-

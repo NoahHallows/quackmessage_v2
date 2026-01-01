@@ -38,6 +38,7 @@ class AuthInterceptor(grpc.ServerInterceptor):
         try:
             payload = verify_jwt(token)
         except jwt.PyJWTError as e:
+            logging.warning(f"Token verification failed: {e}")
             def deny(_, context):
                 context.abort(grpc.StatusCode.UNAUTHENTICATED, f"Token verification failed:")
             return grpc.unary_unary_rpc_method_handler(deny)

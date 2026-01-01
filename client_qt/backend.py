@@ -31,7 +31,8 @@ class Backend(QObject):
     _stub_lock = threading.Lock()
     # Signals
     loginSuccess = Signal()
-    newMessage = Signal(str, str, int, float)
+    newMessageActive = Signal(str, str, int, float)
+    newMessageDeactive = Signal(str)
     loginFail = Signal()
     sendEmailFail = Signal()
     emailVerificationFail = Signal()
@@ -66,8 +67,10 @@ class Backend(QObject):
             logging.error(f"Invalid version, please update to {result.valid_version_num}")
             sys.exit(1)
 
-    def _update_channel(self, token):
+    def _update_channel(self, token: str) -> None:
         logging.info("Updating channel")
+        # Creates new channel and stub
+        # Used to update auth token
         try:
             with self._stub_lock:
                 call_credentials = grpc.access_token_call_credentials(token)
@@ -89,13 +92,13 @@ class Backend(QObject):
 
     # This allows QML to call a Python function
     @Slot(str, str)
-    def login(self, username, password):
+    def login(self, username: str, password: str) -> None:
         logging.info("Login function called, starting helper thread")
         # Start login helper function so we don't block the main ui thread
         threading.Thread(target=self._login_helper, args=(username, password), daemon=True).start()
 
     # We're back to helper functions again
-    def _login_helper(self, username, password):
+    def _login_helper(self, username: str, password: str) -> None:
         logging.info(f"Attempting login for: {username}")
         try:
             request = auth_pb2.LoginMessage(username=username, password=password)
@@ -133,11 +136,11 @@ class Backend(QObject):
 
     # This allows Python to send data back to QML
     @Slot(str)
-    def request_email_code(self, email):
+    def request_email_code(self, email: str) -> None:
         logging.info("Email verification code requested")
         threading.Thread(target=self._request_email_helper, args=(email,), daemon=True).start()
 
-    def _request_email_helper(self, email):
+    def _request_email_helper(self, email: str) -> None:
         logging.debug(f"Sending code to: {email}")
         try:
             with self._var_lock:
@@ -146,7 +149,7 @@ class Backend(QObject):
             email_code = self.authStub.VerifyEmail.future(request)
             result = email_code.result()
             logging.debug(f"Email sent: {result.emailSent}")
-            if result.emailSent == False:
+            if not result.emailSent:
                 logging.warning("Error sending email")
                 self.sendEmailFail.emit()
         except Exception as e:
@@ -158,18 +161,18 @@ class Backend(QObject):
 
 
     @Slot(int)
-    def verify_email_code(self, code):
+    def verify_email_code(self, code: int) -> None:
         logging.info("Verify email code function has been called")
         threading.Thread(target=self._verify_email_helper, args=(code,), daemon=True).start()
 
-    def _verify_email_helper(self, code):
+    def _verify_email_helper(self, code: int) -> None:
         logging.debug(f"Verification code {code}")
         try:
             with self._var_lock:
                 request = auth_pb2.VerificationCodeMessage(code=code, email=self.email)
             verify_result = self.authStub.CheckCode.future(request)
             result = verify_result.result()
-            if result.verified == False:
+            if not result.verified:
                 logging.info("Verification has failed, likely wrong code was entered")
                 self.emailVerificationFail.emit()
         except Exception as e:
@@ -179,11 +182,11 @@ class Backend(QObject):
             self.requestFinished.emit()
 
     @Slot(str, str)
-    def create_account(self, username, password):
+    def create_account(self, username: str, password: str) -> None:
         logging.info("Creating user")
         threading.Thread(target=self._create_account_helper, args=(username, password), daemon=True).start()
 
-    def _create_account_helper(self, username, password):
+    def _create_account_helper(self, username: str, password: str) -> None:
         logging.debug(f"Create account helper: {username}, {password}")
         try:
             request = auth_pb2.CreateUserMessage(username=username, password=password, email=self.email)
@@ -221,14 +224,14 @@ class Backend(QObject):
             self.requestFinished.emit()
     # Message stuff
     @Slot(str)
-    def send_message(self, message):
+    def send_message(self, message: str) -> None:
         logging.debug(f"Sending {message} to {self.active_contact}")
         try:
             request = message_pb2.Message(sender=self.username, receiver=self.active_contact, content=message)
             send_message_result = self.messageStub.sendMessage.future(request)
             result = send_message_result.result()
             logging.debug(f"Success: {result.sendSuccessful}, message id: {result.message_id}")
-            if result.sendSuccessful == True:
+            if result.sendSuccessful:
                 time_sent = datetime.now().timestamp()*1000
                 message_tuple = (self.username, self.active_contact, message, result.message_id, time_sent)
                 with self._var_lock:
@@ -241,7 +244,7 @@ class Backend(QObject):
             logging.error(f"Error sending messsage: {e}")
 
     # start receive message stream
-    def receiveMessage(self):
+    def receiveMessage(self) -> None:
         logging.info('Receiving message')
         try:
             for message in self.messageStub.subscribeMessages(message_pb2.receiveMessagesRequest(request=True)):
@@ -257,7 +260,7 @@ class Backend(QObject):
 
     # Workout who the selected contact is
     @Slot(str)
-    def set_active_contact(self, contact_name):
+    def set_active_contact(self, contact_name: str) -> None:
         with self._var_lock:
             self.active_contact = contact_name
             logging.debug(f"Active contact changed to: {contact_name}")
@@ -272,7 +275,7 @@ class Backend(QObject):
 
 
     # Populate contacts
-    def getContacts(self):
+    def getContacts(self) -> None:
         logging.info("Getting list of contacts")
         try:
             request = message_pb2.contactsRequest(request=True)

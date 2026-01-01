@@ -74,6 +74,10 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
     # Login function
     def Login(self, request, context):
         logging.info(f"Login for user {request.username}")
+        if (len(request.username > 256)):
+            # Username is too long
+            logging.warning(f"Username {request.username} is too long")
+            return auth_pb2.LoginResult(success=False, auth_token="")
         try:
             conn = db.getConn()
             cursor = conn.cursor()
@@ -105,6 +109,8 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
 
     def VerifyEmail(self, request, context):
         # Check email isn't already registered
+        if len(request.email) > 254:
+            return auth_pb2.VerificationEmailSent(emailSent=False)
         conn = db.getConn()
         cur = conn.cursor()
         logging.info("Connected to db")
@@ -144,6 +150,11 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
                 return auth_pb2.VerificationCodeMatches(verified=False)
 
     def CreateUser(self, request, context):
+        if len(request.email) > 254:
+            # Email is too long
+            return auth_pb2.CreateUserResult(success=False, auth_token="")
+        if len(request.username) > 256:
+            return auth_pb2.CreateUserResult(success=False, auth_token="")
         conn = db.getConn()
         cur = conn.cursor()
         cur.execute("SELECT 1 FROM users WHERE username = %s;", (request.username,))
