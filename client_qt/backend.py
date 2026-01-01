@@ -42,7 +42,8 @@ class Backend(QObject):
     active_contact = ""
     email = ""
     master_message_list = []
-    # Auth stuff
+    # System notifications
+        # Auth stuff
     def __init__(self):
         super().__init__()
         try:

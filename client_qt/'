@@ -2,7 +2,7 @@
 
 import sys
 from pathlib import Path
-from PySide6.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication, QSystemTrayIcon
 from PySide6.QtGui import QGuiApplication, QIcon
 from PySide6.QtQml import QQmlApplicationEngine
 from backend import Backend
@@ -24,6 +24,10 @@ class main:
         # 2. Load your main QML file (usually App.qml or Main.qml)
         qml_file = Path(__file__).parent / "qml/App.qml"
         self.engine.load(str(qml_file))
+
+        icon = QIcon("icon.png")
+        tray = QSystemTrayIcon()
+        tray.setIcon(icon)
 
 
         if not self.engine.rootObjects():
