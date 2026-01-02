@@ -128,7 +128,7 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
                 cursor.execute("UPDATE messages SET time_read = %s WHERE message_id = %s", (datetime_obj, request.messageId))
                 cursor.execute("SELECT sender FROM messages WHERE message_id = %s", (request.messageId,))
                 sender = cursor.fetchone()
-                logging.info(receiver)
+                logging.info(sender)
                 conn.commit()
                 cursor.close()
                 # Add to user queue if they're active
