@@ -132,7 +132,7 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
                 cursor.close()
                 # Add to user queue if they're active
                 if sender in self.active_clients:
-                    message = {"sender"="", "receiver"=sender, "content"="", "messageId"=request.messageId, "sent_at"=request.seen_at, "seen_at"=request.seen_at}
+                    message = {"sender": "", "receiver": sender, "content": "", "messageId": request.messageId, "sent_at": request.seen_at, "seen_at": request.seen_at}
                     self.active_clients[sender].put(message)
                 return message_pb2.updateSeenResult(success=True)
             else:
