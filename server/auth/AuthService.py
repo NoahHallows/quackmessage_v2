@@ -74,7 +74,7 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
     # Login function
     def Login(self, request, context):
         logging.info(f"Login for user {request.username}")
-        if (len(request.username > 256)):
+        if (len(request.username) > 256):
             # Username is too long
             logging.warning(f"Username {request.username} is too long")
             return auth_pb2.LoginResult(success=False, auth_token="")

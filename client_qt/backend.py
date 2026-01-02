@@ -239,7 +239,7 @@ class Backend(QObject):
             if result.sendSuccessful:
                 time_sent = datetime.now().timestamp()*1000
                 with self._var_lock:
-                    self.master_message_dict{result.message_id} = (self.username, self.active_contact, message, time_sent)
+                    self.master_message_dict[result.message_id] = (self.username, self.active_contact, message, time_sent)
                 self.newMessageActive.emit("You", message, result.message_id, time_sent)
             else:
                 logging.error("Failed to send message")
