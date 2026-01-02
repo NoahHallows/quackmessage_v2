@@ -49,6 +49,11 @@ class MessagerStub(object):
                 request_serializer=message__pb2.contactsRequest.SerializeToString,
                 response_deserializer=message__pb2.contactList.FromString,
                 _registered_method=True)
+        self.messageSeen = channel.unary_unary(
+                '/Messager/messageSeen',
+                request_serializer=message__pb2.updateSeen.SerializeToString,
+                response_deserializer=message__pb2.updateSeenResult.FromString,
+                _registered_method=True)
 
 
 class MessagerServicer(object):
@@ -72,6 +77,12 @@ class MessagerServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def messageSeen(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_MessagerServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -89,6 +100,11 @@ def add_MessagerServicer_to_server(servicer, server):
                     servicer.getContacts,
                     request_deserializer=message__pb2.contactsRequest.FromString,
                     response_serializer=message__pb2.contactList.SerializeToString,
+            ),
+            'messageSeen': grpc.unary_unary_rpc_method_handler(
+                    servicer.messageSeen,
+                    request_deserializer=message__pb2.updateSeen.FromString,
+                    response_serializer=message__pb2.updateSeenResult.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -172,6 +188,33 @@ class Messager(object):
             '/Messager/getContacts',
             message__pb2.contactsRequest.SerializeToString,
             message__pb2.contactList.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def messageSeen(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/Messager/messageSeen',
+            message__pb2.updateSeen.SerializeToString,
+            message__pb2.updateSeenResult.FromString,
             options,
             channel_credentials,
             insecure,

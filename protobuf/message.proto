@@ -19,7 +19,7 @@ message Message {
   string content = 3;
   int32 messageId = 4;
   google.protobuf.Timestamp sent_at = 5;
-  optional google.protobuf.Timestamp seen_at = 2;
+  google.protobuf.Timestamp seen_at = 6;
 }
 
 message updateSeen {
