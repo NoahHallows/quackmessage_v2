@@ -52,7 +52,7 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
                 except:
                     logging.warning("It appears there are no messages in db")
                     message_id = 1
-                cursor.execute("INSERT INTO messages (sender, receiver, content, message_id, time_sent) VALUES (%s, %s, %s, %s, NOW())", (request.sender, request.receiver, request.content, message_id))
+                cursor.execute("INSERT INTO messages (sender, receiver, content, message_id, time_sent, time_read) VALUES (%s, %s, %s, %s, NOW())", (request.sender, request.receiver, request.content, message_id, datetime(1970, 1, 1)))
                 cursor.execute("UPDATE users SET messages_sent = messages_sent + 1 WHERE username = %s", (request.sender,))
                 cursor.execute("UPDATE users SET messages_received = messages_received + 1 WHERE username = %s", (request.receiver,))
                 conn.commit()
@@ -61,7 +61,7 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
             # Check if receiver is online
             if request.receiver in self.active_clients:
                 logging.debug("Receiver is active")
-                message = {"sender": request.sender, "receiver": request.receiver, "content": request.content, "messageId": message_id, "timeStamp": datetime.now()}
+                message = {"sender": request.sender, "receiver": request.receiver, "content": request.content, "messageId": message_id, "timeStamp": datetime.now(), "seen_at": datetime(1970, 1, 1)}
                 self.active_clients[request.receiver].put(message)
             logging.info("Done sending message")
             return message_pb2.sendMessageResult(sendSuccessful=True, message_id=message_id)
@@ -81,19 +81,23 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
             # Send old messages
             conn = db.getConn()
             cursor = conn.cursor()
-            cursor.execute("SELECT sender, content, message_id, time_sent, receiver FROM messages WHERE receiver = %s OR sender = %s", (username,username,))
+            cursor.execute("SELECT sender, content, message_id, time_sent, receiver, time_read FROM messages WHERE receiver = %s OR sender = %s", (username,username,))
             messages = cursor.fetchall()
+            conn.commit()
+            cursor.close()
             logging.info(f"Sending {len(messages)} to client {username}")
             for message in messages:
                 response = message_pb2.Message(sender=message[0], receiver=message[4],
                                                content=message[1], messageId=message[2],
-                                               sent_at=message[3])
+                                               sent_at=message[3], seen_at=message[5])
                 yield response
             try:
                 while True:
                     new_message = user_queue.get()
                     if new_message["receiver"] == username:
-                        response = message_pb2.Message(sender=new_message["sender"],receiver=username,content=new_message["content"],messageId=new_message["messageId"], sent_at=new_message["timeStamp"])
+                        response =
+                        message_pb2.Message(sender=new_message["sender"],receiver=username,content=new_message["content"],messageId=new_message["messageId"],
+                                            sent_at=new_message["timeStamp"], seen_at=new_message["seen_at"])
                         yield response
 
             finally:
@@ -114,3 +118,28 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
             for user in users:
                 response.append(message_pb2.contact(name=user[0]))
             return message_pb2.contactList(contacts=response)
+
+    def messageSeen(self, request, context):
+        logging.info(f"Updating seen on message {request.messageId}")
+        try:
+            conn = db.getConn()
+            cursor = conn.cursor()
+            cursor.execute("SELECT 1 FROM messages WHERE message_id = %s", request.messageId)
+            if cursor.fetchone() is not None:
+                cursor.execute("UPDATE messages SET time_read = %s WHERE message_id = %s", request.seen_at, request.messageId)
+                cursor.execute("SELECT sender FROM messages WHERE message_id = %s", request.messageId)
+                sender = cursor.fetchone()
+                logging.info(receiver)
+                conn.commit()
+                cursor.close()
+                # Add to user queue if they're active
+                if sender in self.active_clients:
+                    message = message_pb2.Message(sender="", receiver=sender, content="", messageId=request.messageId, sent_at=request.seen_at, seen_at=request.seen_at)
+                    self.active_clients[sender].put(message)
+                return message_pb2.updateSeenResult(success=True)
+            else:
+                logging.info(f"Failed to update seen on {request.messageId} because message does not exist")
+                return message_pb2.updateSeenResult(success=False)
+        except Exception as e:
+            logging.error(f"Error updating seen status on message {request.messageId} to {request.seen_at}: {e}")
+            return message_pb2.updateSeenResult(success=False)

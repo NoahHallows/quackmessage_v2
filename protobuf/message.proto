@@ -6,6 +6,7 @@ service Messager {
   rpc subscribeMessages(receiveMessagesRequest) returns (stream Message) {};
   rpc sendMessage(Message) returns (sendMessageResult) {};
   rpc getContacts(contactsRequest) returns (contactList) {};
+  rpc messageSeen(updateSeen) returns (updateSeenResult) {};
 }
 
 message receiveMessagesRequest {
@@ -18,6 +19,16 @@ message Message {
   string content = 3;
   int32 messageId = 4;
   google.protobuf.Timestamp sent_at = 5;
+  optional google.protobuf.Timestamp seen_at = 2;
+}
+
+message updateSeen {
+  int32 messageId = 1;
+  google.protobuf.Timestamp seen_at = 2;
+}
+
+message updateSeenResult {
+  bool success = 1;
 }
 
 message sendMessageResult {

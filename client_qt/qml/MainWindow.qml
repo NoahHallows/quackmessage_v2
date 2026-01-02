@@ -38,13 +38,9 @@ Rectangle {
         }
 
         function newMessageDeactive(sender) {
-            console.log("Incrementing for " + sender + mainUI.contactsList.model.count)
             for (var i = 0; i < mainUI.contactsList.model.count; i++) {
-                console.log("odagh")
                 var contact = mainUI.contactsList.model.get(i);
-                console.log(contact.name)
                 if (contact.name === sender) {
-                    console.log("Contact name == sender")
                     // Increment the current count
                     var currentCount = parseInt(contact.messageNum);
                     mainUI.contactsList.model.setProperty(i, "messageNum", (currentCount + 1).toString());
@@ -52,6 +48,18 @@ Rectangle {
                 }
             }
         }
+
+        function updateMessageSeen(message_id, time_string) {
+            for (var i = 0; i < mainUI.messageList.model.count; i++) {
+                var message = mainUI.messageList.model.get(i);
+                if (message.message_id == message_id) {
+                    // Increment the current count
+                    mainUI.contactsList.model.setProperty(i, "seenText", time_string);
+                    break;
+                }
+            }
+        }
+
 
         function createContact(contactName) {
             contactsList.model.append({"name": contactName, "messageNum": "0"})
@@ -91,11 +99,14 @@ Rectangle {
             function onSetUserName(name) {
                 mainUI.yourName.name = "You are " + name
             }
+            function onMessageSeen(message_id, timestamp) {
+                mainUI.updateMessageSeen(message_id, mainUI.getRelativeTime(timestamp))
+            }
         }
 
         Timer {
-            interval: 10000
-            //interval: 30000 // Update every 30 seconds for better accuracy
+            //interval: 10000
+            interval: 30000 // Update every 30 seconds for better accuracy
             running: true
             repeat: true
             onTriggered: {

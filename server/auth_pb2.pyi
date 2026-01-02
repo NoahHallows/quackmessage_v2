@@ -7,16 +7,16 @@ DESCRIPTOR: _descriptor.FileDescriptor
 class ClientVersion(_message.Message):
     __slots__ = ("version",)
     VERSION_FIELD_NUMBER: _ClassVar[int]
-    version: float
-    def __init__(self, version: _Optional[float] = ...) -> None: ...
+    version: str
+    def __init__(self, version: _Optional[str] = ...) -> None: ...
 
 class ValidVersion(_message.Message):
     __slots__ = ("valid", "valid_version_num")
     VALID_FIELD_NUMBER: _ClassVar[int]
     VALID_VERSION_NUM_FIELD_NUMBER: _ClassVar[int]
     valid: bool
-    valid_version_num: int
-    def __init__(self, valid: bool = ..., valid_version_num: _Optional[int] = ...) -> None: ...
+    valid_version_num: str
+    def __init__(self, valid: bool = ..., valid_version_num: _Optional[str] = ...) -> None: ...
 
 class LoginMessage(_message.Message):
     __slots__ = ("username", "password")
@@ -61,12 +61,14 @@ class VerificationCodeMatches(_message.Message):
     def __init__(self, verified: bool = ...) -> None: ...
 
 class CreateUserMessage(_message.Message):
-    __slots__ = ("username", "password")
+    __slots__ = ("username", "password", "email")
     USERNAME_FIELD_NUMBER: _ClassVar[int]
     PASSWORD_FIELD_NUMBER: _ClassVar[int]
+    EMAIL_FIELD_NUMBER: _ClassVar[int]
     username: str
     password: str
-    def __init__(self, username: _Optional[str] = ..., password: _Optional[str] = ...) -> None: ...
+    email: str
+    def __init__(self, username: _Optional[str] = ..., password: _Optional[str] = ..., email: _Optional[str] = ...) -> None: ...
 
 class CreateUserResult(_message.Message):
     __slots__ = ("success", "auth_token")

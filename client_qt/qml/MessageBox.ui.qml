@@ -21,6 +21,7 @@ Rectangle {
     property alias messageText: messageText.text
     property alias senderText: senderText.text
     property alias timeText: timeText.text
+    property alias seenText: statusText.text
 
     property bool isOwnMessage: false
 

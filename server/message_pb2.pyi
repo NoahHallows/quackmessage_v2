@@ -29,6 +29,20 @@ class Message(_message.Message):
     sent_at: _timestamp_pb2.Timestamp
     def __init__(self, sender: _Optional[str] = ..., receiver: _Optional[str] = ..., content: _Optional[str] = ..., messageId: _Optional[int] = ..., sent_at: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
+class updateSeen(_message.Message):
+    __slots__ = ("messageId", "seen_at")
+    MESSAGEID_FIELD_NUMBER: _ClassVar[int]
+    SEEN_AT_FIELD_NUMBER: _ClassVar[int]
+    messageId: int
+    seen_at: _timestamp_pb2.Timestamp
+    def __init__(self, messageId: _Optional[int] = ..., seen_at: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
+
+class updateSeenResult(_message.Message):
+    __slots__ = ("success",)
+    SUCCESS_FIELD_NUMBER: _ClassVar[int]
+    success: bool
+    def __init__(self, success: bool = ...) -> None: ...
+
 class sendMessageResult(_message.Message):
     __slots__ = ("sendSuccessful", "message_id")
     SENDSUCCESSFUL_FIELD_NUMBER: _ClassVar[int]
