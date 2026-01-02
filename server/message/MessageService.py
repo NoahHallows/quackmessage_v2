@@ -128,12 +128,11 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
                 cursor.execute("UPDATE messages SET time_read = %s WHERE message_id = %s", (datetime_obj, request.messageId))
                 cursor.execute("SELECT sender FROM messages WHERE message_id = %s", (request.messageId,))
                 sender = cursor.fetchone()[0]
-                logging.info(sender)
                 conn.commit()
                 cursor.close()
                 # Add to user queue if they're active
                 if sender in self.active_clients:
-                    message = message_pb2.Message(sender="", receiver=sender, content="", messageId=request.messageId, sent_at=request.seen_at, seen_at=request.seen_at)
+                    message = {"sender"="", "receiver"=sender, "content"="", "messageId"=request.messageId, "sent_at"=request.seen_at, "seen_at"=request.seen_at}
                     self.active_clients[sender].put(message)
                 return message_pb2.updateSeenResult(success=True)
             else:
