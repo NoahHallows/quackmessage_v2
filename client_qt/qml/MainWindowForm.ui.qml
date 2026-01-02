@@ -86,6 +86,7 @@ Rectangle {
                 timeText: model.timeText
                 timeStamp: model.timeStamp
                 seenText: model.seenText
+                time_seen_ms: model.time_seen_ms
             }
         }
 

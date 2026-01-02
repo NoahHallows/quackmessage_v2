@@ -25,17 +25,28 @@ Rectangle {
 
 
 
-        function showMessage(sender, message, message_id, time_string, time_stamp) {
+        function showMessage(sender, message, message_id, time_string,
+        time_stamp, time_seen_ms) {
             if (sender === "You") {
                 var isOwnMessage = true
+                if (time_seen_ms != -36000000) {
+                    var seen_text = mainUI.getRelativeTime(time_seen_ms)
+                    if (mainUI.messageList.model.count > 0) {
+                        mainUI.messageList.model.get(0).seenText = ""
+                    }
+                }
+                else {
+                    var seen_text = ""
+                }
             }
             else {
                 var isOwnMessage = false
+                var seen_text = ""
             }
             messageList.model.insert(0, { "messageText": message , "senderText":
             "Sent by: " + sender, "isOwnMessage": isOwnMessage, "message_id":
             message_id, "timeText": time_string, "timeStamp": time_stamp,
-            "seenText": "Not seen :()"})
+            "seenText": seen_text, "time_seen_ms": time_seen_ms})
         }
 
         function newMessageDeactive(sender) {
@@ -54,11 +65,11 @@ Rectangle {
             console.log("Updating seen status")
             for (var i = 0; i < mainUI.messageList.model.count; i++) {
                 var message = mainUI.messageList.model.get(i);
+                mainUI.messageList.model.setProperty(i, "seenText", "");
                 if (message.message_id == message_id) {
                     console.log("Match found")
                     console.log(time_string)
                     mainUI.messageList.model.setProperty(i, "seenText", time_string);
-                    break;
                 }
             }
         }
@@ -86,9 +97,10 @@ Rectangle {
         Connections {
             target: backend
             // New message from selected user
-            function onNewMessageActive(sender, message, message_id, time_sent_ms) {
+            function onNewMessageActive(sender, message, message_id, time_sent_ms, seen_time_ms) {
                 mainUI.showMessage(sender, message, message_id,
-                mainUI.getRelativeTime(time_sent_ms), time_sent_ms)
+                mainUI.getRelativeTime(time_sent_ms), time_sent_ms,
+                seen_time_ms)
             }
             // New message for non selected user
             function onNewMessageDeactive(sender) {
@@ -116,10 +128,16 @@ Rectangle {
                 for (var i = 0; i < mainUI.messageList.model.count; i++) {
                     let item = mainUI.messageList.model.get(i);
                     if (item.timeStamp) {
-                        let updatedTime = mainUI.getRelativeTime(item.timeStamp);
+                        let updatedTimeSent = mainUI.getRelativeTime(item.timeStamp);
+                        let updatedTimeSeen = mainUI.getRelativeTime(item.time_seen_ms)
                         // Only update if the string actually changed to save performance
-                        if (item.timeStr !== updatedTime) {
-                            mainUI.messageList.model.setProperty(i, "timeText", updatedTime);
+                        if (item.timeText !== updatedTimeSent) {
+                            mainUI.messageList.model.setProperty(i, "timeText",
+                            updatedTimeSent);
+                        }
+                        if (item.seenText !== updatedTimeSeen && item.seenText !== "") {
+                            mainUI.messageList.model.setProperty(i, seenText,
+                            updatedTimeSeen)
                         }
                     }
                 }

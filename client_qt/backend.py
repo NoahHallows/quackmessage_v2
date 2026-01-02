@@ -12,6 +12,7 @@ import sys
 import logging
 # To copy dict and actually make a new one instead of a new reference to the same one
 from copy import deepcopy
+import operator
 
 ISSUER = "Quackmessage"
 AUDIENCE = "Quackmessage_app"
@@ -27,7 +28,7 @@ VERSION = "0.0.0.1"
 
 epoch = datetime(1970, 1, 1)
 js_timestamp_epoch = int(epoch.timestamp() * 1000)
-
+logging.debug(js_timestamp_epoch)
 class Backend(QObject):
     logging.info("Starting")
     # Lock for updating class wide variables
@@ -35,7 +36,7 @@ class Backend(QObject):
     _stub_lock = threading.Lock()
     # Signals
     loginSuccess = Signal()
-    newMessageActive = Signal(str, str, int, float)
+    newMessageActive = Signal(str, str, int, 'qint64', 'qint64',)
     newMessageDeactive = Signal(str)
     loginFail = Signal()
     sendEmailFail = Signal()
@@ -44,7 +45,7 @@ class Backend(QObject):
     addContactSignal = Signal(str)
     setUserName = Signal(str)
     requestFinished = Signal()
-    messageSeen = Signal(int, float)
+    messageSeen = Signal(int, 'qint64')
     active_contact = ""
     email = ""
     master_message_dict = {}
@@ -237,10 +238,12 @@ class Backend(QObject):
             result = send_message_result.result()
             logging.debug(f"Success: {result.sendSuccessful}, message id: {result.message_id}")
             if result.sendSuccessful:
-                time_sent = datetime.now().timestamp()*1000
+                time_sent = int(datetime.now().timestamp()*1000)
                 with self._var_lock:
-                    self.master_message_dict[result.message_id] = (self.username, self.active_contact, message, time_sent)
-                self.newMessageActive.emit("You", message, result.message_id, time_sent)
+                    self.master_message_dict[result.message_id] = (self.username,
+                                                                   self.active_contact, message,
+                                                                   time_sent, js_timestamp_epoch)
+                self.newMessageActive.emit("You", message, result.message_id, time_sent, js_timestamp_epoch)
             else:
                 logging.error("Failed to send message")
                 # TODO show some ui thing to indicate this error
@@ -252,13 +255,16 @@ class Backend(QObject):
         logging.info('Receiving message')
         try:
             for message in self.messageStub.subscribeMessages(message_pb2.receiveMessagesRequest(request=True)):
-                js_timestamp_sent = (message.sent_at.seconds * 1000) + (message.sent_at.nanos // 1000000)
-                js_timestamp_seen = (message.seen_at.seconds * 1000) + (message.seen_at.nanos // 1000000)
+                js_timestamp_sent = int((message.sent_at.seconds * 1000) + (message.sent_at.nanos // 1000000))
+                js_timestamp_seen = int((message.seen_at.seconds * 1000) + (message.seen_at.nanos //1000000))
                 logging.debug("Message received")
                 with self._var_lock:
                     if message.messageId in self.master_message_dict:
                         # Update seen
-                        message_tuple = (self.master_message_dict[message.messageId][0], self.master_message_dict[message.messageId][1], self.master_message_dict[message.messageId][2], self.master_message_dict[message.messageId][3], message.seen_at)
+                        message_tuple = (self.master_message_dict[message.messageId][0],
+                                         self.master_message_dict[message.messageId][1],
+                                         self.master_message_dict[message.messageId][2],
+                                         self.master_message_dict[message.messageId][3], js_timestamp_seen)
                         new_message = False
                         logging.debug("Update seen message")
                     else:
@@ -268,10 +274,10 @@ class Backend(QObject):
                         logging.debug("New message (not update seen)")
                 if (message.sender == self.active_contact):
                     if new_message:
-                        self.newMessageActive.emit(message.sender, message.content, message.messageId, js_timestamp_sent)
-                if js_timestamp_seen != js_timestamp_epoch and not new_message:
-                    logging.debug(f"Emitting update seen for message {message.messageId}")
-                    self.messageSeen.emit(message.messageId, js_timestamp_seen)
+                        self.newMessageActive.emit(message.sender, message.content, message.messageId, js_timestamp_sent, js_timestamp_seen)
+                    if js_timestamp_seen != js_timestamp_epoch and not new_message:
+                        logging.debug(f"Emitting update seen for message {message.messageId}")
+                        self.messageSeen.emit(message.messageId, js_timestamp_seen)
 
                 else:
                     if js_timestamp_seen == js_timestamp_epoch:
@@ -293,13 +299,18 @@ class Backend(QObject):
             logging.debug(f"Active contact changed to: {contact_name}")
             logging.debug(f"self.username: {self.username}")
             # Loop through master message list and add all relevent messages to ui
-            # TODO Need to sort list my time sent to ensure messages are in right order
-            for message_id, message in self.master_message_dict.items():
+            # The tuple is: (sender, receiver, content, time_sent, time_seen)
+            sorted_messages = dict(sorted(self.master_message_dict.items(), key=operator.itemgetter(0)))
+            logging.debug("Sorted message list follows:")
+            for message_id, message in sorted_messages.items():
+                logging.debug(f"message id {message_id}: time sent {message[3]}")
                 if (message[0] == contact_name or message[1] == contact_name):
                     if (message[0] == self.username):
-                         self.newMessageActive.emit("You", message[2], message_id, message[3])
+                         self.newMessageActive.emit("You", message[2], message_id, message[3],
+                                                    message[4])
                     else:
-                        self.newMessageActive.emit(message[0], message[2], message_id, message[3])
+                        self.newMessageActive.emit(message[0], message[2], message_id, message[3],
+                                                   message[4])
         # Start thread to update seen status on all these messages
         threading.Thread(target=self.update_seen_on_contact_change, args=(contact_name,), daemon=False).start()
 
@@ -329,5 +340,6 @@ class Backend(QObject):
             for result in results.contacts:
                 if (result.name != self.username):
                     self.addContactSignal.emit(result.name)
+            self.setUserName(self.username)
         except Exception as e:
             logging.error(f"Error getting contacts: {e}")
