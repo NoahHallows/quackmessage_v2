@@ -21,7 +21,7 @@ Rectangle {
     property alias messageText: messageText.text
     property alias senderText: senderText.text
     property alias timeText: timeText.text
-    property alias seenText: statusText.text
+    property alias seenText: statusLabel.text
 
     property bool isOwnMessage: false
 
@@ -33,6 +33,10 @@ Rectangle {
     color: isOwnMessage ?  "#b261ff" : "#539fe4"
     Column {
         id: messageColumn
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.margins: 12 // Uniform margins for the column
         spacing: 4
 
         Text {

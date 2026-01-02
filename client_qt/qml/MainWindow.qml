@@ -34,7 +34,8 @@ Rectangle {
             }
             messageList.model.insert(0, { "messageText": message , "senderText":
             "Sent by: " + sender, "isOwnMessage": isOwnMessage, "message_id":
-            message_id, "timeText": time_string, "timeStamp": time_stamp})
+            message_id, "timeText": time_string, "timeStamp": time_stamp,
+            "seenText": ""})
         }
 
         function newMessageDeactive(sender) {
@@ -49,11 +50,10 @@ Rectangle {
             }
         }
 
-        function updateMessageSeen(message_id, time_string) {
+        function updateMessageSeen(message_id, time_string, time_stamp) {
             for (var i = 0; i < mainUI.messageList.model.count; i++) {
                 var message = mainUI.messageList.model.get(i);
                 if (message.message_id == message_id) {
-                    // Increment the current count
                     mainUI.contactsList.model.setProperty(i, "seenText", time_string);
                     break;
                 }

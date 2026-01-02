@@ -287,7 +287,7 @@ class Backend(QObject):
             logging.debug(f"Active contact changed to: {contact_name}")
             logging.debug(f"self.username: {self.username}")
             # Loop through master message list and add all relevent messages to ui
-            for message_id, message in self.master_message_dict:
+            for message_id, message in self.master_message_dict.items():
                 if (message[0] == contact_name or message[1] == contact_name):
                     if (message[0] == self.username):
                          self.newMessageActive.emit("You", message[2], message_id, message[4])
@@ -299,12 +299,12 @@ class Backend(QObject):
     def update_seen_on_contact_change(self, contact_name: str) -> None:
         with self._var_lock:
             master_message_dict_shadow = deepcopy(self.master_message_dict)
-            contact_name = deepcopy(self.contact_name)
+            contact_name = deepcopy(self.active_contact)
         time_seen = datetime.now()
         try:
             for message_id, message in master_message_dict_shadow.items():
                 if message[0] == contact_name or message[1] == contact_name:
-                    request = message_pb2.update_seen(messageId=message_id, seen_at=time_seen)
+                    request = message_pb2.updateSeen(messageId=message_id, seen_at=time_seen)
                     update_seen_result = self.messageStub.messageSeen.future(request).result()
                     if update_seen_result.success is not True:
                         logging.error(f"Failed to update seen status for message {message_id}")
