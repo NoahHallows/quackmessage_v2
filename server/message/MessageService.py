@@ -61,7 +61,7 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
             # Check if receiver is online
             if request.receiver in self.active_clients:
                 logging.debug("Receiver is active")
-                message = {"sender": request.sender, "receiver": request.receiver, "content": request.content, "messageId": message_id, "timeStamp": datetime.now(), "seen_at": datetime(1970, 1, 1)}
+                message = {"sender": request.sender, "receiver": request.receiver, "content": request.content, "messageId": message_id, "sent_at": datetime.now(), "seen_at": datetime(1970, 1, 1)}
                 self.active_clients[request.receiver].put(message)
             logging.info("Done sending message")
             return message_pb2.sendMessageResult(sendSuccessful=True, message_id=message_id)
@@ -95,7 +95,8 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
                 while True:
                     new_message = user_queue.get()
                     if new_message["receiver"] == username:
-                        response = message_pb2.Message(sender=new_message["sender"],receiver=username,content=new_message["content"],messageId=new_message["messageId"],          sent_at=new_message["timeStamp"], seen_at=new_message["seen_at"])
+                        response =
+                        message_pb2.Message(sender=new_message["sender"],receiver=username,content=new_message["content"],messageId=new_message["messageId"], sent_at=new_message["sent_at"], seen_at=new_message["seen_at"])
                         yield response
 
             finally:
