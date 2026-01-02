@@ -383,7 +383,7 @@ Rectangle {
             Button {
                 text: qsTr("OK")
                 anchors.horizontalCenter: parent.horizontalCenter
-                //onClicked: errorPopup.close()
+                onClicked: errorPopup.close()
             }
         }
     }

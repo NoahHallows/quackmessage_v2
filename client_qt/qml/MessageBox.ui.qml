@@ -31,14 +31,6 @@ Rectangle {
     // Change color based on who sent it
     // first if you sent it, second not you
     color: isOwnMessage ?  "#b261ff" : "#539fe4"
-    Column {
-        id: messageColumn
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.margins: 12 // Uniform margins for the column
-        spacing: 4
-
         Text {
             id: messageText
             anchors.top: parent.top
@@ -74,12 +66,11 @@ Rectangle {
 
         Text {
             id: statusLabel
-            text: model.statusText || "" // Use the property from the model
-            visible: text !== ""
-            font.pixelSize: 10
-            color: "#aaaaaa"
-            anchors.right: isOwnMessage ? parent.right : undefined
-            anchors.left: !isOwnMessage ? parent.left : undefined
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            y: parent.height - 15
+            x: parent.width - 25
+            text: "Hello!"
+            font.pixelSize: 8
         }
-    }
 }

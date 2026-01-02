@@ -35,7 +35,7 @@ Rectangle {
             messageList.model.insert(0, { "messageText": message , "senderText":
             "Sent by: " + sender, "isOwnMessage": isOwnMessage, "message_id":
             message_id, "timeText": time_string, "timeStamp": time_stamp,
-            "seenText": ""})
+            "seenText": "Not seen :()"})
         }
 
         function newMessageDeactive(sender) {
@@ -51,10 +51,13 @@ Rectangle {
         }
 
         function updateMessageSeen(message_id, time_string, time_stamp) {
+            console.log("Updating seen status")
             for (var i = 0; i < mainUI.messageList.model.count; i++) {
                 var message = mainUI.messageList.model.get(i);
                 if (message.message_id == message_id) {
-                    mainUI.contactsList.model.setProperty(i, "seenText", time_string);
+                    console.log("Match found")
+                    console.log(time_string)
+                    mainUI.messageList.model.setProperty(i, "seenText", time_string);
                     break;
                 }
             }
@@ -89,7 +92,6 @@ Rectangle {
             }
             // New message for non selected user
             function onNewMessageDeactive(sender) {
-                console.log("EIOGHOUGH")
                 mainUI.newMessageDeactive(sender)
             }
 
@@ -100,6 +102,7 @@ Rectangle {
                 mainUI.yourName.name = "You are " + name
             }
             function onMessageSeen(message_id, timestamp) {
+                console.log(message_id + " has been seen")
                 mainUI.updateMessageSeen(message_id, mainUI.getRelativeTime(timestamp))
             }
         }

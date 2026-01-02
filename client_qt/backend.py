@@ -254,27 +254,33 @@ class Backend(QObject):
             for message in self.messageStub.subscribeMessages(message_pb2.receiveMessagesRequest(request=True)):
                 js_timestamp_sent = (message.sent_at.seconds * 1000) + (message.sent_at.nanos // 1000000)
                 js_timestamp_seen = (message.seen_at.seconds * 1000) + (message.seen_at.nanos // 1000000)
-
+                logging.debug("Message received")
                 with self._var_lock:
                     if message.messageId in self.master_message_dict:
                         # Update seen
-                        message_tuple = (self.master_message_dict[message.messageId][0], self.master_message_dict[message.messageId][1], self.master_message_dict[message.messageId][3], self.master_message_dict[message.messageId][4], message.seen_at)
+                        message_tuple = (self.master_message_dict[message.messageId][0], self.master_message_dict[message.messageId][1], self.master_message_dict[message.messageId][2], self.master_message_dict[message.messageId][3], message.seen_at)
                         new_message = False
+                        logging.debug("Update seen message")
                     else:
                         # Actual new message
                         self.master_message_dict[message.messageId] = (message.sender, message.receiver, message.content,                                                              js_timestamp_sent, js_timestamp_seen)
                         new_message = True
+                        logging.debug("New message (not update seen)")
                 if (message.sender == self.active_contact):
                     if new_message:
                         self.newMessageActive.emit(message.sender, message.content, message.messageId, js_timestamp_sent)
-                    if message.seen_at != js_timestamp_epoch:
-                        self.messageSeen.emit(message.messageId, js_timestamp_seen)
+                if js_timestamp_seen != js_timestamp_epoch and not new_message:
+                    logging.debug(f"Emitting update seen for message {message.messageId}")
+                    self.messageSeen.emit(message.messageId, js_timestamp_seen)
 
                 else:
-                    logging.debug("Emitting message for deactive sender")
-                    self.newMessageDeactive.emit(message.sender)
+                    if js_timestamp_seen == js_timestamp_epoch:
+                        logging.debug("Emitting message for deactive sender")
+                        self.newMessageDeactive.emit(message.sender)
+                    else:
+                        logging.debug("Not emitting for deactive sender as read time not epoch")
         except Exception as e:
-            logging.error("Receive message thread has errored: {e}")
+            logging.error(f"Receive message thread has errored: {e}")
 
 
 
@@ -287,12 +293,13 @@ class Backend(QObject):
             logging.debug(f"Active contact changed to: {contact_name}")
             logging.debug(f"self.username: {self.username}")
             # Loop through master message list and add all relevent messages to ui
+            # TODO Need to sort list my time sent to ensure messages are in right order
             for message_id, message in self.master_message_dict.items():
                 if (message[0] == contact_name or message[1] == contact_name):
                     if (message[0] == self.username):
-                         self.newMessageActive.emit("You", message[2], message_id, message[4])
+                         self.newMessageActive.emit("You", message[2], message_id, message[3])
                     else:
-                        self.newMessageActive.emit(message[0], message[2], message_id, message[4])
+                        self.newMessageActive.emit(message[0], message[2], message_id, message[3])
         # Start thread to update seen status on all these messages
         threading.Thread(target=self.update_seen_on_contact_change, args=(contact_name,), daemon=False).start()
 
@@ -303,7 +310,7 @@ class Backend(QObject):
         time_seen = datetime.now()
         try:
             for message_id, message in master_message_dict_shadow.items():
-                if message[0] == contact_name or message[1] == contact_name:
+                if message[0] == contact_name: # Don't update seen status for messages you sent
                     request = message_pb2.updateSeen(messageId=message_id, seen_at=time_seen)
                     update_seen_result = self.messageStub.messageSeen.future(request).result()
                     if update_seen_result.success is not True:
