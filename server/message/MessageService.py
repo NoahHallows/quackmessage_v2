@@ -122,6 +122,7 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
         try:
             conn = db.getConn()
             cursor = conn.cursor()
+            logging.info(type(request.seen_at))
             cursor.execute("SELECT 1 FROM messages WHERE message_id = %s", (request.messageId,))
             if cursor.fetchone() is not None:
                 cursor.execute("UPDATE messages SET time_read = %s WHERE message_id = %s", (request.seen_at, request.messageId))
