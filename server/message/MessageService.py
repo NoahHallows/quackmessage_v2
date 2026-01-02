@@ -108,10 +108,16 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
         if auth_header.startswith('Bearer '):
             token = auth_header[len("Bearer "):]
             username = jwt_auth.get_username(token)
-            conn = db.getConn()
-            cursor = conn.cursor()
-            cursor.execute("SELECT username FROM users")
-            users = cursor.fetchall()
+            try:
+                conn = db.getConn()
+                cursor = conn.cursor()
+                cursor.execute("SELECT username FROM users")
+                users = cursor.fetchall()
+                conn.commit()
+            except Exception as e:
+                logging.error(f"Error getting contacts from database: {e}")
+            finally:
+                cursor.close()
             response = []
             for user in users:
                 response.append(message_pb2.contact(name=user[0]))
