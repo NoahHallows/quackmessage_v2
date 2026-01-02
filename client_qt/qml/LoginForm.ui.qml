@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
+import QtQuick.Dialogs
 
 Rectangle {
     id: rectangle
@@ -351,43 +352,17 @@ Rectangle {
     }
 
     // Error popup
-    Popup {
+    MessageDialog {
         id: errorPopup
-        x: 100
-        y: 350
-        width: 300
-        height: 100
-        modal: true
-        focus: true
-        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
-        property alias errorText: errorLabel.text
-        background: Rectangle {
-            color: "#1e1e1e"
-            border.color: "#ff4444"
-            border.width: 2
-            radius: 10
-        }
+        title: qsTr("Login Error")
+        text: qsTr("An error occurred.") // Default text, changed via backend
+        buttons: MessageDialog.Ok
 
-        Column {
-            anchors.centerIn: parent
-            spacing: 20
-
-            Text {
-                id: errorLabel
-                text: qsTr("Invalid credentials")
-                color: "white"
-                font.pixelSize: 16
-                horizontalAlignment: Text.AlignHCenter
-            }
-
-            Button {
-                text: qsTr("OK")
-                anchors.horizontalCenter: parent.horizontalCenter
-                onClicked: errorPopup.close()
-            }
+        // Optional: formatting if you want to catch the "Ok" click
+        onAccepted: {
+            console.log("User clicked OK")
         }
     }
-
     // Theres definitely a better way to do this but I've come this far
     // I probably should have used a stackview instead but oh well
     states: [

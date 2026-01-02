@@ -340,6 +340,6 @@ class Backend(QObject):
             for result in results.contacts:
                 if (result.name != self.username):
                     self.addContactSignal.emit(result.name)
-            self.setUserName(self.username)
+            self.setUserName.emit(self.username)
         except Exception as e:
             logging.error(f"Error getting contacts: {e}")

@@ -69,13 +69,13 @@ Rectangle {
             if (passwordEdit.text.length == 0)
             {
                 console.log("Enter a password")
-                loginForm.errorPopup.errorText = "Enter a password"
+                loginForm.errorPopup.text = "Enter a password"
                 loginForm.errorPopup.open()
             }
             else if (usernameEdit.text.length == 0)
             {
                 console.log("Enter a username")
-                loginForm.errorPopup.errorText = "Enter an username"
+                loginForm.errorPopup.text = "Enter an username"
                 loginForm.errorPopup.open()
             }
             else
@@ -89,7 +89,7 @@ Rectangle {
             if (emailEdit.text.length == 0)
             {
                 console.log("Enter an email")
-                loginForm.errorPopup.errorText = "Enter a valid email"
+                loginForm.errorPopup.text = "Enter a valid email"
                 loginForm.errorPopup.open()
                 loginForm.loginState = "emailCodeRequest"
             }
@@ -100,7 +100,7 @@ Rectangle {
                     backend.request_email_code(emailEdit.text)
                 }
                 else {
-                    loginForm.errorPopup.errorText = "Enter a valid email"
+                    loginForm.errorPopup.text = "Enter a valid email"
                     loginForm.errorPopup.open()
                     loginForm.loginState = "emailCodeRequest"
                 }
@@ -111,7 +111,7 @@ Rectangle {
         function submitVerificationCodeFunction() {
             if (verificationCodeEdit.text.length == 0)
             {
-                loginForm.errorPopup.errorText = "Enter the code"
+                loginForm.errorPopup.text = "Enter the code"
                 loginForm.errorPopup.open()
             }
             else {
@@ -122,11 +122,11 @@ Rectangle {
 
         function createAccountFunction() {
             if (usernameEdit.text.length == 0) {
-                loginForm.errorPopup.errorText = "Enter an username"
+                loginForm.errorPopup.text = "Enter an username"
                 loginForm.errorPopup.open()
             }
             else if (passwordEdit.text.length == 0) {
-                loginForm.errorPopup.errorText = "Enter a password"
+                loginForm.errorPopup.text = "Enter a password"
            loginForm.errorPopup.open()
             }
             else {
@@ -139,24 +139,24 @@ Rectangle {
             // These are triggered by signals from backend.py
             target: backend
             function onLoginFail(message) {
-                loginForm.errorPopup.errorText = "Incorrect username or password"
+                loginForm.errorPopup.text = "Incorrect username or password"
                 loginForm.errorPopup.open()
                 loginForm.passwordEdit.clear()
             }
 
             function onSendEmailFail() {
-                loginForm.errorPopup.errorText = "Unable to send email"
+                loginForm.errorPopup.text = "Unable to send email"
                 loginForm.errorPopup.open()
                 //loginForm.loginRectangle.state = "emailCodeRequest"
             }
             function onEmailVerificationFail() {
-                loginForm.errorPopup.errorText = "Incorrect code"
+                loginForm.errorPopup.text = "Incorrect code"
                 loginForm.errorPopup.open()
                 loginForm.verificationCodeEdit.clear()
                 //loginForm.loginRectangle.state = "enterEmailVerificationCode"
             }
             function onAccountCreationFail() {
-                loginForm.errorPopup.errorText = "Error creating account"
+                loginForm.errorPopup.text = "Error creating account"
                 loginForm.errorPopup.open()
                 loginForm.passwordEdit.clear()
             }
