@@ -46,7 +46,7 @@ Item {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.margins: 8
-            wrapMode: Text.WordWrap
+            wrapMode: Text.Wrap
             text: qsTr("Message: ")
             font.pixelSize: 12
         }
