@@ -52,7 +52,7 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
                 except:
                     logging.warning("It appears there are no messages in db")
                     message_id = 1
-                cursor.execute("INSERT INTO messages (sender, receiver, content, message_id, time_sent, time_read) VALUES (%s, %s, %s, %s, %s, %s)", (request.sender, request.receiver, request.content, message_id, datetime.now(tzinfo=timezone.utc), datetime(1970, 1, 1, tzinfo=timezone.utc)))
+                cursor.execute("INSERT INTO messages (sender, receiver, content, message_id, time_sent, time_read) VALUES (%s, %s, %s, %s, %s, %s)", (request.sender, request.receiver, request.content, message_id, datetime.now(timezone.utc), datetime(1970, 1, 1, tzinfo=timezone.utc)))
                 cursor.execute("UPDATE users SET messages_sent = messages_sent + 1 WHERE username = %s", (request.sender,))
                 cursor.execute("UPDATE users SET messages_received = messages_received + 1 WHERE username = %s", (request.receiver,))
                 conn.commit()

@@ -164,7 +164,7 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
                 ph = PasswordHasher()
                 password_hash = ph.hash(request.password)
                 try:
-                    cur.execute("INSERT INTO users (email, username, password_hash, account_creation_date, messages_sent, messages_received) VALUES (%s, %s, %s, %s, %s, %s)", (request.email, request.username, password_hash, datetime.now(tzinfo=timezone.utc), 0, 0))
+                    cur.execute("INSERT INTO users (email, username, password_hash, account_creation_date, messages_sent, messages_received) VALUES (%s, %s, %s, %s, %s, %s)", (request.email, request.username, password_hash, datetime.now(timezone.utc), 0, 0))
                     conn.commit()
                     cur.close()
 

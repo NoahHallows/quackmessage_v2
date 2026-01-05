@@ -319,8 +319,7 @@ class Backend(QObject):
         with self._var_lock:
             master_message_dict_shadow = deepcopy(self.master_message_dict)
             contact_name = deepcopy(self.active_contact)
-        time_seen = datetime.now()
-        time_seen = time_seen.replace(tzinfo=timezone.utc)
+        time_seen = datetime.now(timezone.utc)
         try:
             for message_id, message in master_message_dict_shadow.items():
                 if message[0] == contact_name: # Don't update seen status for messages you sent
