@@ -5,7 +5,7 @@ import logging
 import time
 from threading import Lock
 from sys import stdout
-from datetime import datetime
+from datetime import datetime, timezone
 
 import message_pb2
 import message_pb2_grpc
@@ -87,9 +87,11 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
             cursor.close()
             logging.info(f"Sending {len(messages)} to client {username}")
             for message in messages:
+                sent_at = message[3].replace(tzinfo=timezone.utc)
+                seen_at = message[5].replace(tzinfo=timezone.utc)
                 response = message_pb2.Message(sender=message[0], receiver=message[4],
                                                content=message[1], messageId=message[2],
-                                               sent_at=message[3], seen_at=message[5])
+                                               sent_at=sent_at, seen_at=seen_at)
                 yield response
             try:
                 while True:
