@@ -43,6 +43,7 @@ Rectangle {
                 var isOwnMessage = false
                 var seen_text = ""
             }
+            console.log(seen_text)
             messageList.model.insert(0, { "messageText": message , "senderText":
             "Sent by: " + sender, "isOwnMessage": isOwnMessage, "message_id":
             message_id, "timeText": time_string, "timeStamp": time_stamp,
@@ -115,7 +116,8 @@ Rectangle {
             }
             function onMessageSeen(message_id, timestamp) {
                 console.log(message_id + " has been seen")
-                mainUI.updateMessageSeen(message_id, mainUI.getRelativeTime(timestamp))
+                mainUI.updateMessageSeen(message_id,
+                mainUI.getRelativeTime(timestamp), timestamp)
             }
         }
 
@@ -132,12 +134,10 @@ Rectangle {
                         let updatedTimeSeen = mainUI.getRelativeTime(item.time_seen_ms)
                         // Only update if the string actually changed to save performance
                         if (item.timeText !== updatedTimeSent) {
-                            mainUI.messageList.model.setProperty(i, "timeText",
-                            updatedTimeSent);
+                            mainUI.messageList.model.setProperty(i, "timeText", updatedTimeSent);
                         }
                         if (item.seenText !== updatedTimeSeen && item.seenText !== "") {
-                            mainUI.messageList.model.setProperty(i, seenText,
-                            updatedTimeSeen)
+                            mainUI.messageList.model.setProperty(i, "seenText", updatedTimeSeen)
                         }
                     }
                 }

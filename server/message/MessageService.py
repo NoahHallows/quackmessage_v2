@@ -52,7 +52,7 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
                 except:
                     logging.warning("It appears there are no messages in db")
                     message_id = 1
-                cursor.execute("INSERT INTO messages (sender, receiver, content, message_id, time_sent, time_read) VALUES (%s, %s, %s, %s, NOW(), %s)", (request.sender, request.receiver, request.content, message_id, datetime(1970, 1, 1)))
+                cursor.execute("INSERT INTO messages (sender, receiver, content, message_id, time_sent, time_read) VALUES (%s, %s, %s, %s, %s, %s)", (request.sender, request.receiver, request.content, message_id, datetime.now(tzinfo=timezone.utc), datetime(1970, 1, 1, tzinfo=timezone.utc)))
                 cursor.execute("UPDATE users SET messages_sent = messages_sent + 1 WHERE username = %s", (request.sender,))
                 cursor.execute("UPDATE users SET messages_received = messages_received + 1 WHERE username = %s", (request.receiver,))
                 conn.commit()
@@ -87,11 +87,9 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
             cursor.close()
             logging.info(f"Sending {len(messages)} to client {username}")
             for message in messages:
-                sent_at = message[3].replace(tzinfo=timezone.utc)
-                seen_at = message[5].replace(tzinfo=timezone.utc)
                 response = message_pb2.Message(sender=message[0], receiver=message[4],
                                                content=message[1], messageId=message[2],
-                                               sent_at=sent_at, seen_at=seen_at)
+                                               sent_at=message[3], seen_at=message[5])
                 yield response
             try:
                 while True:
@@ -130,7 +128,7 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
         try:
             conn = db.getConn()
             cursor = conn.cursor()
-            datetime_obj = datetime.fromtimestamp(request.seen_at.seconds + request.seen_at.nanos/1e9)
+            datetime_obj = datetime.fromtimestamp(request.seen_at.seconds + request.seen_at.nanos/1e9, tz=timezone.utc)
             cursor.execute("SELECT 1 FROM messages WHERE message_id = %s", (request.messageId,))
             if cursor.fetchone() is not None:
                 cursor.execute("UPDATE messages SET time_read = %s WHERE message_id = %s", (datetime_obj, request.messageId))

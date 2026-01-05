@@ -6,7 +6,7 @@ import message_pb2_grpc
 import _credentials
 import grpc
 import threading
-from datetime import datetime
+from datetime import datetime, timezone
 import jwt
 import sys
 import logging
@@ -27,7 +27,7 @@ logging.basicConfig(
 VERSION = "0.0.0.1"
 
 epoch = datetime(1970, 1, 1)
-js_timestamp_epoch = int(epoch.timestamp() * 1000)
+js_timestamp_epoch = int(epoch.replace(tzinfo=timezone.utc).timestamp() * 1000)
 logging.debug(js_timestamp_epoch)
 class Backend(QObject):
     logging.info("Starting")
@@ -265,6 +265,7 @@ class Backend(QObject):
                                          self.master_message_dict[message.messageId][1],
                                          self.master_message_dict[message.messageId][2],
                                          self.master_message_dict[message.messageId][3], js_timestamp_seen)
+                        self.master_message_dict[message.messageId] = message_tuple
                         new_message = False
                         logging.debug("Update seen message")
                     else:
@@ -319,13 +320,20 @@ class Backend(QObject):
             master_message_dict_shadow = deepcopy(self.master_message_dict)
             contact_name = deepcopy(self.active_contact)
         time_seen = datetime.now()
+        time_seen = time_seen.replace(tzinfo=timezone.utc)
         try:
             for message_id, message in master_message_dict_shadow.items():
                 if message[0] == contact_name: # Don't update seen status for messages you sent
-                    request = message_pb2.updateSeen(messageId=message_id, seen_at=time_seen)
-                    update_seen_result = self.messageStub.messageSeen.future(request).result()
-                    if update_seen_result.success is not True:
-                        logging.error(f"Failed to update seen status for message {message_id}")
+                    # Check if it already has a seen time, if so don't update
+                    logging.debug(f'message: {message[4]}')
+                    logging.debug(f'epoch: {js_timestamp_epoch}')
+                    if message[4] == js_timestamp_epoch:
+                        request = message_pb2.updateSeen(messageId=message_id, seen_at=time_seen)
+                        update_seen_result = self.messageStub.messageSeen.future(request).result()
+                        if update_seen_result.success is not True:
+                            logging.error(f"Failed to update seen status for message {message_id}")
+                    else:
+                        logging.debug("Not updating seen as seen not equal to epoch (already seen)")
         except Exception as e:
             logging.error(f"Error setting seen status on {message_id}: {e}")
 

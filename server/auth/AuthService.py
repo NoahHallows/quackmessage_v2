@@ -91,7 +91,7 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
             ph = PasswordHasher()
             ph.verify(password_hash, request.password)
             logging.info("Passwords match")
-            cursor.execute("UPDATE users SET last_login = NOW() WHERE username = %s", (request.username,))
+            cursor.execute("UPDATE users SET last_login = %s WHERE username = %s", (datetime.now(timezone.utc), request.username,))
             conn.commit()
             cursor.close()
 
@@ -164,7 +164,7 @@ class AuthServicer(auth_pb2_grpc.QuackMessageAuthServicer):
                 ph = PasswordHasher()
                 password_hash = ph.hash(request.password)
                 try:
-                    cur.execute("INSERT INTO users (email, username, password_hash, account_creation_date, messages_sent, messages_received) VALUES (%s, %s, %s, NOW(), %s, %s)", (request.email, request.username, password_hash, 0, 0))
+                    cur.execute("INSERT INTO users (email, username, password_hash, account_creation_date, messages_sent, messages_received) VALUES (%s, %s, %s, %s, %s, %s)", (request.email, request.username, password_hash, datetime.now(tzinfo=timezone.utc), 0, 0))
                     conn.commit()
                     cur.close()
 
