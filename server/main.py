@@ -15,7 +15,7 @@ logging.basicConfig(
     format="{asctime} - {levelname} - {message}",
     style="{",
     datefmt="%Y-%m-%d %H:%M",
-    level=logging.DEBUG,
+    level=logging.INFO,
     handlers=[
         logging.StreamHandler(stdout)
     ]

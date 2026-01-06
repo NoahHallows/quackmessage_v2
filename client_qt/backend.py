@@ -22,7 +22,7 @@ logging.basicConfig(
     format="{asctime} - {levelname} - {message}",
     style="{",
     datefmt="%Y-%m-%d %H:%M",
-    level=logging.DEBUG,
+    level=logging.WARNING,
 )
 
 VERSION = "0.0.0.1"
