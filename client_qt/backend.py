@@ -238,7 +238,7 @@ class Backend(QObject):
             result = send_message_result.result()
             logging.debug(f"Success: {result.sendSuccessful}, message id: {result.message_id}")
             if result.sendSuccessful:
-                time_sent = int(datetime.now(timezone=utc).timestamp()*1000)
+                time_sent = int(datetime.now(timezone.utc).timestamp()*1000)
                 with self._var_lock:
                     self.master_message_dict[result.message_id] = (self.username,
                                                                    self.active_contact, message,
@@ -270,13 +270,19 @@ class Backend(QObject):
                         logging.debug("Update seen message")
                     else:
                         # Actual new message
-                        self.master_message_dict[message.messageId] = (message.sender, message.receiver, message.content,                                                              js_timestamp_sent, js_timestamp_seen)
+                        self.master_message_dict[message.messageId] = (message.sender, message.receiver, message.content, js_timestamp_sent, js_timestamp_seen)
                         new_message = True
                         logging.debug("New message (not update seen)")
                 if (message.sender == self.active_contact):
                     if new_message:
                         self.newMessageActive.emit(message.sender, message.content, message.messageId, js_timestamp_sent, js_timestamp_seen)
-                    if js_timestamp_seen != js_timestamp_epoch and not new_message:
+                        request = message_pb2.updateSeen(messageId=message.messageId, seen_at=datetime.now(timezone.utc))
+                        update_seen_result = self.messageStub.messageSeen.future(request).result()
+                        if update_seen_result.success is not True:
+                            logging.error(f"Failed to update seen status for message {message.messageId}")
+
+                    #if js_timestamp_seen != js_timestamp_epoch and not new_message:
+                    else:
                         logging.debug(f"Emitting update seen for message {message.messageId}")
                         self.messageSeen.emit(message.messageId, js_timestamp_seen)
 

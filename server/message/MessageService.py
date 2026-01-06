@@ -61,7 +61,7 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
             # Check if receiver is online
             if request.receiver in self.active_clients:
                 logging.debug("Receiver is active")
-                message = {"sender": request.sender, "receiver": request.receiver, "content": request.content, "messageId": message_id, "sent_at": datetime.now(), "seen_at": datetime(1970, 1, 1)}
+                message = {"sender": request.sender, "receiver": request.receiver, "content": request.content, "messageId": message_id, "sent_at": datetime.now(timezone.utc), "seen_at": datetime(1970, 1, 1, tzinfo=timezone.utc)}
                 self.active_clients[request.receiver].put(message)
             logging.info("Done sending message")
             return message_pb2.sendMessageResult(sendSuccessful=True, message_id=message_id)
@@ -132,13 +132,14 @@ class MessageServicer(message_pb2_grpc.MessagerServicer):
             cursor.execute("SELECT 1 FROM messages WHERE message_id = %s", (request.messageId,))
             if cursor.fetchone() is not None:
                 cursor.execute("UPDATE messages SET time_read = %s WHERE message_id = %s", (datetime_obj, request.messageId))
-                cursor.execute("SELECT sender FROM messages WHERE message_id = %s", (request.messageId,))
-                sender = cursor.fetchone()[0]
+                cursor.execute("SELECT sender, receiver FROM messages WHERE message_id = %s", (request.messageId,))
+                sender, receiver = cursor.fetchone()
+                logging.debug(f"for update message seen original sender: {sender}, receiver: {receiver}")
                 conn.commit()
                 cursor.close()
                 # Add to user queue if they're active
                 if sender in self.active_clients:
-                    message = {"sender": "", "receiver": sender, "content": "", "messageId": request.messageId, "sent_at": request.seen_at, "seen_at": request.seen_at}
+                    message = {"sender": receiver, "receiver": sender, "content": "", "messageId": request.messageId, "sent_at": request.seen_at, "seen_at": request.seen_at}
                     self.active_clients[sender].put(message)
                 return message_pb2.updateSeenResult(success=True)
             else:
