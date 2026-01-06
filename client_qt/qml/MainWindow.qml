@@ -6,6 +6,11 @@ Rectangle {
     anchors.fill: parent
     visible: true
 
+    Component.onCompleted: {
+        console.log("Main Window loaded, requesting data...")
+        backend.populate_ui()
+    }
+
     MainWindowForm {
         id: mainUI
         anchors.fill: parent
@@ -29,7 +34,7 @@ Rectangle {
         time_stamp, time_seen_ms) {
             if (sender === "You") {
                 var isOwnMessage = true
-                if (time_seen_ms != -36000000) {
+                if (time_seen_ms != 0) {
                     var seen_text = mainUI.getRelativeTime(time_seen_ms)
                     if (mainUI.messageList.model.count > 0) {
                         mainUI.messageList.model.get(0).seenText = ""
@@ -43,7 +48,6 @@ Rectangle {
                 var isOwnMessage = false
                 var seen_text = ""
             }
-            console.log(seen_text)
             messageList.model.insert(0, { "messageText": message , "senderText":
             "Sent by: " + sender, "isOwnMessage": isOwnMessage, "message_id":
             message_id, "timeText": time_string, "timeStamp": time_stamp,
@@ -63,14 +67,12 @@ Rectangle {
         }
 
         function updateMessageSeen(message_id, time_string, time_stamp) {
-            console.log("Updating seen status")
             for (var i = 0; i < mainUI.messageList.model.count; i++) {
                 var message = mainUI.messageList.model.get(i);
                 mainUI.messageList.model.setProperty(i, "seenText", "");
                 if (message.message_id == message_id) {
-                    console.log("Match found")
-                    console.log(time_string)
                     mainUI.messageList.model.setProperty(i, "seenText", time_string);
+                    mainUI.messageList.model.setProperty(i, "time_seen_ms", time_stamp)
                 }
             }
         }
@@ -99,9 +101,7 @@ Rectangle {
             target: backend
             // New message from selected user
             function onNewMessageActive(sender, message, message_id, time_sent_ms, seen_time_ms) {
-                mainUI.showMessage(sender, message, message_id,
-                mainUI.getRelativeTime(time_sent_ms), time_sent_ms,
-                seen_time_ms)
+                mainUI.showMessage(sender, message, message_id, mainUI.getRelativeTime(time_sent_ms), time_sent_ms, seen_time_ms)
             }
             // New message for non selected user
             function onNewMessageDeactive(sender) {
@@ -122,8 +122,7 @@ Rectangle {
         }
 
         Timer {
-            //interval: 10000
-            interval: 30000 // Update every 30 seconds for better accuracy
+            interval: 10000
             running: true
             repeat: true
             onTriggered: {

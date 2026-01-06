@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 import jwt
 import sys
 import logging
+from time import sleep
 # To copy dict and actually make a new one instead of a new reference to the same one
 from copy import deepcopy
 import operator
@@ -127,9 +128,6 @@ class Backend(QObject):
                 # Start receive message stream
                 self.receiveMessageThread = threading.Thread(target=self.receiveMessage, args=(), daemon=True)
                 self.receiveMessageThread.start()
-                getContactsThread = threading.Thread(target=self.getContacts, args=(),daemon=True)
-                getContactsThread.start()
-                self.setUserName.emit(self.username)
             else:
                 logging.warning(f"Error logging in for user {username}")
                 self.loginFail.emit()
@@ -216,9 +214,6 @@ class Backend(QObject):
                 # Start receive message stream
                 self.receiveMessageThread = threading.Thread(target=self.receiveMessage, args=(), daemon=True)
                 self.receiveMessageThread.start()
-                getContactsThread = threading.Thread(target=self.getContacts, args=(),daemon=True)
-                getContactsThread.start()
-                self.setUserName.emit(self.username)
             else:
                 logging.warning("Unable to create account")
                 self.accountCreationFail.emit()
@@ -354,5 +349,19 @@ class Backend(QObject):
                 if (result.name != self.username):
                     self.addContactSignal.emit(result.name)
             self.setUserName.emit(self.username)
+            logging.debug(f"Setting active contact to {results.contacts[0].name}")
+            sleep(0.5)
+            self.set_active_contact(results.contacts[0].name)
         except Exception as e:
             logging.error(f"Error getting contacts: {e}")
+
+    @Slot()
+    def populate_ui(self):
+        threading.Thread(target=self._populate_ui_thead, args=(), daemon=True).start()
+
+    def _populate_ui_thead(self):
+        # Called by mainui when loaded to populate stuff like contacts.
+        # Username
+        self.setUserName.emit(self.username)
+        # Contacts
+        self.getContacts()
