@@ -238,7 +238,7 @@ class Backend(QObject):
             result = send_message_result.result()
             logging.debug(f"Success: {result.sendSuccessful}, message id: {result.message_id}")
             if result.sendSuccessful:
-                time_sent = int(datetime.now().timestamp()*1000)
+                time_sent = int(datetime.now(timezone=utc).timestamp()*1000)
                 with self._var_lock:
                     self.master_message_dict[result.message_id] = (self.username,
                                                                    self.active_contact, message,

@@ -16,7 +16,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from dotenv import load_dotenv, dotenv_values
 from sys import stdout
-from datetime import datetime
+from datetime import datetime, timezone
 from .jwt_auth import create_jwt
 import logging
 from threading import Lock
